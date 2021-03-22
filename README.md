@@ -1,112 +1,40 @@
-## [Devias Kit - Admin Dashboard](https://react-material-dashboard.devias.io/) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?text=%F0%9F%9A%A8Devias%20Freebie%20Alert%20-%20An%20awesome%20ready-to-use%20register%20page%20made%20with%20%23material%20%23react%0D%0Ahttps%3A%2F%2Fdevias.io%20%23createreactapp%20%23devias%20%23material%20%23freebie%20%40devias-io)
+<p align="center">
+<img src="src/assets/icons/logo/Assets.xcassets/AppIcon.appiconset/120.png" alt="logo verde com traçado de um livro aberto">
+</p>
 
-![license](https://img.shields.io/badge/license-MIT-blue.svg)
+# LMS Livros Didáticos
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![](https://img.shields.io/badge/node->=%20v12.19.0-green)]()
+![](https://img.shields.io/github/last-commit/fabsoftwareifrs/ifrs-livros-didaticos)
 
-[![React Material Dashboard](https://s3.eu-west-2.amazonaws.com/devias/products/react-material-dashboard/react-material-free-xl.jpg)](https://react-material-dashboard.devias.io/)
+Este é um projeto open-source de um LMS (Library Management System - Sistema de Controle Bibliotecário) utilizado para o controle e distribuição de livros didáticos dentro do Instituto Federal do Rio Grande do Sul, Câmpus Bento Gonçalves. O projeto é desenvolvido e mantido pelos professores, bolsistas e voluntários do Projeto Fábrica de Software que fomenta a comunidade interna e externa no desenvolvimento de soluções open-source para o ensino.
 
-> Free React Dashboard made with [Material UI's](https://material-ui.com/?ref=devias-io) components, [React](https://reactjs.org/?ref=devias-io) and of course [create-react-app](https://facebook.github.io/create-react-app/?ref=devias-io) to boost your app development process! We'll launch a pro version soon, so if you are interested subscribe to our personal emailing list on [https://devias.io/](https://devias.io/)
-
-## Upgrade to PRO Version
-
-We also have a pro version of this product which bundles even more pages and components if you want to save more time and design efforts :)
-
-
-| Free Version (this one)              | [Devias Kit PRO](https://material-ui.com/store/items/devias-kit-pro/) |
-| ------------------------ | :----------------------------------------------------------- |
-| **7** Demo Pages         | **32** demo pages
-| -                        | ✔ Dark & light mode
-| -                        | ✔ Authtentication with **Auth0** & **Firebase**  
-| -                        | ✔ TypeScript version                                                                                   
-| -                        | ✔ Design files (sketch & figma) - for extended license       
-| -                        | ✔ Complete users flows                                       
-
-## Demo
-
-- [Dashboard Page](https://react-material-dashboard.devias.io/app/dashboard)
-- [Users Page](https://react-material-dashboard.devias.io/app/customers)
-- [Products Page](https://react-material-dashboard.devias.io/app/products)
-- [Register Page](https://react-material-dashboard.devias.io/register)
-- [Login Page](https://react-material-dashboard.devias.io/login)
-- [Account Page](https://react-material-dashboard.devias.io/app/account)
-- [Settings Page](https://react-material-dashboard.devias.io/app/settings)
+Caso deseje contribuir, é importante que antes avise-nos por issue para que possamos atribuir a você a tarefa e evitar esforço duplicado. 
 
 
-## Quick start
+## Pré-requisitos
+Os requerimentos necessários para rodar o projeto são:
+- MySQL v5.7+ ou MariaDB v10.4+
+- NodeJS v12.4+
+- npm
 
-- [Download from Github](https://github.com/devias-io/react-material-dashboard/archive/master.zip) or [Download from Devias](https://devias.io/products/material-react-dashboard) or clone the repo: `git clone https://github.com/devias-io/react-material-dashboard.git`
+## Como rodar
+Para saber o passo a passo de como rodar o projeto leia o arquivo [STARTING](STARTING.md), esse arquivo não apenas contêm como instalar todos os pré-rquisitos como também detalha cada passo e configuração para que projeto possa ser executado com sucesso.
 
-- Make sure your NodeJS and npm versions are up to date for `React 16.8.6`
+## Contribuindo
+Contribuições com nosso projeto são bem vindas e encorajadas!<br>
+Por favor leia nosso arquivo [CONTRIB](CONTRIB.md)
 
-- Install dependencies: `npm install` or `yarn`
+Como uma instituição pública desenvolvemos ferramentas abertas e que podem ser úteis para toda a sociedade. Para que possamos realemente ser bem sucedidos em nossas metas de transformar a educação e a sociedade precisamos de pessoas com diferentes vivências e experiências. A diversidade das contribuições em qualquer um de nossos projetos nos ajuda a melhorar cada vez mais e ter melhores ideias, melhores perspectivas e certamente produzir código com mais qualidade. Garantimos que qualquer um independente do seu nível de conhecimento é bem vindo a contribuir.
 
-- Start the server: `npm run start` or `yarn start`
+## Autores
+- **Thyago Salvá** - [Github](https://github.com/Salvah)
+- **Maurício Covolan Rosito** - [Github](https://github.com/mauriciorosito)
+- **Camilo Cunha de Azevedo** - [Github](https://github.com/Camilotk)
+- **Douglas Rauschkolb** - [Github](https://github.com/DouglasRauschkolb)
+- **Eduardo Faggion** - [Github](https://github.com/FaggionEduardo)
 
-- Views are on: `localhost:3000`
+## Licença
 
-## Documentation
-
-The documentation for the React Material Kit is can be found [here](https://material-ui.com?ref=devias-io).
-
-## 🖌 Design Files
-
-👉[Download Sketch file](https://s3.eu-west-2.amazonaws.com/devias/products/react-material-dashboard/react-material-dashboard-free.sketch)
-
-👉[Download Figma file](https://devias.s3.eu-west-2.amazonaws.com/products/react-material-dashboard/react-material-dashboard-free.fig)
-
-## File Structure
-
-Within the download you'll find the following directories and files:
-
-```
-material-react-dashboard
-
-├── .eslintrc
-├── .gitignore
-├── .prettierrc
-├── CHANGELOG.md
-├── jsconfig.json
-├── LICENSE.md
-├── package.json
-├── README.md
-├── public
-├── docs
-└── src
-	├── assets
-	├── common
-	├── components
-	├── helpers
-	├── icons
-	├── layouts
-	├── theme
-	├── views
-	│	├── Account
-	│	├── Dashboard
-	│	├── Icons
-	│	├── NotFound
-	│	├── ProductList
-	│	├── Settings
-	│	├── SignIn
-	│	├── SignUp
-	│	├── Typography
-	│	└── UserList
-	├── App.jsx
-	├── index.jsx
-	└── Routes.jsx
-```
-
-## Resources
-
-- More freebies like this one: <https://devias.io>
-
-## Reporting Issues:
-
-- [Github Issues Page](https://github.com/devias-io/react-material-dashboard/issues?ref=devias-io)
-
-## License
-
-- Licensed under MIT (https://github.com/devias-io/react-material-dashboard/blob/master/LICENSE.md)
-
-## Contact Us
-
-- Email Us: contact@devias.io
-- [Follow us on Instagram](https://www.instagram.com/deviasio/)
+LMS Livros Didáticos é licenciado pela licena [AGPL 3](https://github.com/fabsoftwareifrs/ifrs-livros-didaticos/blob/main/LICENSE).<br>
+Copyleft 🄯 2020, Fábrica de Software IFRS
