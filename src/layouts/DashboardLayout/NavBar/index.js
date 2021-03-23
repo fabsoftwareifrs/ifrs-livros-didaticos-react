@@ -60,7 +60,12 @@ const items = [
     icon: UsersIcon,
     title: 'Estudantes'
   },
-  
+  {
+    href: '/app/loans',
+    icon: BookIcon,
+    title: 'Empréstimos'
+  },
+
 ];
 
 const useStyles = makeStyles(() => ({
