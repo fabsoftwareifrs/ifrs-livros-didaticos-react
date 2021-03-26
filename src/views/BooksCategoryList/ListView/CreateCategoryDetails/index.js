@@ -24,7 +24,6 @@ import {
 const useStyles = makeStyles(() => ({
   root: {}
 }));
-
 const CategoryDetails = ({ className,...rest }) => {
   const classes = useStyles();
   var history= useHistory()

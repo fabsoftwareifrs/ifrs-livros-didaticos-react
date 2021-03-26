@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
-import {StudentsQuery} from '../../../graphql/queries/student'
-import {StudentDelete, StudentEdit} from '../../../graphql/mutations/student'
-import {useMutation,useQuery, gql } from '@apollo/client';
+import {LoansQuery} from '../../../graphql/queries/loan'
+import {LoanCreate, LoanEdit, LoanDelete} from '../../../graphql/mutations/loan'
+import { useMutation,useQuery, gql } from '@apollo/client';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Modal from '../../../components/ModalIcon';
 import {
@@ -40,26 +40,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const StudentsList = (props) => {
+
+
+const LoanList = (props) => {
   const classes = useStyles();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-  const { loading, error, data } = useQuery(StudentsQuery, {
+  const { loading, error, data } = useQuery(LoansQuery,{
     variables: { page:page, limit:limit },
   });
-  const [mutationDelete] = useMutation(StudentDelete,{
+  const [mutationDelete] = useMutation(LoanDelete,{
     
     refetchQueries: [
-      { query: StudentsQuery,
-       variables: { page:page, limit:limit }
-       }
+      {
+        query: LoansQuery,
+        variables: { page:page, limit:limit }
+      }
     ]
   });
 
-   
+
+
  
   if (error) return <p>Error :(</p>;
-
+ 
+ 
+  
   
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
@@ -68,19 +74,19 @@ const StudentsList = (props) => {
   const handlePageChange = (event, newPage) => {
     setPage(newPage+1);
   };
-  const deleteStudent = (id) => {
+  const deleteLoan= (id) => {
     mutationDelete({ variables: { id } })
   };
-
   
+ 
  
   return (
     <Page
       className={classes.root}
-      title="Estudantes"
+      title="Empréstimos"
     >
       <Container maxWidth={false}>
-     
+      <>
         <Toolbar />
         <Box mt={3}>
           {loading?'':
@@ -91,19 +97,22 @@ const StudentsList = (props) => {
                   <TableHead>
                     <TableRow>
                       <TableCell>
-                        Nome
+                        Estudante
                       </TableCell>
                       <TableCell>
-                        E-mail
+                        Livro
                       </TableCell>
                       <TableCell>
-                        Matricula
+                        Entrege?
                       </TableCell>
                       <TableCell>
-                        Curso
+                        Atrasado?
                       </TableCell>
                       <TableCell>
-                        Turma
+                        Período
+                      </TableCell>
+                      <TableCell>
+                        Servidor
                       </TableCell>
                       <TableCell>
                         
@@ -111,60 +120,49 @@ const StudentsList = (props) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {data.paginateStudents.docs.slice(0, limit).map((student) => (
+                    {data.paginateLoans.docs.slice(0, limit).map((loan) => (
                       <TableRow
                         hover
-                        key={student.id}
+                        key={loan.id}
                       >
                         
-                        <TableCell>
-                          <Box
-                            alignItems="center"
-                            display="flex"
-                          >
-                          
-                            <Typography
-                              color="textPrimary"
-                              variant="body1"
-                            >
-                              {student.name}
-                            </Typography>
-                          </Box>
+                        <TableCell>                           
+                          {loan.students.name}
                         </TableCell>
                         <TableCell>
-                          {student.email}
+                          {loan.books.name}
                         </TableCell>
                         <TableCell>
-                          {student.matriculation}
+                          {loan.delivered?"Sim":"Não"}
                         </TableCell>
                         <TableCell>
-                          {student.course_id}
+                          {loan.late?"ATRASADO":"Em dia"}
                         </TableCell>
                         <TableCell>
-                          {student.class_id}
+                          {loan.periods.name}
                         </TableCell>
-                        <TableCell> 
-
+                        <TableCell>
+                          {loan.users.name}
                         </TableCell>
-                        <TableCell> 
+                        <TableCell>
                           <Modal
                             className={classes.icon}
                             icon={TrashIcon}
                           >
                             <CardHeader
-                            subheader={'Tem certeza que deseja deletar o estudante "'+student.name+'"'}
-                            title="Deletar estudante"
+                            subheader={'Tem certeza que deseja deletar o empréstimo?'}
+                            title="Deletar empréstimo"
                           />
                           <Button
                             variant="contained"
                             style={{margin:10,backgroundColor:"#8B0000",color:'#fff'}}
-                            onClick={()=>deleteStudent(student.id)}
+                            onClick={()=>deleteLoan(loan.id)}
                           >
                             Deletar
                           </Button>
                           </Modal>
                           
-                          <Link to={"/app/students/edit/"+student.id} style={{color:'#263238'}}><EditIcon className={classes.icon}/></Link>
+                         <Link to={"/app/loans/edit/"+loan.id} style={{color:'#263238'}}><EditIcon className={classes.icon}/></Link> 
                         </TableCell>
                       </TableRow>
                     ))}
@@ -174,7 +172,7 @@ const StudentsList = (props) => {
             </PerfectScrollbar>
             <TablePagination
               component="div"
-              count={data.paginateStudents.total}
+              count={data.paginateLoans.total}
               onChangePage={handlePageChange}
               onChangeRowsPerPage={handleLimitChange}
               page={page-1}
@@ -185,11 +183,12 @@ const StudentsList = (props) => {
           </Card>
           }
         </Box>
+        </>
         
       </Container>
     </Page>
   );
 };
 
-export default (StudentsList);
+export default (LoanList);
 

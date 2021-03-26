@@ -46,8 +46,6 @@ const UsersList = (props) => {
   const classes = useStyles();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-  const [edit, setEdit] = useState(false);
-  const [create, setCreate] = useState(false);
   const { loading, error, data } = useQuery(UsersQuery, {
     variables: { page:page, limit:limit },
   });
@@ -84,11 +82,6 @@ const UsersList = (props) => {
   const deleteUser = (id) => {
     mutationDelete({ variables: { id } })
   };
-  const editUser = (values) => {
-    values.accessLevel=parseInt(values.accessLevel)
-    mutationEdit({ variables: values })
-    setEdit(false)
-  };
   
  
   return (
@@ -98,7 +91,7 @@ const UsersList = (props) => {
     >
       <Container maxWidth={false}>
      
-        <Toolbar create={setCreate} />
+        <Toolbar  />
         <Box mt={3}>
           {loading?'':
           <Card>

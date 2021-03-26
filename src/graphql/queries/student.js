@@ -15,6 +15,18 @@ const StudentsQuery = gql`
     }
   }
 `;
+const AllStudentsQuery = gql`
+  query AllStudentsQuery{
+    students{
+        id
+        name
+        email
+        matriculation
+        course_id
+        class_id
+    }
+  }
+`;
 const StudentQuery = gql`
   query StudentQuery($id:ID!){
     student(id:$id) {
@@ -28,4 +40,4 @@ const StudentQuery = gql`
   }
 `;
 
-export {StudentsQuery, StudentQuery}
+export {StudentsQuery, StudentQuery,AllStudentsQuery}
