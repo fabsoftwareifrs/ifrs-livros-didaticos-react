@@ -17,6 +17,7 @@ export default {
     },
     course_id:{
         label:'Curso',
+        value:1,
         type:'number',
         rules:{
             required:"Este campo é obrigatório",

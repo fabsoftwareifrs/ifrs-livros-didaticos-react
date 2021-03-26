@@ -43,15 +43,15 @@ export default {
     course_id:{
         label:'Curso',
         type:'number',
-        rules:{
-            required:"Este campo é obrigatório",
-        }
+        //rules:{
+        //    required:"Este campo é obrigatório",
+        //}
     },
     class_id:{
         label:'Turma',
         type:'number',
-        rules:{
-            required:"Este campo é obrigatório",
-        }
+        //rules:{
+        //    required:"Este campo é obrigatório",
+        //}
     }
 }

@@ -9,7 +9,15 @@ const StudentsQuery = gql`
         email
         matriculation
         course_id
+        courses{
+          id
+          name
+        }
         class_id
+        classes{
+          id
+          name
+        }
       }
       total
     }
@@ -23,7 +31,15 @@ const StudentQuery = gql`
       email
       matriculation
       course_id
+      courses{
+        id
+        name
+      }
       class_id
+      classes{
+        id
+        name
+      }
     }
   }
 `;

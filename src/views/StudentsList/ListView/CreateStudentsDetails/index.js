@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useMutation,useQuery, gql } from '@apollo/client';
 import {StudentCreate} from '../../../../graphql/mutations/student'
 import {StudentsQuery} from '../../../../graphql/queries/student'
+import { ClassesQueryAll, CoursesQuery } from '../../../../graphql/queries/class'
 import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
 import { Link, useHistory } from 'react-router-dom';
@@ -19,15 +20,19 @@ import {
   makeStyles
 } from '@material-ui/core';
 
-
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles(() => ({
   root: {}
 }));
 
 const StudentDetails = ({ className,...rest }) => {
-  const classes = useStyles();
+  const classes = useStyles()
   var history= useHistory()
+
+  const [course, setCourse] = useState(null)
+  const [classRoom, setClass] = useState(null)
+
   const {
     fields: input,
     errors,
@@ -45,11 +50,14 @@ const StudentDetails = ({ className,...rest }) => {
     ]
   }); 
   const createStudent = (data) => {
-    data.course_id=parseInt(data.course_id)
-    data.class_id=parseInt(data.class_id)
+    data.course_id=parseInt(course['value'])
+    data.class_id=parseInt(classRoom['value'])
     mutationCreate({ variables: data })
     history.push('/app/students')
   };
+
+  const courses = useQuery(CoursesQuery);
+  const classesRoom = useQuery(ClassesQueryAll);
   
 
   return (
@@ -125,17 +133,30 @@ const StudentDetails = ({ className,...rest }) => {
               md={6}
               xs={12}
             >
-             <TextField
-                error={!!errors.course_id}
-                fullWidth
-                helperText={!!errors.course_id?errors.course_id:"Informe o nome da turma"}
-                label={input.course_id.label}
-                type={input.course_id.type}
+              <Autocomplete
                 name="course_id"
-                onChange={({ target }) => handleChange(target)}
-                value={input.course_id.value}
-                variant="outlined"
+                id="autocomplete"
+                options={
+                  courses.data &&
+                  courses.data.courses &&
+                  courses.data.courses.map(({ id, name }) => ({ value: id, label: name }))
+                }
+                onChange={(event, newValue) => {
+                  setCourse(newValue);
+                }}
+                value={course}
+                getOptionLabel={(option) => option.label}
+                getOptionSelected={(option, value) => option.id === value.id}
+                style={{ width: 300 }}
+                renderInput={(params) => 
+                  <TextField {...params} 
+                              label="Cursos" 
+                              variant="outlined" 
+                              error={!!errors.course_id}
+                              helperText={!!errors.course_id?errors.course_id:"Informe o curso"}
+                  />}
               />
+              
             </Grid>
 
             <Grid
@@ -143,17 +164,30 @@ const StudentDetails = ({ className,...rest }) => {
               md={6}
               xs={12}
             >
-             <TextField
-                error={!!errors.class_id}
-                fullWidth
-                helperText={!!errors.class_id?errors.class_id:"Informe o nome da turma"}
-                label={input.class_id.label}
-                type={input.class_id.type}
+              <Autocomplete
                 name="class_id"
-                onChange={({ target }) => handleChange(target)}
-                value={input.class_id.value}
-                variant="outlined"
+                id="autocomplete"
+                options={
+                  classesRoom.data &&
+                  classesRoom.data.classes &&
+                  classesRoom.data.classes.map(({ id, name }) => ({ value: id, label: name }))
+                }
+                onChange={(event, newValue) => {
+                  setClass(newValue);
+                }}
+                value={classRoom}
+                getOptionLabel={(option) => option.label}
+                getOptionSelected={(option, value) => option.id === value.id}
+                style={{ width: 300 }}
+                renderInput={(params) => 
+                  <TextField {...params} 
+                              label="Turma" 
+                              variant="outlined" 
+                              error={!!errors.class_id}
+                              helperText={!!errors.class_id?errors.class_id:"Informe a turma"}
+                  />}
               />
+             
             </Grid>
            
           </Grid>
@@ -184,7 +218,5 @@ const StudentDetails = ({ className,...rest }) => {
     </form>
   );
 };
-
-
 
 export default StudentDetails;

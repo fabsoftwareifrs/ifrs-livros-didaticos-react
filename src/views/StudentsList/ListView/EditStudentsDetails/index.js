@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useMutation,useQuery, gql } from '@apollo/client';
@@ -6,6 +6,7 @@ import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
 import {StudentEdit} from '../../../../graphql/mutations/student'
 import {StudentsQuery, StudentQuery} from '../../../../graphql/queries/student'
+import { ClassesQueryAll, CoursesQuery } from '../../../../graphql/queries/class'
 import { Link, useHistory, useParams } from 'react-router-dom';
 import {
   Box,
@@ -19,6 +20,8 @@ import {
   makeStyles
 } from '@material-ui/core';
 
+import ReactSelect from 'react-select'
+
 const useStyles = makeStyles(() => ({
   root: {}
 }));
@@ -26,6 +29,10 @@ const useStyles = makeStyles(() => ({
 const StudentDetails = ({ className, ...rest }) => {
   const classes = useStyles();
   var history= useHistory()
+
+  const [course, setCourse] = useState(null)
+  const [classRoom, setClass] = useState(null)
+
   const {
     fields: input,
     errors,
@@ -36,9 +43,16 @@ const StudentDetails = ({ className, ...rest }) => {
     setValues
   } = useMyForm(fields);
   var { id } = useParams();
+
+  const coursesQuery = useQuery(CoursesQuery)
+  const classesQuery = useQuery(ClassesQueryAll)
+
   const { loading, error, data } = useQuery(StudentQuery, {
     variables: { id:id },
   });
+
+
+
   var values= {
     name:"",
     email:"",
@@ -49,10 +63,23 @@ const StudentDetails = ({ className, ...rest }) => {
   if(!loading){
     console.log(data)
     values=data.student
+
+    var courseDefault = {
+      value:values.courses.id,
+      label:values.courses.name
+    }
+
+    var classDefault = {
+      value:values.classes.id,
+      label:values.classes.name
+    }
+
   }
   const onCompleted = useCallback(
     (response) => {
-      setValues(values);
+      setValues(values)
+      setCourse(courseDefault)
+      setClass(classDefault)
     },
     [setValues]
   );
@@ -60,8 +87,6 @@ const StudentDetails = ({ className, ...rest }) => {
     onCompleted()
   },[values])
   
-  
- 
   const [mutationEdit] = useMutation(StudentEdit,{
     refetchQueries: [
       { query: StudentsQuery,
@@ -70,11 +95,14 @@ const StudentDetails = ({ className, ...rest }) => {
     ]
   });  
   const editStudent = async (data) => {
-    data.course_id=parseInt(data.course_id)
-    data.class_id=parseInt(data.class_id)
+    data.course_id=parseInt(course['value'])
+    data.class_id=parseInt(classRoom['value'])
     await mutationEdit({ variables: data })
     history.push('/app/students')
   };
+
+  const courses = coursesQuery.data
+  const classesRoom = classesQuery.data
  
 
   return (
@@ -150,16 +178,18 @@ const StudentDetails = ({ className, ...rest }) => {
                 md={6}
                 xs={12}
               >
-              <TextField
-                  error={!!errors.course_id}
-                  fullWidth
-                  helperText={!!errors.course_id?errors.course_id:"Informe o nome da turma"}
-                  label={input.course_id.label}
-                  type={input.course_id.type}
+                <ReactSelect
+                  id="autocomplete"
                   name="course_id"
-                  onChange={({ target }) => handleChange(target)}
-                  value={input.course_id.value}
-                  variant="outlined"
+                  onChange={e => {
+                    setCourse(e)
+                  }}
+                  options={
+                    courses &&
+                    courses.courses &&
+                    courses.courses.map(({ id, name }) => ({ value: id, label: name }))
+                  }
+                  value={course}
                 />
               </Grid>
 
@@ -168,16 +198,18 @@ const StudentDetails = ({ className, ...rest }) => {
                 md={6}
                 xs={12}
               >
-              <TextField
-                  error={!!errors.class_id}
-                  fullWidth
-                  helperText={!!errors.class_id?errors.class_id:"Informe o nome da turma"}
-                  label={input.class_id.label}
-                  type={input.class_id.type}
+                <ReactSelect
+                  id="autocomplete"
                   name="class_id"
-                  onChange={({ target }) => handleChange(target)}
-                  value={input.class_id.value}
-                  variant="outlined"
+                  onChange={e => {
+                    setClass(e)
+                  }}
+                  options={
+                    classesRoom &&
+                    classesRoom.classes &&
+                    classesRoom.classes.map(({ id, name }) => ({ value: id, label: name }))
+                  }
+                  value={classRoom}
                 />
               </Grid>
             

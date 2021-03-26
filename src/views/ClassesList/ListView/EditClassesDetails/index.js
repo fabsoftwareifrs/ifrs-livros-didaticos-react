@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { useMutation,useQuery, gql } from '@apollo/client';
 import { CoursesQuery, ClassQuery, ClassesQuery } from '../../../../graphql/queries/class'
@@ -20,8 +20,11 @@ import {
   InputLabel
 } from '@material-ui/core';
 
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+
+
+import ReactSelect from 'react-select'
+import { SignalCellularNullSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   root: {}
@@ -31,6 +34,8 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
   const classes = useStyles();
 
   var history= useHistory()
+
+  const [course, setCourse] = useState(SignalCellularNullSharp);
   
   const {
     fields: input,
@@ -44,7 +49,7 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
 
   var { id } = useParams();
 
-  console.log(id)
+  const coursesQuery = useQuery(CoursesQuery)
 
   const { loading, error, data } = useQuery(ClassQuery, {
     variables: { id:id },
@@ -54,27 +59,31 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
     name:"",
     course_id:1
   }
+
   if(!loading){
-    console.log(data)
     values=data.classRoom
+
+    var courseSelected = {
+      value:values.courses.id,
+      label:values.courses.name
+    }
+
   }
+
   const onCompleted = useCallback(
     (response) => {
       setValues(values);
+      setCourse(courseSelected)
     },
     [setValues]
   );
+
   useEffect(() => {
     onCompleted()
   },[values])
 
-
-  //const { loading1, error1, data1 } = useQuery(CoursesQuery);
-
-  //if (loading1) return 'Loading...';
-  //if (error1) return `Error! ${error.message}`;
+  const courses = coursesQuery.data
   
-
   const [mutationEdit] = useMutation(ClassEdit,{
     refetchQueries: [
       { query: ClassesQuery,
@@ -84,9 +93,7 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
   }); 
 
   const editClass = async (data) => {
-    data.course_id=parseInt(data.course_id)
-    console.log(data)
-    console.log("teste")
+    data.course_id=parseInt(course['value'])
     await mutationEdit({ variables: data })
     history.push('/app/classes')
   };
@@ -132,18 +139,21 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
               md={6}
               xs={12}
             >
-              <TextField
-                error={!!errors.course_id}
-                fullWidth
-                helperText={!!errors.course_id?errors.course_id:"Informe o nome da turma"}
-                label={input.course_id.label}
-                type={input.course_id.type}
+
+              <ReactSelect
+                id="autocomplete"
                 name="course_id"
-                onChange={({ target }) => handleChange(target)}
-                value={input.course_id.value}
-                variant="outlined"
+                onChange={e => {
+                  setCourse(e)
+                }}
+                options={
+                  courses &&
+                  courses.courses &&
+                  courses.courses.map(({ id, name }) => ({ value: id, label: name }))
+                }
+                value={course}
               />
-              
+
             </Grid>
           </Grid>
         </CardContent>
@@ -177,24 +187,29 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
 
 export default ClassDetails;
 
+
 /*
-<FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel id="demo-simple-select-filled-label">Curso</InputLabel>
-                <Select
-                  error={!!errors.courseId}
-                  helperText={errors.courseId}
-                  label={input.courseId.label}
-                  type={input.courseId.type}
-                  id="select"
-                  onChange={handleChange}
-                  name="course_id"
-                  value={input.courseId.value}
-                >
-                  {data.courses.map((course) => (
-                    (course.id == values.course_id)?
-                      <MenuItem value={course.id}>{course.name}</MenuItem>:
-                      <MenuItem value={course.id}>{course.name}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+<Autocomplete
+                name="course_id"
+                id="autocomplete"
+                options={
+                  courses &&
+                  courses.courses &&
+                  courses.courses.map(({ id, name }) => ({ value: id, label: name }))
+                }
+                onChange={(event, newValue) => {
+                  setCourse(newValue);
+                }}
+                value={course}
+                getOptionLabel={(option) => option.label}
+                getOptionSelected={(option, value) => option.id === value.id}
+                style={{ width: 300 }}
+                renderInput={(params) => 
+                  <TextField {...params} 
+                              label="Cursos" 
+                              variant="outlined" 
+                              error={!!errors.course_id}
+                              helperText={!!errors.course_id?errors.course_id:"Informe o curso"}
+                  />}
+              />
 */

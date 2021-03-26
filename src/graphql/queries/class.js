@@ -7,6 +7,10 @@ const ClassesQuery = gql`
         id
         name
         course_id
+        courses{
+          id
+          name
+        }
       }
       total
     }
@@ -19,6 +23,19 @@ const ClassQuery = gql`
         id
         name
         course_id
+        courses{
+          id
+          name
+        }
+    }
+  }
+`;
+
+const ClassesQueryAll = gql`
+  query ClassesQuery {
+    classes {
+      id
+      name
     }
   }
 `;
@@ -32,4 +49,4 @@ const CoursesQuery = gql`
   }
 `;
 
-export {ClassesQuery, ClassQuery, CoursesQuery}
+export {ClassesQuery, ClassQuery, CoursesQuery, ClassesQueryAll}

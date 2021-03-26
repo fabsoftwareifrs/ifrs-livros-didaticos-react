@@ -149,10 +149,10 @@ const StudentsList = (props) => {
                           {student.matriculation}
                         </TableCell>
                         <TableCell>
-                          {student.course_id}
+                          {student.courses.name}
                         </TableCell>
                         <TableCell>
-                          {student.class_id}
+                          {student.classes.name}
                         </TableCell>
                         <TableCell> 
 

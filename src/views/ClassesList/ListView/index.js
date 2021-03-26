@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
 const ClassesList = (props) => {
   const classes = useStyles();
   const [limit, setLimit] = useState(10);
@@ -143,7 +142,7 @@ const ClassesList = (props) => {
                           </Box>
                         </TableCell>
                         <TableCell>
-                          {classes.course_id}
+                          {classes.courses.name}
                         </TableCell>
                         <TableCell>
                           <Modal
