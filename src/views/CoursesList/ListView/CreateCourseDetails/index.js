@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useMutation,useQuery, gql } from '@apollo/client';
-import {CourseCreate} from '../../../../graphql/mutations/course'
+import { useMutation, useQuery, gql } from '@apollo/client';
+import { CourseCreate } from '../../../../graphql/mutations/course'
 import { Link, useHistory } from 'react-router-dom';
 import { CoursesQuery } from 'src/graphql/queries/course';
 import useMyForm from '../../../../hooks/MyForm'
@@ -25,9 +25,9 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const CourseDetails = ({ className,...rest }) => {
+const CourseDetails = ({ className, ...rest }) => {
   const classes = useStyles();
-  var history= useHistory()
+  var history = useHistory()
   const {
     fields: input,
     errors,
@@ -37,27 +37,28 @@ const CourseDetails = ({ className,...rest }) => {
     reset,
     setValues
   } = useMyForm(fields);
-  
-  const [mutationCreate] = useMutation(CourseCreate,{
-    
+
+  const [mutationCreate] = useMutation(CourseCreate, {
+
     refetchQueries: [
-      { query: CoursesQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: CoursesQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  });  
-  
+  });
+
   const createCourse = async (data) => {
-    await mutationCreate({ variables: data })
+    await mutationCreate({ variables: { input: data } })
     history.push('/app/course')
 
   };
 
-  
+
 
   return (
     <form
-    onSubmit={handleSubmit(createCourse)}
+      onSubmit={handleSubmit(createCourse)}
       className={clsx(classes.root, className)}
       {...rest}
     >
@@ -80,7 +81,7 @@ const CourseDetails = ({ className,...rest }) => {
               <TextField
                 error={!!errors.name}
                 fullWidth
-                helperText={!!errors.name?errors.name:"Informe o nome do curso"}
+                helperText={!!errors.name ? errors.name : "Informe o nome do curso"}
                 label={input.name.label}
                 name="name"
                 type={input.name.type}
@@ -89,8 +90,8 @@ const CourseDetails = ({ className,...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            
-            
+
+
           </Grid>
         </CardContent>
         <Divider />
@@ -100,11 +101,11 @@ const CourseDetails = ({ className,...rest }) => {
           p={2}
         >
           <Link to="/app/course">
-          <Button
-            style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
-            variant="contained"
-          >
-            Cancelar
+            <Button
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+              variant="contained"
+            >
+              Cancelar
           </Button>
           </Link>
           <Button

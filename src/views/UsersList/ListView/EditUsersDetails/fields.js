@@ -27,6 +27,12 @@ export default {
             }
         }
     },
+    password:{
+        label:'Password',
+        type:'password',
+        value:'',
+        
+    },
     accessLevel:{
         label:'Nível de acesso',
         type:'number',

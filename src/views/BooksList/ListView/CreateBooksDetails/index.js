@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useMutation,useQuery, gql } from '@apollo/client';
-import {BooksCreate} from '../../../../graphql/mutations/book'
+import { useMutation, useQuery, gql } from '@apollo/client';
+import { BooksCreate } from '../../../../graphql/mutations/book'
+import { AllCategoriesQuery } from '../../../../graphql/queries/category'
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ import {
   TextField,
   makeStyles
 } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Link, useHistory } from 'react-router-dom';
 import { BooksQuery } from 'src/graphql/queries/book';
 import useMyForm from '../../../../hooks/MyForm'
@@ -24,7 +26,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const BookDetails = ({ className, ...rest }) => {
-  var history= useHistory()
+  var history = useHistory()
   const classes = useStyles();
   const {
     fields: input,
@@ -35,20 +37,19 @@ const BookDetails = ({ className, ...rest }) => {
     reset,
     setValues
   } = useMyForm(fields);
-  
-  const [mutationCreate] = useMutation(BooksCreate,{
-    
+
+  const [mutationCreate] = useMutation(BooksCreate, {
+
     refetchQueries: [
-      { query: BooksQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: BooksQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  });  
-  
+  });
+  const categories = useQuery(AllCategoriesQuery);
   const createBook = async (data) => {
-    
-    data.quantity=parseInt(data.quantity)
-    await mutationCreate({ variables: data })
+    await mutationCreate({ variables: { input: data } })
     history.push('/app/books')
 
   };
@@ -70,8 +71,8 @@ const BookDetails = ({ className, ...rest }) => {
             container
             spacing={3}
           >
-           
-           <Grid
+
+            <Grid
               item
               md={6}
               xs={12}
@@ -79,7 +80,7 @@ const BookDetails = ({ className, ...rest }) => {
               <TextField
                 error={!!errors.name}
                 fullWidth
-                helperText={!!errors.name?errors.name:"Informe o título do livro"}
+                helperText={!!errors.name ? errors.name : "Informe o título do livro"}
                 label={input.name.label}
                 name="name"
                 type={input.name.type}
@@ -87,7 +88,7 @@ const BookDetails = ({ className, ...rest }) => {
                 value={input.name.value}
                 variant="outlined"
               />
-              
+
             </Grid>
             <Grid
               item
@@ -98,7 +99,7 @@ const BookDetails = ({ className, ...rest }) => {
                 error={!!errors.author}
                 fullWidth
                 helperText={errors.author}
-                label={input.name.label}
+                label={input.author.label}
                 name="author"
                 type={input.author.type}
                 onChange={({ target }) => handleChange(target)}
@@ -106,23 +107,7 @@ const BookDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                error={!!errors.code}
-                fullWidth
-                helperText={errors.code}
-                label={input.code.label}
-                name="code"
-                type={input.code.type}
-                onChange={({ target }) => handleChange(target)}
-                value={input.code.value}
-                variant="outlined"
-              />
-            </Grid>
+
             <Grid
               item
               md={6}
@@ -145,17 +130,31 @@ const BookDetails = ({ className, ...rest }) => {
               md={6}
               xs={12}
             >
-              <TextField
-                error={!!errors.quantity}
-                fullWidth
-                helperText={errors.quantity}
-                label={input.quantity.label}
-                name="quantity"
-                type={input.quantity.type}
-                onChange={({ target }) => handleChange(target)}
-                value={input.quantity.value}
-                variant="outlined"
-              />
+              {categories.loading ? "" :
+                <Autocomplete
+                  name="categoryId"
+                  options={
+                    categories.data.categories.map(({ id, name }) => ({ value: id, label: name }))
+                  }
+                  onChange={(event, value) => {
+                    if (!value) {
+                      handleChange({ name: "categoryId", value: "" })
+                    } else {
+                      handleChange({ name: "categoryId", value: parseInt(value.value) })
+                    }
+                  }}
+                  getOptionLabel={(option) => option.label}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  renderInput={(params) =>
+                    <TextField {...params}
+                      label={input.categoryId.label}
+                      variant="outlined"
+                      fullWidth
+                      error={!!errors.categoryId}
+                      helperText={!!errors.categoryId ? errors.categoryId : "Informe a categoria"}
+                    />}
+                />
+              }
             </Grid>
           </Grid>
         </CardContent>
@@ -166,11 +165,11 @@ const BookDetails = ({ className, ...rest }) => {
           p={2}
         >
           <Link to="/app/books">
-          <Button
-            style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
-            variant="contained"
-          >
-            Cancelar
+            <Button
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+              variant="contained"
+            >
+              Cancelar
           </Button>
           </Link>
           <Button

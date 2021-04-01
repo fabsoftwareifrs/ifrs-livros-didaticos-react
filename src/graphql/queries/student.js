@@ -1,15 +1,21 @@
 import { gql } from '@apollo/client';
 
 const StudentsQuery = gql`
-  query StudentsQuery($page:Int!, $limit:Int!){
-    paginateStudents(page:$page, limit:$limit) {
+  query StudentsQuery($input:PaginateInput!){
+    paginateStudents(input:$input) {
       docs{
         id
         name
         email
         matriculation
-        course_id
-        class_id
+        course{
+          id
+          name
+        }
+        classes{
+          id 
+          name
+        }
       }
       total
     }
@@ -22,8 +28,14 @@ const AllStudentsQuery = gql`
         name
         email
         matriculation
-        course_id
-        class_id
+        course{
+          id
+          name
+        }
+        classes{
+          id 
+          name
+        }
     }
   }
 `;
@@ -34,10 +46,16 @@ const StudentQuery = gql`
       name
       email
       matriculation
-      course_id
-      class_id
+      course{
+        id
+        name
+      }
+      classes{
+        id 
+        name
+      }
     }
   }
 `;
 
-export {StudentsQuery, StudentQuery,AllStudentsQuery}
+export { StudentsQuery, StudentQuery, AllStudentsQuery }

@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useMutation,useQuery, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
-import {StudentEdit} from '../../../../graphql/mutations/student'
-import {StudentsQuery, StudentQuery} from '../../../../graphql/queries/student'
+import { StudentEdit } from '../../../../graphql/mutations/student'
+import { StudentsQuery, StudentQuery } from '../../../../graphql/queries/student'
 import { Link, useHistory, useParams } from 'react-router-dom';
 import {
   Box,
@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
 
 const StudentDetails = ({ className, ...rest }) => {
   const classes = useStyles();
-  var history= useHistory()
+  var history = useHistory()
   const {
     fields: input,
     errors,
@@ -37,18 +37,18 @@ const StudentDetails = ({ className, ...rest }) => {
   } = useMyForm(fields);
   var { id } = useParams();
   const { loading, error, data } = useQuery(StudentQuery, {
-    variables: { id:id },
+    variables: { id: id },
   });
-  var values= {
-    name:"",
-    email:"",
-    matriculation:"",
-    course_id:1,
-    class_id:1
+  var values = {
+    name: "",
+    email: "",
+    matriculation: "",
+    course_id: 1,
+    class_id: 1
   }
-  if(!loading){
+  if (!loading) {
     console.log(data)
-    values=data.student
+    values = data.student
   }
   const onCompleted = useCallback(
     (response) => {
@@ -58,24 +58,26 @@ const StudentDetails = ({ className, ...rest }) => {
   );
   useEffect(() => {
     onCompleted()
-  },[values])
-  
-  
- 
-  const [mutationEdit] = useMutation(StudentEdit,{
+  }, [values])
+
+
+
+  const [mutationEdit] = useMutation(StudentEdit, {
     refetchQueries: [
-      { query: StudentsQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: StudentsQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  });  
+  });
   const editStudent = async (data) => {
-    data.course_id=parseInt(data.course_id)
-    data.class_id=parseInt(data.class_id)
-    await mutationEdit({ variables: data })
+    data.course_id = parseInt(data.course_id)
+    data.class_id = parseInt(data.class_id)
+    const { id, ...rest } = data
+    await mutationEdit({ variables: { id: data.id, input: { ...rest } } })
     history.push('/app/students')
   };
- 
+
 
   return (
     <form
@@ -89,100 +91,100 @@ const StudentDetails = ({ className, ...rest }) => {
           title="Estudante"
         />
         <Divider />
-          <CardContent>
+        <CardContent>
+          <Grid
+            container
+            spacing={3}
+          >
             <Grid
-              container
-              spacing={3}
+              item
+              md={6}
+              xs={12}
             >
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={!!errors.name}
-                  fullWidth
-                  helperText={!!errors.name?errors.name:"Informe o nome do estudante"}
-                  label={input.name.label}
-                  name="name"
-                  type={input.name.type}
-                  onChange={({ target }) => handleChange(target)}
-                  value={input.name.value}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={!!errors.email}
-                  fullWidth
-                  helperText={errors.email}
-                  label={input.email.label}
-                  name="email"
-                  type={input.email.type}
-                  onChange={({ target }) => handleChange(target)}
-                  value={input.email.value}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={!!errors.matriculation}
-                  fullWidth
-                  helperText={errors.matriculation}
-                  label={input.matriculation.label}
-                  name="matriculation"
-                  type={input.matriculation.type}
-                  onChange={({ target }) => handleChange(target)}
-                  value={input.matriculation.value}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
               <TextField
-                  error={!!errors.course_id}
-                  fullWidth
-                  helperText={!!errors.course_id?errors.course_id:"Informe o nome da turma"}
-                  label={input.course_id.label}
-                  type={input.course_id.type}
-                  name="course_id"
-                  onChange={({ target }) => handleChange(target)}
-                  value={input.course_id.value}
-                  variant="outlined"
-                />
-              </Grid>
-
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-              <TextField
-                  error={!!errors.class_id}
-                  fullWidth
-                  helperText={!!errors.class_id?errors.class_id:"Informe o nome da turma"}
-                  label={input.class_id.label}
-                  type={input.class_id.type}
-                  name="class_id"
-                  onChange={({ target }) => handleChange(target)}
-                  value={input.class_id.value}
-                  variant="outlined"
-                />
-              </Grid>
-            
+                error={!!errors.name}
+                fullWidth
+                helperText={!!errors.name ? errors.name : "Informe o nome do estudante"}
+                label={input.name.label}
+                name="name"
+                type={input.name.type}
+                onChange={({ target }) => handleChange(target)}
+                value={input.name.value}
+                variant="outlined"
+              />
             </Grid>
-          </CardContent>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                error={!!errors.email}
+                fullWidth
+                helperText={errors.email}
+                label={input.email.label}
+                name="email"
+                type={input.email.type}
+                onChange={({ target }) => handleChange(target)}
+                value={input.email.value}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                error={!!errors.matriculation}
+                fullWidth
+                helperText={errors.matriculation}
+                label={input.matriculation.label}
+                name="matriculation"
+                type={input.matriculation.type}
+                onChange={({ target }) => handleChange(target)}
+                value={input.matriculation.value}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                error={!!errors.course_id}
+                fullWidth
+                helperText={!!errors.course_id ? errors.course_id : "Informe o nome da turma"}
+                label={input.course_id.label}
+                type={input.course_id.type}
+                name="course_id"
+                onChange={({ target }) => handleChange(target)}
+                value={input.course_id.value}
+                variant="outlined"
+              />
+            </Grid>
+
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                error={!!errors.class_id}
+                fullWidth
+                helperText={!!errors.class_id ? errors.class_id : "Informe o nome da turma"}
+                label={input.class_id.label}
+                type={input.class_id.type}
+                name="class_id"
+                onChange={({ target }) => handleChange(target)}
+                value={input.class_id.value}
+                variant="outlined"
+              />
+            </Grid>
+
+          </Grid>
+        </CardContent>
         <Divider />
         <Box
           display="flex"
@@ -190,11 +192,11 @@ const StudentDetails = ({ className, ...rest }) => {
           p={2}
         >
           <Link to="/app/students">
-          <Button
-            style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
-            variant="contained"
-          >
-            Cancelar
+            <Button
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+              variant="contained"
+            >
+              Cancelar
           </Button>
           </Link>
           <Button

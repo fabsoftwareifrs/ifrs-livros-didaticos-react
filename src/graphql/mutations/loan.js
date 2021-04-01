@@ -9,14 +9,10 @@ const LoanDelete = gql`
 `;
 
 const LoanEdit = gql`
-  mutation LoanEdit($id:ID!, $delivered:Boolean!, $student_id: Int!, $book_id: Int!, $user_id: Int!, $period_id: Int!){
+  mutation LoanEdit($id:ID!, $input:LoanInput){
     updateLoan(
     id:$id
-    delivered: $delivered, 
-    student_id: $student_id, 
-    book_id: $book_id, 
-    user_id: $user_id
-    period_id: $period_id
+    input:$input
   ),{
     id
    
@@ -24,13 +20,9 @@ const LoanEdit = gql`
   }
 `;
 const LoanCreate = gql`
-mutation LoanCreate($delivered:Boolean!, $student_id: Int!, $book_id: Int!, $user_id: Int!, $period_id: Int!){
+mutation LoanCreate($input:LoanInput){
     createLoan(
-      delivered: $delivered, 
-      student_id: $student_id, 
-      book_id: $book_id, 
-      user_id: $user_id
-      period_id: $period_id
+      input:$input
   ),{
     id
    

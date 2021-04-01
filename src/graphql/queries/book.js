@@ -1,15 +1,17 @@
 import { gql } from '@apollo/client';
 
 const BooksQuery = gql`
-  query BooksQuery($page:Int!, $limit:Int!){
-    paginateBooks(page:$page, limit:$limit) {
+  query BooksQuery($input:PaginateInput!){
+    paginateBooks(input:$input) {
       docs{
         id
         name
-        code
         author
         volume
-        quantity
+        category{
+          id 
+          name
+        }
       }
       total
     }
@@ -20,10 +22,12 @@ const AllBooksQuery = gql`
     books{
         id
         name
-        code
         author
         volume
-        quantity
+        category{
+          id 
+          name
+        }
     }
   }
 `;
@@ -32,12 +36,14 @@ const BookQuery = gql`
     book(id:$id) {
         id
         name
-        code
         author
         volume
-        quantity
+        category{
+          id 
+          name
+        }
   }
 }
 `;
 
-export {BooksQuery, BookQuery, AllBooksQuery}
+export { BooksQuery, BookQuery, AllBooksQuery }

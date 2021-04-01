@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 const PeriodsQuery = gql`
-  query PeriodsQuery($page:Int!, $limit:Int!){
-    paginatePeriods(page:$page, limit:$limit) {
+  query PeriodsQuery($input:PaginateInput!){
+    paginatePeriods(input:$input) {
       docs{
         id
         name
@@ -34,4 +34,4 @@ const PeriodQuery = gql`
   }
 `;
 
-export {PeriodsQuery, PeriodQuery,AllPeriodsQuery}
+export { PeriodsQuery, PeriodQuery, AllPeriodsQuery }

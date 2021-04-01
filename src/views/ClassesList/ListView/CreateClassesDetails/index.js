@@ -15,7 +15,7 @@ import {
   Divider,
   Grid,
   TextField,
-  makeStyles, 
+  makeStyles,
   Select,
   InputLabel
 } from '@material-ui/core';
@@ -27,10 +27,10 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const ClassDetails = ({ className, create, set,...rest }) => {
+const ClassDetails = ({ className, create, set, ...rest }) => {
   const classes = useStyles();
 
-  var history= useHistory();
+  var history = useHistory();
 
   const {
     fields: input,
@@ -42,16 +42,17 @@ const ClassDetails = ({ className, create, set,...rest }) => {
     setValues
   } = useMyForm(fields);
 
-  const [mutationCreate] = useMutation(ClassCreate,{
+  const [mutationCreate] = useMutation(ClassCreate, {
     refetchQueries: [
-      { query: ClassesQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: ClassesQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  }); 
+  });
 
   const createClass = (data) => {
-    data.course_id=parseInt(data.course_id)
+    data.course_id = parseInt(data.course_id)
     mutationCreate({ variables: data })
     history.push('/app/classes')
   };
@@ -86,7 +87,7 @@ const ClassDetails = ({ className, create, set,...rest }) => {
               <TextField
                 error={!!errors.name}
                 fullWidth
-                helperText={!!errors.name?errors.name:"Informe o nome da turma"}
+                helperText={!!errors.name ? errors.name : "Informe o nome da turma"}
                 label={input.name.label}
                 type={input.name.type}
                 name="name"
@@ -103,7 +104,7 @@ const ClassDetails = ({ className, create, set,...rest }) => {
               <TextField
                 error={!!errors.course_id}
                 fullWidth
-                helperText={!!errors.course_id?errors.course_id:"Informe o nome da turma"}
+                helperText={!!errors.course_id ? errors.course_id : "Informe o nome da turma"}
                 label={input.course_id.label}
                 type={input.course_id.type}
                 name="course_id"
@@ -111,7 +112,7 @@ const ClassDetails = ({ className, create, set,...rest }) => {
                 value={input.course_id.value}
                 variant="outlined"
               />
-              
+
             </Grid>
           </Grid>
         </CardContent>
@@ -123,7 +124,7 @@ const ClassDetails = ({ className, create, set,...rest }) => {
         >
           <Link to="/app/classes">
             <Button
-              style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
               variant="contained"
             >
               Cancelar

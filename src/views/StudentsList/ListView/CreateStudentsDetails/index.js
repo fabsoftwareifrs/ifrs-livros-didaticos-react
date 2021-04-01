@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useMutation,useQuery, gql } from '@apollo/client';
-import {StudentCreate} from '../../../../graphql/mutations/student'
-import {StudentsQuery} from '../../../../graphql/queries/student'
+import { useMutation, useQuery, gql } from '@apollo/client';
+import { StudentCreate } from '../../../../graphql/mutations/student'
+import { StudentsQuery } from '../../../../graphql/queries/student'
 import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
 import { Link, useHistory } from 'react-router-dom';
@@ -25,9 +25,9 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const StudentDetails = ({ className,...rest }) => {
+const StudentDetails = ({ className, ...rest }) => {
   const classes = useStyles();
-  var history= useHistory()
+  var history = useHistory()
   const {
     fields: input,
     errors,
@@ -37,20 +37,21 @@ const StudentDetails = ({ className,...rest }) => {
     reset,
     setValues
   } = useMyForm(fields);
-  const [mutationCreate] = useMutation(StudentCreate,{
+  const [mutationCreate] = useMutation(StudentCreate, {
     refetchQueries: [
-      { query: StudentsQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: StudentsQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  }); 
+  });
   const createStudent = (data) => {
-    data.course_id=parseInt(data.course_id)
-    data.class_id=parseInt(data.class_id)
-    mutationCreate({ variables: data })
+    data.course_id = parseInt(data.course_id)
+    data.class_id = parseInt(data.class_id)
+    mutationCreate({ variables: { input: data } })
     history.push('/app/students')
   };
-  
+
 
   return (
     <form
@@ -77,7 +78,7 @@ const StudentDetails = ({ className,...rest }) => {
               <TextField
                 error={!!errors.name}
                 fullWidth
-                helperText={!!errors.name?errors.name:"Informe o nome do estudante"}
+                helperText={!!errors.name ? errors.name : "Informe o nome do estudante"}
                 label={input.name.label}
                 name="name"
                 type={input.name.type}
@@ -108,7 +109,7 @@ const StudentDetails = ({ className,...rest }) => {
               md={6}
               xs={12}
             >
-               <TextField
+              <TextField
                 error={!!errors.matriculation}
                 fullWidth
                 helperText={errors.matriculation}
@@ -125,10 +126,10 @@ const StudentDetails = ({ className,...rest }) => {
               md={6}
               xs={12}
             >
-             <TextField
+              <TextField
                 error={!!errors.course_id}
                 fullWidth
-                helperText={!!errors.course_id?errors.course_id:"Informe o nome da turma"}
+                helperText={!!errors.course_id ? errors.course_id : "Informe o nome da turma"}
                 label={input.course_id.label}
                 type={input.course_id.type}
                 name="course_id"
@@ -143,10 +144,10 @@ const StudentDetails = ({ className,...rest }) => {
               md={6}
               xs={12}
             >
-             <TextField
+              <TextField
                 error={!!errors.class_id}
                 fullWidth
-                helperText={!!errors.class_id?errors.class_id:"Informe o nome da turma"}
+                helperText={!!errors.class_id ? errors.class_id : "Informe o nome da turma"}
                 label={input.class_id.label}
                 type={input.class_id.type}
                 name="class_id"
@@ -155,7 +156,7 @@ const StudentDetails = ({ className,...rest }) => {
                 variant="outlined"
               />
             </Grid>
-           
+
           </Grid>
         </CardContent>
         <Divider />
@@ -165,11 +166,11 @@ const StudentDetails = ({ className,...rest }) => {
           p={2}
         >
           <Link to="/app/students">
-          <Button
-            style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
-            variant="contained"
-          >
-            Cancelar
+            <Button
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+              variant="contained"
+            >
+              Cancelar
           </Button>
           </Link>
           <Button

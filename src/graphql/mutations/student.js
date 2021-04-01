@@ -9,27 +9,20 @@ const StudentDelete = gql`
 `;
 
 const StudentEdit = gql`
-  mutation StudentEdit($id:ID, $name:String!, $email:String!, $matriculation:String!, $course_id:Int!, $class_id:Int!){
+  mutation StudentEdit($id:ID, $input:StudentInput){
     updateStudent(
       id:$id
-      name:$name
-      email:$email
-      matriculation:$matriculation
-      course_id:$course_id
-      class_id:$class_id
+      input:$input
   ),{
       id
     }
   }
 `;
 const StudentCreate = gql`
-  mutation StudentCreate( $name:String!, $email:String!, $matriculation:String!, $course_id:Int!, $class_id:Int!){
+  mutation StudentCreate($input:StudentInput){
     createStudent(
       name:$name
-      email:$email
-      matriculation:$matriculation
-      course_id:$course_id
-      class_id:$class_id
+      input:$input
   ),{
       id
     }

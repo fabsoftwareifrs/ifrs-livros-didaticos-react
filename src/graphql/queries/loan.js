@@ -1,23 +1,29 @@
 import { gql } from '@apollo/client';
 
 const LoansQuery = gql`
-  query LoansQuery($page:Int!, $limit:Int!){
-    paginateLoans(page:$page, limit:$limit) {
+  query LoansQuery($input:PaginateInput!){
+    paginateLoans(input:$input) {
       docs{
         id
         late
         delivered
-        students{
+        student{
+          id
           name
+          email
+          matriculation
+          
         }
-        books{
-          name
+        copy{
+          id
+          code 
+          status
         }
-        users{
+        period{
+          id
           name
-        }
-        periods{
-          name
+          start
+          end
         }
       }
       total
@@ -27,43 +33,29 @@ const LoansQuery = gql`
 const LoanQuery = gql`
   query LoanQuery($id:ID!){
     loan(id:$id) {
-      id
-      late
-      delivered
-      user_id
-      student_id
-      book_id
-      period_id
-      students{
         id
-        name
-        email
-        matriculation
-        course_id
-        class_id
+        late
+        delivered
+        student{
+          id
+          name
+          email
+          matriculation
+         
+        }
+        copy{
+          id
+          code 
+          status
+        }
+        period{
+          id
+          name
+          start
+          end
+        }
       }
-      books{
-        id
-        name
-        code
-        author
-        volume
-        quantity
-      }
-      users{
-        id
-        name
-        login
-        accessLevel
-      }
-      periods{
-        id
-        name
-        start
-        end
-      }
-    }
   }
 `;
 
-export {LoanQuery, LoansQuery}
+export { LoanQuery, LoansQuery }

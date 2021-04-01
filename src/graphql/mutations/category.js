@@ -4,15 +4,17 @@ const CategoryDelete = gql`
   mutation CategoryDelete($id:ID!){
     deleteCategory(
       id:$id
-    )
+    ){
+      id
+    }
   }
 `;
 
 const CategoryEdit = gql`
-  mutation CategoryEdit($id:ID!, $name:String!){
+  mutation CategoryEdit($id:ID!, $input:CategoryInput){
     updateCategory(
     id:$id
-    name:$name
+    input:$input
   ),{
     id
    
@@ -20,9 +22,9 @@ const CategoryEdit = gql`
   }
 `;
 const CategoryCreate = gql`
-  mutation CategoryCreate( $name:String!){
+  mutation CategoryCreate( $input:CategoryInput){
     createCategory(
-    name:$name
+      input:$input
   ),{
     id
    

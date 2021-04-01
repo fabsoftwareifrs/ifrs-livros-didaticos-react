@@ -1,28 +1,28 @@
 export default {
-    
-    student_id:{
-        label:'Estudante',
-        type:'number',
-        value:'',
-        rules:{
-            required:"Este campo é obrigatório",
-            
+
+    studentId: {
+        label: 'Estudante',
+        type: 'number',
+        value: '',
+        rules: {
+            required: "Este campo é obrigatório",
+
         }
     },
-    book_id:{
-        label:'Livro',
-        type:'number',
-        value:'',
-        rules:{
-            required:"Este campo é obrigatório",
+    copyId: {
+        label: 'Exemplar',
+        type: 'number',
+        value: '',
+        rules: {
+            required: "Este campo é obrigatório",
         }
     },
-    period_id:{
-        label:'Período letivo',
-        type:'number',
-        value:'',
-        rules:{
-            required:"Este campo é obrigatório",
+    periodId: {
+        label: 'Período letivo',
+        type: 'number',
+        value: '',
+        rules: {
+            required: "Este campo é obrigatório",
         }
     },
 }

@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useMutation,useQuery, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
-import {UserEdit} from '../../../../graphql/mutations/user'
-import {UsersQuery, UserQuery} from '../../../../graphql/queries/user'
+import { UserEdit } from '../../../../graphql/mutations/user'
+import { UsersQuery, UserQuery } from '../../../../graphql/queries/user'
 import { Link, useHistory, useParams } from 'react-router-dom';
 import {
   Box,
@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
 
 const UserDetails = ({ className, ...rest }) => {
   const classes = useStyles();
-  var history= useHistory()
+  var history = useHistory()
   const {
     fields: input,
     errors,
@@ -39,17 +39,17 @@ const UserDetails = ({ className, ...rest }) => {
   } = useMyForm(fields);
   var { id } = useParams();
   const { loading, error, data } = useQuery(UserQuery, {
-    variables: { id:id },
+    variables: { id: id },
   });
-  var values= {
-    name:"",
-    code:"",
-    author:"",
-    volume:"",
-    quantity:1
+  var values = {
+    name: "",
+    code: "",
+    author: "",
+    volume: "",
+    quantity: 1
   }
-  if(!loading){
-    values=data.user
+  if (!loading) {
+    values = data.user
   }
   const onCompleted = useCallback(
     (response) => {
@@ -59,23 +59,25 @@ const UserDetails = ({ className, ...rest }) => {
   );
   useEffect(() => {
     onCompleted()
-  },[values])
-  
-  
- 
-  const [mutationEdit] = useMutation(UserEdit,{
+  }, [values])
+
+
+
+  const [mutationEdit] = useMutation(UserEdit, {
     refetchQueries: [
-      { query: UsersQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: UsersQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  });  
+  });
   const editUser = async (data) => {
-    data.accessLevel=parseInt(data.accessLevel)
-    await mutationEdit({ variables: data })
+    data.accessLevel = parseInt(data.accessLevel)
+    const { id, ...rest } = data
+    await mutationEdit({ variables: { id: data.id, input: { ...rest } } })
     history.push('/app/users')
   };
- 
+
 
   return (
     <form
@@ -99,11 +101,11 @@ const UserDetails = ({ className, ...rest }) => {
               md={6}
               xs={12}
             >
-              <input type="hidden" name="id" value={id}/>
+              <input type="hidden" name="id" value={id} />
               <TextField
                 error={!!errors.name}
                 fullWidth
-                helperText={!!errors.name?errors.name:"Informe o nome do usuário"}
+                helperText={!!errors.name ? errors.name : "Informe o nome do usuário"}
                 label={input.name.label}
                 name="name"
                 type={input.name.type}
@@ -129,13 +131,29 @@ const UserDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            
             <Grid
               item
               md={6}
               xs={12}
             >
-             <TextField
+              <TextField
+                error={!!errors.password}
+                fullWidth
+                helperText={errors.password}
+                label={input.password.label}
+                name="password"
+                type={input.password.type}
+                onChange={({ target }) => handleChange(target)}
+                value={input.password.value}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
                 error={!!errors.accessLevel}
                 fullWidth
                 helperText={errors.accessLevel}
@@ -147,7 +165,7 @@ const UserDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-           
+
           </Grid>
         </CardContent>
         <Divider />
@@ -157,11 +175,11 @@ const UserDetails = ({ className, ...rest }) => {
           p={2}
         >
           <Link to="/app/users">
-          <Button
-            style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
-            variant="contained"
-          >
-            Cancelar
+            <Button
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+              variant="contained"
+            >
+              Cancelar
           </Button>
           </Link>
           <Button

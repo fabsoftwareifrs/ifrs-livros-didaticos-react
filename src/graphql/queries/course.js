@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 const CoursesQuery = gql`
-  query CoursesQuery($page:Int!, $limit:Int!){
-    paginateCourses(page:$page, limit:$limit) {
+  query CoursesQuery($input:PaginateInput!){
+    paginateCourses(input:$input) {
       docs{
         id
         name
@@ -20,4 +20,4 @@ const CourseQuery = gql`
   }
 `;
 
-export {CoursesQuery, CourseQuery}
+export { CoursesQuery, CourseQuery }
