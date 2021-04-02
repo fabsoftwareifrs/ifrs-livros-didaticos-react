@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-<<<<<<< HEAD
 import { useMutation,useQuery, gql } from '@apollo/client';
 import {StudentCreate} from '../../../../graphql/mutations/student'
 import {StudentsQuery} from '../../../../graphql/queries/student'
 import { ClassesQueryAll, CoursesQuery } from '../../../../graphql/queries/class'
-=======
-import { useMutation, useQuery, gql } from '@apollo/client';
-import { StudentCreate } from '../../../../graphql/mutations/student'
-import { StudentsQuery } from '../../../../graphql/queries/student'
->>>>>>> main
 import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
 import { Link, useHistory } from 'react-router-dom';
