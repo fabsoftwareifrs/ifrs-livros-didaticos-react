@@ -25,7 +25,8 @@ import {
   Users as UsersIcon,
   Square as SquareIcon,
   PenTool as PenIcon,
-  ArrowUp as ArrowIcon
+  ArrowUp as ArrowIcon,
+  Clock as ClockIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -65,6 +66,11 @@ const items = [
     href: '/app/loans',
     icon: ArrowIcon,
     title: 'Empréstimos'
+  },
+  {
+    href: '/app/lates',
+    icon: ClockIcon,
+    title: 'Atrasados'
   },
 
 ];
