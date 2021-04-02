@@ -112,6 +112,9 @@ const BooksList = (props) => {
                           <TableCell>
 
                           </TableCell>
+                          <TableCell>
+
+                          </TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -143,6 +146,16 @@ const BooksList = (props) => {
                             </TableCell>
                             <TableCell>
                               {book.category.name}
+                            </TableCell>
+                            <TableCell>
+                              <Link to={"/app/copies/" + book.id}>
+                                <Button
+                                  color="primary"
+                                  variant="contained"
+                                >
+                                  Exemplares
+                              </Button>
+                              </Link>
                             </TableCell>
                             <TableCell>
                               <Modal

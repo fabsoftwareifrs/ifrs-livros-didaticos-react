@@ -4,7 +4,9 @@ const CourseDelete = gql`
   mutation CourseDelete($id:ID!){
     deleteCourse(
       id:$id
-    )
+    ){
+      id
+    }
   }
 `;
 
@@ -30,4 +32,4 @@ const CourseCreate = gql`
   }
 `;
 
-export {CourseCreate, CourseEdit, CourseDelete}
+export { CourseCreate, CourseEdit, CourseDelete }

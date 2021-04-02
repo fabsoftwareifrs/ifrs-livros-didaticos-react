@@ -40,4 +40,9 @@ export default {
             required: "Este campo é obrigatório",
         }
     },
+    quantity: {
+        label: 'Exemplares',
+        type: 'number',
+        value: '',
+    },
 }

@@ -4,7 +4,9 @@ const BooksDelete = gql`
   mutation BooksDelete($id:ID!){
     deleteBook(
       id:$id
-    )
+    ){
+      id
+    }
   }
 `;
 const BooksEdit = gql`
@@ -29,4 +31,4 @@ const BooksCreate = gql`
   }
 `;
 
-export {BooksCreate, BooksEdit, BooksDelete}
+export { BooksCreate, BooksEdit, BooksDelete }

@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { BooksCreate } from '../../../../graphql/mutations/book'
+import { CopyCreate } from '../../../../graphql/mutations/copy'
 import { AllCategoriesQuery } from '../../../../graphql/queries/category'
 import {
   Box,
@@ -47,9 +48,17 @@ const BookDetails = ({ className, ...rest }) => {
       }
     ]
   });
+  const [mutationCreateCopy] = useMutation(CopyCreate);
   const categories = useQuery(AllCategoriesQuery);
   const createBook = async (data) => {
-    await mutationCreate({ variables: { input: data } })
+    var { quantity } = data
+    quantity = parseInt(quantity)
+    delete data.quantity
+
+    let book = await mutationCreate({ variables: { input: data } })
+    for (let i = 0; i < quantity; i++) {
+      await mutationCreateCopy({ variables: { input: { status: "AVAILABLE", bookId: parseInt(book.data.createBook.id) } } })
+    }
     history.push('/app/books')
 
   };
@@ -155,6 +164,23 @@ const BookDetails = ({ className, ...rest }) => {
                     />}
                 />
               }
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                helperText='Informe a quantidade de exemplares'
+                label={input.quantity.label}
+                name="quantity"
+                type={input.quantity.type}
+                onChange={({ target }) => handleChange(target)}
+                value={input.quantity.value}
+                variant="outlined"
+                inputProps={{ min: 0 }}
+              />
             </Grid>
           </Grid>
         </CardContent>

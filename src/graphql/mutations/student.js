@@ -4,7 +4,9 @@ const StudentDelete = gql`
   mutation studentDelete($id:ID!){
     deleteStudent(
       id:$id
-    )
+    ){
+      id
+    }
   }
 `;
 
@@ -29,4 +31,4 @@ const StudentCreate = gql`
   }
 `;
 
-export {StudentDelete, StudentEdit, StudentCreate}
+export { StudentDelete, StudentEdit, StudentCreate }

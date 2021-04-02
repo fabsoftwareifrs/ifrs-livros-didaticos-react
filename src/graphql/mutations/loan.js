@@ -4,7 +4,9 @@ const LoanDelete = gql`
   mutation LoanDelete($id:ID!){
     deleteLoan(
       id:$id
-    )
+    ){
+      id
+    }
   }
 `;
 
@@ -30,4 +32,4 @@ mutation LoanCreate($input:LoanInput){
   }
 `;
 
-export {LoanCreate, LoanEdit, LoanDelete}
+export { LoanCreate, LoanEdit, LoanDelete }

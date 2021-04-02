@@ -5,6 +5,23 @@ const CopiesQuery = gql`
     copies {
       id
       code
+      book{
+        id
+        name
+      }
+      status
+    }
+  }
+`;
+const CopiesByBookQuery = gql`
+  query CopiesByBookQuery($bookId:Int!){
+    copiesByBookId(bookId:$bookId) {
+      id
+      code
+      book{
+        id
+        name
+      }
       status
     }
   }
@@ -14,9 +31,13 @@ const CopyQuery = gql`
     copy(id:$id) {
       id
       code
+      book{
+        id
+        name
+      }
       status
     }
   }
 `;
 
-export { CopiesQuery, CopyQuery }
+export { CopiesQuery, CopiesByBookQuery, CopyQuery }
