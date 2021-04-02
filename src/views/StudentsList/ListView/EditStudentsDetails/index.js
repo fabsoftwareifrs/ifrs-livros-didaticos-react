@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useMutation,useQuery, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
 import {StudentEdit} from '../../../../graphql/mutations/student'
@@ -48,7 +48,7 @@ const StudentDetails = ({ className, ...rest }) => {
   const classesQuery = useQuery(ClassesQueryAll)
 
   const { loading, error, data } = useQuery(StudentQuery, {
-    variables: { id:id },
+    variables: { id: id },
   });
 
 
@@ -60,7 +60,7 @@ const StudentDetails = ({ className, ...rest }) => {
     course_id:1,
     class_id:1
   }
-  if(!loading){
+  if (!loading) {
     console.log(data)
     values=data.student
 
@@ -89,11 +89,12 @@ const StudentDetails = ({ className, ...rest }) => {
   
   const [mutationEdit] = useMutation(StudentEdit,{
     refetchQueries: [
-      { query: StudentsQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: StudentsQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  });  
+  });
   const editStudent = async (data) => {
     data.course_id=parseInt(course['value'])
     data.class_id=parseInt(classRoom['value'])
@@ -117,10 +118,49 @@ const StudentDetails = ({ className, ...rest }) => {
           title="Estudante"
         />
         <Divider />
-          <CardContent>
+        <CardContent>
+          <Grid
+            container
+            spacing={3}
+          >
             <Grid
-              container
-              spacing={3}
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                error={!!errors.name}
+                fullWidth
+                helperText={!!errors.name ? errors.name : "Informe o nome do estudante"}
+                label={input.name.label}
+                name="name"
+                type={input.name.type}
+                onChange={({ target }) => handleChange(target)}
+                value={input.name.value}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                error={!!errors.email}
+                fullWidth
+                helperText={errors.email}
+                label={input.email.label}
+                name="email"
+                type={input.email.type}
+                onChange={({ target }) => handleChange(target)}
+                value={input.email.value}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
             >
               <Grid
                 item
@@ -214,7 +254,9 @@ const StudentDetails = ({ className, ...rest }) => {
               </Grid>
             
             </Grid>
-          </CardContent>
+
+          </Grid>
+        </CardContent>
         <Divider />
         <Box
           display="flex"
@@ -222,11 +264,11 @@ const StudentDetails = ({ className, ...rest }) => {
           p={2}
         >
           <Link to="/app/students">
-          <Button
-            style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
-            variant="contained"
-          >
-            Cancelar
+            <Button
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+              variant="contained"
+            >
+              Cancelar
           </Button>
           </Link>
           <Button

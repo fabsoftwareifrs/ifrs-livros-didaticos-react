@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useMutation,useQuery, gql } from '@apollo/client';
-import {UserCreate} from '../../../../graphql/mutations/user'
-import {UsersQuery} from '../../../../graphql/queries/user'
+import { useMutation, useQuery, gql } from '@apollo/client';
+import { UserCreate } from '../../../../graphql/mutations/user'
+import { UsersQuery } from '../../../../graphql/queries/user'
 import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
 import { Link, useHistory } from 'react-router-dom';
@@ -25,9 +25,9 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const UserDetails = ({ className,...rest }) => {
+const UserDetails = ({ className, ...rest }) => {
   const classes = useStyles();
-  var history= useHistory()
+  var history = useHistory()
   const {
     fields: input,
     errors,
@@ -37,19 +37,20 @@ const UserDetails = ({ className,...rest }) => {
     reset,
     setValues
   } = useMyForm(fields);
-  const [mutationCreate] = useMutation(UserCreate,{
+  const [mutationCreate] = useMutation(UserCreate, {
     refetchQueries: [
-      { query: UsersQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: UsersQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  }); 
+  });
   const createUser = (data) => {
-    data.accessLevel=parseInt(data.accessLevel)
-    mutationCreate({ variables: data })
+    data.accessLevel = parseInt(data.accessLevel)
+    mutationCreate({ variables: { input: data } })
     history.push('/app/users')
   };
-  
+
 
   return (
     <form
@@ -76,7 +77,7 @@ const UserDetails = ({ className,...rest }) => {
               <TextField
                 error={!!errors.name}
                 fullWidth
-                helperText={!!errors.name?errors.name:"Informe o nome do usuário"}
+                helperText={!!errors.name ? errors.name : "Informe o nome do usuário"}
                 label={input.name.label}
                 name="name"
                 type={input.name.type}
@@ -107,7 +108,7 @@ const UserDetails = ({ className,...rest }) => {
               md={6}
               xs={12}
             >
-               <TextField
+              <TextField
                 error={!!errors.password}
                 fullWidth
                 helperText={errors.password}
@@ -124,7 +125,7 @@ const UserDetails = ({ className,...rest }) => {
               md={6}
               xs={12}
             >
-             <TextField
+              <TextField
                 error={!!errors.accessLevel}
                 fullWidth
                 helperText={errors.accessLevel}
@@ -136,7 +137,7 @@ const UserDetails = ({ className,...rest }) => {
                 variant="outlined"
               />
             </Grid>
-           
+
           </Grid>
         </CardContent>
         <Divider />
@@ -146,11 +147,11 @@ const UserDetails = ({ className,...rest }) => {
           p={2}
         >
           <Link to="/app/users">
-          <Button
-            style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
-            variant="contained"
-          >
-            Cancelar
+            <Button
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+              variant="contained"
+            >
+              Cancelar
           </Button>
           </Link>
           <Button

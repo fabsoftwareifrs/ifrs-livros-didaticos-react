@@ -37,7 +37,7 @@ const LoginView = () => {
     }
   });
   const onSubmit= async (data) =>  {
-    await mutationLogin({ variables:  data })
+    await mutationLogin({ variables: {input:data} })
     
   }
   

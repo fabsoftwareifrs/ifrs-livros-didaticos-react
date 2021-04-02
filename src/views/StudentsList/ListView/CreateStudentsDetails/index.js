@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import { useMutation,useQuery, gql } from '@apollo/client';
 import {StudentCreate} from '../../../../graphql/mutations/student'
 import {StudentsQuery} from '../../../../graphql/queries/student'
 import { ClassesQueryAll, CoursesQuery } from '../../../../graphql/queries/class'
+=======
+import { useMutation, useQuery, gql } from '@apollo/client';
+import { StudentCreate } from '../../../../graphql/mutations/student'
+import { StudentsQuery } from '../../../../graphql/queries/student'
+>>>>>>> main
 import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
 import { Link, useHistory } from 'react-router-dom';
@@ -42,13 +48,14 @@ const StudentDetails = ({ className,...rest }) => {
     reset,
     setValues
   } = useMyForm(fields);
-  const [mutationCreate] = useMutation(StudentCreate,{
+  const [mutationCreate] = useMutation(StudentCreate, {
     refetchQueries: [
-      { query: StudentsQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: StudentsQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  }); 
+  });
   const createStudent = (data) => {
     data.course_id=parseInt(course['value'])
     data.class_id=parseInt(classRoom['value'])
@@ -85,7 +92,7 @@ const StudentDetails = ({ className,...rest }) => {
               <TextField
                 error={!!errors.name}
                 fullWidth
-                helperText={!!errors.name?errors.name:"Informe o nome do estudante"}
+                helperText={!!errors.name ? errors.name : "Informe o nome do estudante"}
                 label={input.name.label}
                 name="name"
                 type={input.name.type}
@@ -116,7 +123,7 @@ const StudentDetails = ({ className,...rest }) => {
               md={6}
               xs={12}
             >
-               <TextField
+              <TextField
                 error={!!errors.matriculation}
                 fullWidth
                 helperText={errors.matriculation}
@@ -189,7 +196,7 @@ const StudentDetails = ({ className,...rest }) => {
               />
              
             </Grid>
-           
+
           </Grid>
         </CardContent>
         <Divider />
@@ -199,11 +206,11 @@ const StudentDetails = ({ className,...rest }) => {
           p={2}
         >
           <Link to="/app/students">
-          <Button
-            style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
-            variant="contained"
-          >
-            Cancelar
+            <Button
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+              variant="contained"
+            >
+              Cancelar
           </Button>
           </Link>
           <Button

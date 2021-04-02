@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { useMutation,useQuery, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import { CoursesQuery, ClassQuery, ClassesQuery } from '../../../../graphql/queries/class'
 import { ClassEdit } from '../../../../graphql/mutations/class'
 import fields from './fields'
@@ -52,12 +52,12 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
   const coursesQuery = useQuery(CoursesQuery)
 
   const { loading, error, data } = useQuery(ClassQuery, {
-    variables: { id:id },
+    variables: { id: id },
   });
 
-  var values= {
-    name:"",
-    course_id:1
+  var values = {
+    name: "",
+    course_id: 1
   }
 
   if(!loading){
@@ -80,28 +80,30 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
 
   useEffect(() => {
     onCompleted()
-  },[values])
+  }, [values])
 
   const courses = coursesQuery.data
   
   const [mutationEdit] = useMutation(ClassEdit,{
     refetchQueries: [
-      { query: ClassesQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: ClassesQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  }); 
+  });
 
   const editClass = async (data) => {
-    data.course_id=parseInt(course['value'])
+    data.course_id = parseInt(data.course_id)
+    console.log(data)
     await mutationEdit({ variables: data })
     history.push('/app/classes')
   };
 
-  
+
   return (
     <form
-    onSubmit={handleSubmit(editClass)}
+      onSubmit={handleSubmit(editClass)}
       className={clsx(classes.root, className)}
       {...rest}
     >
@@ -121,11 +123,11 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
               md={6}
               xs={12}
             >
-              <input type="hidden" name="id" value={id}/>
+              <input type="hidden" name="id" value={id} />
               <TextField
                 error={!!errors.name}
                 fullWidth
-                helperText={!!errors.name?errors.name:"Informe o nome da turma"}
+                helperText={!!errors.name ? errors.name : "Informe o nome da turma"}
                 label={input.name.label}
                 type={input.name.type}
                 name="name"
@@ -165,7 +167,7 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
         >
           <Link to="/app/classes">
             <Button
-              style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
               variant="contained"
             >
               Cancelar
@@ -175,7 +177,7 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
             color="primary"
             variant="contained"
             type="submit"
-            
+
           >
             Editar
           </Button>

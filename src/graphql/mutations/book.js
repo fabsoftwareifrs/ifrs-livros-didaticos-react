@@ -4,18 +4,16 @@ const BooksDelete = gql`
   mutation BooksDelete($id:ID!){
     deleteBook(
       id:$id
-    )
+    ){
+      id
+    }
   }
 `;
 const BooksEdit = gql`
-  mutation BooksEdit($id:ID!, $name:String!, $code:String!,$author:String!, $volume:String!, $quantity:Int!){
+  mutation BooksEdit($id:ID!, $input:BookInput){
     updateBook(
     id:$id
-    name:$name
-    code:$code
-    author:$author
-    volume:$volume
-    quantity:$quantity
+    input:$input
   ),{
     id
    
@@ -23,13 +21,9 @@ const BooksEdit = gql`
   }
 `;
 const BooksCreate = gql`
-  mutation BooksCreate( $name:String!, $code:String!,$author:String!, $volume:String!, $quantity:Int!){
+  mutation BooksCreate( $input:BookInput){
     createBook(
-    name:$name
-    code:$code
-    author:$author
-    volume:$volume
-    quantity:$quantity
+      input:$input
   ),{
     id
    
@@ -37,4 +31,4 @@ const BooksCreate = gql`
   }
 `;
 
-export {BooksCreate, BooksEdit, BooksDelete}
+export { BooksCreate, BooksEdit, BooksDelete }

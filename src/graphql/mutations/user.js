@@ -4,17 +4,17 @@ const UserDelete = gql`
   mutation UserDelete($id:ID!){
     deleteUser(
       id:$id
-    )
+    ){
+      id
+    }
   }
 `;
 
 const UserEdit = gql`
-  mutation UserEdit($id:ID!, $name:String!, $login:String!, $accessLevel:Int!){
+  mutation UserEdit($id:ID!, $input:UserInput){
     updateUser(
     id:$id
-    name:$name
-    login:$login
-    accessLevel:$accessLevel
+    input:$input
   ),{
     id
    
@@ -22,12 +22,9 @@ const UserEdit = gql`
   }
 `;
 const UserCreate = gql`
-  mutation UserCreate( $name:String!, $login:String!, $password:String!, $accessLevel:Int!){
+  mutation UserCreate( $input:UserInput){
     createUser(
-    name:$name
-    login:$login
-    password:$password
-    accessLevel:$accessLevel
+    input:$input
   ),{
     id
    
@@ -35,4 +32,4 @@ const UserCreate = gql`
   }
 `;
 
-export {UserDelete, UserEdit, UserCreate}
+export { UserDelete, UserEdit, UserCreate }

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import {  useAuth } from '../../../providers/Auth'
+import { useAuth } from '../../../providers/Auth'
 import PropTypes from 'prop-types';
 import {
   Avatar,
@@ -24,7 +24,9 @@ import {
   Bookmark as BookMarkIcon,
   Users as UsersIcon,
   Square as SquareIcon,
-  PenTool as PenIcon
+  PenTool as PenIcon,
+  ArrowUp as ArrowIcon,
+  Clock as ClockIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -60,7 +62,17 @@ const items = [
     icon: UsersIcon,
     title: 'Estudantes'
   },
-  
+  {
+    href: '/app/loans',
+    icon: ArrowIcon,
+    title: 'Empréstimos'
+  },
+  {
+    href: '/app/lates',
+    icon: ClockIcon,
+    title: 'Atrasados'
+  },
+
 ];
 
 const useStyles = makeStyles(() => ({
@@ -82,7 +94,7 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
-  const {auth} =useAuth()
+  const { auth } = useAuth()
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
@@ -107,7 +119,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           color="textPrimary"
           variant="h5"
         >
-          {"Bem-vindo, "+auth.user.name}
+          {"Bem-vindo, " + auth.user.name}
         </Typography>
       </Box>
       <Divider />
@@ -124,8 +136,8 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </List>
       </Box>
       <Box flexGrow={1} />
-      
-    
+
+
     </Box>
   );
 
@@ -162,7 +174,7 @@ NavBar.propTypes = {
 };
 
 NavBar.defaultProps = {
-  onMobileClose: () => {},
+  onMobileClose: () => { },
   openMobile: false
 };
 

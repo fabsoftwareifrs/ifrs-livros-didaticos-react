@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useMutation,useQuery, gql } from '@apollo/client';
-import {CategoryCreate} from '../../../../graphql/mutations/category'
+import { useMutation, useQuery, gql } from '@apollo/client';
+import { CategoryCreate } from '../../../../graphql/mutations/category'
 import { Link, useHistory } from 'react-router-dom';
-import { CategoryQuery } from 'src/graphql/queries/category';
+import { CategoriesQuery } from 'src/graphql/queries/category';
 import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
 import {
@@ -24,10 +24,9 @@ import {
 const useStyles = makeStyles(() => ({
   root: {}
 }));
-
-const CategoryDetails = ({ className,...rest }) => {
+const CategoryDetails = ({ className, ...rest }) => {
   const classes = useStyles();
-  var history= useHistory()
+  var history = useHistory()
   const {
     fields: input,
     errors,
@@ -37,27 +36,28 @@ const CategoryDetails = ({ className,...rest }) => {
     reset,
     setValues
   } = useMyForm(fields);
-  
-  const [mutationCreate] = useMutation(CategoryCreate,{
-    
+
+  const [mutationCreate] = useMutation(CategoryCreate, {
+
     refetchQueries: [
-      { query: CategoryQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: CategoriesQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  });  
-  
+  });
+
   const createCategory = async (data) => {
-    await mutationCreate({ variables: data })
+    await mutationCreate({ variables: { input: data } })
     history.push('/app/category')
 
   };
 
-  
+
 
   return (
     <form
-    onSubmit={handleSubmit(createCategory)}
+      onSubmit={handleSubmit(createCategory)}
       className={clsx(classes.root, className)}
       {...rest}
     >
@@ -80,7 +80,7 @@ const CategoryDetails = ({ className,...rest }) => {
               <TextField
                 error={!!errors.name}
                 fullWidth
-                helperText={!!errors.name?errors.name:"Informe o nome da categoria"}
+                helperText={!!errors.name ? errors.name : "Informe o nome da categoria"}
                 label={input.name.label}
                 name="name"
                 type={input.name.type}
@@ -89,8 +89,8 @@ const CategoryDetails = ({ className,...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            
-            
+
+
           </Grid>
         </CardContent>
         <Divider />
@@ -100,11 +100,11 @@ const CategoryDetails = ({ className,...rest }) => {
           p={2}
         >
           <Link to="/app/category">
-          <Button
-            style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
-            variant="contained"
-          >
-            Cancelar
+            <Button
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+              variant="contained"
+            >
+              Cancelar
           </Button>
           </Link>
           <Button

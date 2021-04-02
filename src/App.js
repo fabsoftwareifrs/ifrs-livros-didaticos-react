@@ -30,23 +30,30 @@ import CoursesEdit from 'src/views/CoursesList/ListView/EditCourseDetails';
 import Students from 'src/views/StudentsList/ListView';
 import StudentsCreate from 'src/views/StudentsList/ListView/CreateStudentsDetails';
 import StudentsEdit from 'src/views/StudentsList/ListView/EditStudentsDetails';
+import Loans from 'src/views/LoansList/ListView';
+import LoansCreate from 'src/views/LoansList/ListView/CreateLoansDetails';
+import LoansEdit from 'src/views/LoansList/ListView/EditLoansDetails';
+import Copies from 'src/views/CopiesList/ListView';
+import CopiesEdit from 'src/views/CopiesList/ListView/EditCopiesDetails';
+import Lates from 'src/views/LatesList/ListView';
 import { createBrowserHistory } from "history";
+import { LocationSearching } from '@material-ui/icons';
 var hist = createBrowserHistory();
 
 const App = () => {
- 
+
 
   return (
     <Router>
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <AuthProvider>  
-            <Switch>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <AuthProvider>
+          <Switch>
             <UnPrivateRoute
-             exact 
-             path="/" 
-             component={() => <Main Children={LoginView} />} 
-             />
+              exact
+              path="/"
+              component={() => <Main Children={LoginView} />}
+            />
             <PrivateRoute
               exact
               path="/app/student"
@@ -142,9 +149,39 @@ const App = () => {
               path="/app/students/edit/:id"
               component={() => <Dashboard Children={StudentsEdit} />}
             />
+            <PrivateRoute
+              exact
+              path="/app/loans"
+              component={() => <Dashboard Children={Loans} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/loans/create"
+              component={() => <Dashboard Children={LoansCreate} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/loans/edit/:id"
+              component={() => <Dashboard Children={LoansEdit} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/copies/:id"
+              component={() => <Dashboard Children={Copies} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/copies/edit/:id"
+              component={() => <Dashboard Children={CopiesEdit} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/lates"
+              component={() => <Dashboard Children={Lates} />}
+            />
           </Switch>
-    </AuthProvider>
-    </ThemeProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 };

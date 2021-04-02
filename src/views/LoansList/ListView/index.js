@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
-import { BooksQuery } from '../../../graphql/queries/book'
-import { BooksCreate, BooksDelete, BooksEdit } from '../../../graphql/mutations/book'
+import { LoansQuery } from '../../../graphql/queries/loan'
+import { LoanCreate, LoanEdit, LoanDelete } from '../../../graphql/mutations/loan'
 import { useMutation, useQuery, gql } from '@apollo/client';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Modal from '../../../components/ModalIcon';
@@ -42,18 +42,18 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const BooksList = (props) => {
+const LoanList = (props) => {
   const classes = useStyles();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-  const { loading, error, data } = useQuery(BooksQuery, {
+  const { loading, error, data } = useQuery(LoansQuery, {
     variables: { input: { page: page, paginate: limit } },
   });
-  const [mutationDelete] = useMutation(BooksDelete, {
+  const [mutationDelete] = useMutation(LoanDelete, {
 
     refetchQueries: [
       {
-        query: BooksQuery,
+        query: LoansQuery,
         variables: { input: { page: page, paginate: limit } }
       }
     ]
@@ -74,7 +74,7 @@ const BooksList = (props) => {
   const handlePageChange = (event, newPage) => {
     setPage(newPage + 1);
   };
-  const deleteBook = (id) => {
+  const deleteLoan = (id) => {
     mutationDelete({ variables: { id } })
   };
 
@@ -83,7 +83,7 @@ const BooksList = (props) => {
   return (
     <Page
       className={classes.root}
-      title="Livros"
+      title="Empréstimos"
     >
       <Container maxWidth={false}>
         <>
@@ -97,85 +97,68 @@ const BooksList = (props) => {
                       <TableHead>
                         <TableRow>
                           <TableCell>
-                            Nome
+                            Estudante
+                      </TableCell>
+                          <TableCell>
+                            Exemplar
+                      </TableCell>
+                          <TableCell>
+                            Entrege?
+                      </TableCell>
+                          <TableCell>
+                            Atrasado?
+                      </TableCell>
+                          <TableCell>
+                            Período
                       </TableCell>
 
-                          <TableCell>
-                            Autor
-                      </TableCell>
-                          <TableCell>
-                            Volume
-                      </TableCell>
-                          <TableCell>
-                            Categoria
-                      </TableCell>
-                          <TableCell>
-
-                          </TableCell>
                           <TableCell>
 
                           </TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {data.paginateBooks.docs.slice(0, limit).map((book) => (
+                        {data.paginateLoans.docs.slice(0, limit).map((loan) => (
                           <TableRow
                             hover
-                            key={book.id}
+                            key={loan.id}
                           >
 
                             <TableCell>
-                              <Box
-                                alignItems="center"
-                                display="flex"
-                              >
+                              {loan.student.name}
+                            </TableCell>
+                            <TableCell>
+                              {loan.copy.code}
+                            </TableCell>
+                            <TableCell>
+                              {loan.delivered ? "Sim" : "Não"}
+                            </TableCell>
+                            <TableCell>
+                              {loan.late ? "ATRASADO" : "Em dia"}
+                            </TableCell>
+                            <TableCell>
+                              {loan.period.name}
+                            </TableCell>
 
-                                <Typography
-                                  color="textPrimary"
-                                  variant="body1"
-                                >
-                                  {book.name}
-                                </Typography>
-                              </Box>
-                            </TableCell>
-                            <TableCell>
-                              {book.author}
-                            </TableCell>
-                            <TableCell>
-                              {book.volume}
-                            </TableCell>
-                            <TableCell>
-                              {book.category.name}
-                            </TableCell>
-                            <TableCell>
-                              <Link to={"/app/copies/" + book.id}>
-                                <Button
-                                  color="primary"
-                                  variant="contained"
-                                >
-                                  Exemplares
-                              </Button>
-                              </Link>
-                            </TableCell>
                             <TableCell>
                               <Modal
                                 className={classes.icon}
                                 icon={TrashIcon}
                               >
                                 <CardHeader
-                                  subheader={'Tem certeza que deseja deletar o livro "' + book.name + '"'}
-                                  title="Deletar livro"
+                                  subheader={'Tem certeza que deseja deletar o empréstimo?'}
+                                  title="Deletar empréstimo"
                                 />
                                 <Button
                                   variant="contained"
                                   style={{ margin: 10, backgroundColor: "#8B0000", color: '#fff' }}
-                                  onClick={() => deleteBook(book.id)}
+                                  onClick={() => deleteLoan(loan.id)}
                                 >
                                   Deletar
                           </Button>
                               </Modal>
 
-                              <Link to={"/app/books/edit/" + book.id} style={{ color: '#263238' }}><EditIcon className={classes.icon} /></Link>
+                              <Link to={"/app/loans/edit/" + loan.id} style={{ color: '#263238' }}><EditIcon className={classes.icon} /></Link>
                             </TableCell>
                           </TableRow>
                         ))}
@@ -185,7 +168,7 @@ const BooksList = (props) => {
                 </PerfectScrollbar>
                 <TablePagination
                   component="div"
-                  count={data.paginateBooks.total}
+                  count={data.paginateLoans.total}
                   onChangePage={handlePageChange}
                   onChangeRowsPerPage={handleLimitChange}
                   page={page - 1}
@@ -203,5 +186,5 @@ const BooksList = (props) => {
   );
 };
 
-export default (BooksList);
+export default (LoanList);
 

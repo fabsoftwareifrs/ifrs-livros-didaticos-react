@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useMutation,useQuery, gql } from '@apollo/client';
-import {CategoryEdit} from '../../../../graphql/mutations/category'
+import { useMutation, useQuery, gql } from '@apollo/client';
+import { CategoryEdit } from '../../../../graphql/mutations/category'
 import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
 import {
@@ -17,7 +17,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import { CategoryQuery, CategoriesQuery } from 'src/graphql/queries/category';
-import {Link,useParams,useHistory} from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 
 
 const useStyles = makeStyles(() => ({
@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 
 const CategoryDetails = ({ className, ...rest }) => {
   const classes = useStyles();
-  var history= useHistory()
+  var history = useHistory()
   const {
     fields: input,
     errors,
@@ -38,14 +38,14 @@ const CategoryDetails = ({ className, ...rest }) => {
   } = useMyForm(fields);
   var { id } = useParams();
   const { loading, error, data } = useQuery(CategoryQuery, {
-    variables: { id:id },
+    variables: { id: id },
   });
-  var values= {
-    name:"",
-    
+  var values = {
+    name: "",
+
   }
-  if(!loading){
-    values=data.category
+  if (!loading) {
+    values = data.category
   }
   const onCompleted = useCallback(
     (response) => {
@@ -55,24 +55,25 @@ const CategoryDetails = ({ className, ...rest }) => {
   );
   useEffect(() => {
     onCompleted()
-  },[values])
-  
-  
- 
-  const [mutationEdit] = useMutation(CategoryEdit,{
+  }, [values])
+
+
+
+  const [mutationEdit] = useMutation(CategoryEdit, {
     refetchQueries: [
-      { query: CategoriesQuery,
-       variables: { page:1, limit:10 }
-       }
+      {
+        query: CategoriesQuery,
+        variables: { input: { page: 1, paginate: 10 } }
+      }
     ]
-  });  
+  });
   const editCategory = async (data) => {
-    console.log(data)
-    await mutationEdit({ variables: data })
+    const { id, ...rest } = data
+    await mutationEdit({ variables: { id: data.id, input: { ...rest } } })
     history.push('/app/category')
   };
- 
-  
+
+
 
   return (
     <form
@@ -96,11 +97,11 @@ const CategoryDetails = ({ className, ...rest }) => {
               md={6}
               xs={12}
             >
-              <input type="hidden" name="id" value={id}/>
+              <input type="hidden" name="id" value={id} />
               <TextField
                 error={!!errors.name}
                 fullWidth
-                helperText={!!errors.name?errors.name:"Informe o nome da categoria"}
+                helperText={!!errors.name ? errors.name : "Informe o nome da categoria"}
                 label={input.name.label}
                 name="name"
                 type={input.name.type}
@@ -108,9 +109,9 @@ const CategoryDetails = ({ className, ...rest }) => {
                 value={input.name.value}
                 variant="outlined"
               />
-              
+
             </Grid>
-            
+
           </Grid>
         </CardContent>
         <Divider />
@@ -120,18 +121,18 @@ const CategoryDetails = ({ className, ...rest }) => {
           p={2}
         >
           <Link to="/app/category">
-          <Button
-            style={{marginRight:10,backgroundColor:"#8B0000",color:'#fff'}}
-            variant="contained"
-          >
-            Cancelar
+            <Button
+              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+              variant="contained"
+            >
+              Cancelar
           </Button>
           </Link>
           <Button
             color="primary"
             variant="contained"
             type="submit"
-            
+
           >
             Editar
           </Button>

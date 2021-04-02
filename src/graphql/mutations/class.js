@@ -4,29 +4,29 @@ const ClassDelete = gql`
   mutation ClassDelete($id:ID!){
     deleteClass(
       id:$id
-    )
+    ){
+      id
+    }
   }
 `;
 const ClassEdit = gql`
-  mutation ClassEdit($id:ID!, $name:String!, $course_id:Int!){
+  mutation ClassEdit($id:ID!, $input:ClassInput){
     updateClass(
       id:$id
-      name:$name
-      course_id:$course_id
+      input:$input
   ),{
     id
   }
   }
 `;
 const ClassCreate = gql`
-  mutation ClassCreate( $name:String!, $course_id:Int!){
+  mutation ClassCreate( $input:ClassInput){
     createClass(
-    name:$name
-    course_id:$course_id
+      input:$input
   ),{
     id
   }
   }
 `;
 
-export {ClassCreate, ClassEdit, ClassDelete}
+export { ClassCreate, ClassEdit, ClassDelete }
