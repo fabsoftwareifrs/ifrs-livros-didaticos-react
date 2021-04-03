@@ -24,8 +24,6 @@ import {
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import ReactSelect from 'react-select'
-
 const useStyles = makeStyles(() => ({
   root: {}
 }));
@@ -34,8 +32,6 @@ const ClassDetails = ({ className, create, set, ...rest }) => {
   const classes = useStyles();
 
   var history = useHistory();
-
-  const [course, setCourse] = useState(null);
 
   const {
     fields: input,

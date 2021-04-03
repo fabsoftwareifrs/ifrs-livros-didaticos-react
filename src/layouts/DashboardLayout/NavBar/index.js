@@ -26,7 +26,8 @@ import {
   Square as SquareIcon,
   PenTool as PenIcon,
   ArrowUp as ArrowIcon,
-  Clock as ClockIcon
+  Clock as ClockIcon,
+  Calendar as CalendarIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -71,6 +72,11 @@ const items = [
     href: '/app/lates',
     icon: ClockIcon,
     title: 'Atrasados'
+  },
+  {
+    href: '/app/periods',
+    icon: CalendarIcon,
+    title: 'Períodos'
   },
 
 ];

@@ -59,7 +59,6 @@ const ClassesList = (props) => {
     ]
   });
 
-
   if (error) return <p>Error :(</p>;
 
   const handleLimitChange = (event) => {
@@ -73,7 +72,6 @@ const ClassesList = (props) => {
   const deleteClass = (id) => {
     mutationDelete({ variables: { id } })
   };
-
 
   return (
     <Page

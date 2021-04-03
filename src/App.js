@@ -36,6 +36,9 @@ import LoansEdit from 'src/views/LoansList/ListView/EditLoansDetails';
 import Copies from 'src/views/CopiesList/ListView';
 import CopiesEdit from 'src/views/CopiesList/ListView/EditCopiesDetails';
 import Lates from 'src/views/LatesList/ListView';
+import Periods from 'src/views/PeriodsList/ListView';
+import PeriodCreate from 'src/views/PeriodsList/ListView/CreatePeriodDetails';
+import PeriodEdit from 'src/views/PeriodsList/ListView/EditPeriodDetails';
 import { createBrowserHistory } from "history";
 import { LocationSearching } from '@material-ui/icons';
 var hist = createBrowserHistory();
@@ -178,6 +181,21 @@ const App = () => {
               exact
               path="/app/lates"
               component={() => <Dashboard Children={Lates} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/periods"
+              component={() => <Dashboard Children={Periods} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/periods/create"
+              component={() => <Dashboard Children={PeriodCreate} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/periods/edit/:id"
+              component={() => <Dashboard Children={PeriodEdit} />}
             />
           </Switch>
         </AuthProvider>
