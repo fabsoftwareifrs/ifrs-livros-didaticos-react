@@ -6,7 +6,8 @@ import useMyForm from '../../../../hooks/MyForm'
 import fields from './fields'
 import {StudentEdit} from '../../../../graphql/mutations/student'
 import {StudentsQuery, StudentQuery} from '../../../../graphql/queries/student'
-import { ClassesQueryAll, CoursesQuery } from '../../../../graphql/queries/class'
+import { AllClassesQuery } from '../../../../graphql/queries/class'
+import { AllCoursesQuery } from '../../../../graphql/queries/course'
 import { Link, useHistory, useParams } from 'react-router-dom';
 import {
   Box,
@@ -20,18 +21,16 @@ import {
   makeStyles
 } from '@material-ui/core';
 
-import ReactSelect from 'react-select'
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles(() => ({
   root: {}
 }));
 
 const StudentDetails = ({ className, ...rest }) => {
+
   const classes = useStyles();
   var history= useHistory()
-
-  const [course, setCourse] = useState(null)
-  const [classRoom, setClass] = useState(null)
 
   const {
     fields: input,
@@ -42,50 +41,39 @@ const StudentDetails = ({ className, ...rest }) => {
     reset,
     setValues
   } = useMyForm(fields);
-  var { id } = useParams();
 
-  const coursesQuery = useQuery(CoursesQuery)
-  const classesQuery = useQuery(ClassesQueryAll)
+  var { id } = useParams();
 
   const { loading, error, data } = useQuery(StudentQuery, {
     variables: { id: id },
   });
 
+  const courses = useQuery(AllCoursesQuery)
+  const classesRoom = useQuery(AllClassesQuery)
 
+  console.log(classesRoom)
 
   var values= {
     name:"",
     email:"",
     matriculation:"",
-    course_id:1,
-    class_id:1
+    course_id:"",
+    class_id:""
   }
-  if (!loading) {
-    console.log(data)
-    values=data.student
 
-    var courseDefault = {
-      value:values.courses.id,
-      label:values.courses.name
-    }
-
-    var classDefault = {
-      value:values.classes.id,
-      label:values.classes.name
-    }
-
+  if(!loading){
+    values = { id: data.student.id, name: data.student.name, email: data.student.email, matriculation: data.student.matriculation, courseId: parseInt(data.student.course.id), classId: parseInt(data.student.classes.id) }
   }
+
   const onCompleted = useCallback(
     (response) => {
       setValues(values)
-      setCourse(courseDefault)
-      setClass(classDefault)
     },
     [setValues]
   );
   useEffect(() => {
     onCompleted()
-  },[values])
+  },[loading])
   
   const [mutationEdit] = useMutation(StudentEdit,{
     refetchQueries: [
@@ -95,16 +83,12 @@ const StudentDetails = ({ className, ...rest }) => {
       }
     ]
   });
-  const editStudent = async (data) => {
-    data.course_id=parseInt(course['value'])
-    data.class_id=parseInt(classRoom['value'])
-    await mutationEdit({ variables: data })
-    history.push('/app/students')
-  };
 
-  const courses = coursesQuery.data
-  const classesRoom = classesQuery.data
- 
+  const editStudent = async (data) => {
+    const { id, ...rest } = data
+    await mutationEdit({ variables: { id: id, input: { ...rest } } })
+    history.push('/app/students')
+  }; 
 
   return (
     <form
@@ -114,7 +98,7 @@ const StudentDetails = ({ className, ...rest }) => {
     >
       <Card>
         <CardHeader
-          subheader="Você pode editar as informações de um estudante."
+          subheader="Você pode cadastrar as informações de um estudante."
           title="Estudante"
         />
         <Divider />
@@ -162,99 +146,82 @@ const StudentDetails = ({ className, ...rest }) => {
               md={6}
               xs={12}
             >
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={!!errors.name}
-                  fullWidth
-                  helperText={!!errors.name?errors.name:"Informe o nome do estudante"}
-                  label={input.name.label}
-                  name="name"
-                  type={input.name.type}
-                  onChange={({ target }) => handleChange(target)}
-                  value={input.name.value}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={!!errors.email}
-                  fullWidth
-                  helperText={errors.email}
-                  label={input.email.label}
-                  name="email"
-                  type={input.email.type}
-                  onChange={({ target }) => handleChange(target)}
-                  value={input.email.value}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={!!errors.matriculation}
-                  fullWidth
-                  helperText={errors.matriculation}
-                  label={input.matriculation.label}
-                  name="matriculation"
-                  type={input.matriculation.type}
-                  onChange={({ target }) => handleChange(target)}
-                  value={input.matriculation.value}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <ReactSelect
-                  id="autocomplete"
-                  name="course_id"
-                  onChange={e => {
-                    setCourse(e)
-                  }}
-                  options={
-                    courses &&
-                    courses.courses &&
-                    courses.courses.map(({ id, name }) => ({ value: id, label: name }))
-                  }
-                  value={course}
-                />
-              </Grid>
-
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <ReactSelect
-                  id="autocomplete"
-                  name="class_id"
-                  onChange={e => {
-                    setClass(e)
-                  }}
-                  options={
-                    classesRoom &&
-                    classesRoom.classes &&
-                    classesRoom.classes.map(({ id, name }) => ({ value: id, label: name }))
-                  }
-                  value={classRoom}
-                />
-              </Grid>
-            
+              <TextField
+                error={!!errors.matriculation}
+                fullWidth
+                helperText={errors.matriculation}
+                label={input.matriculation.label}
+                name="matriculation"
+                type={input.matriculation.type}
+                onChange={({ target }) => handleChange(target)}
+                value={input.matriculation.value}
+                variant="outlined"
+              />
             </Grid>
-
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              {courses.loading ? "" :
+                <Autocomplete
+                  name="courseId"
+                  options={
+                    courses.data.courses.map(({ id, name }) => ({ value: id, label: name }))
+                  }
+                  onChange={(event, value) => {
+                    if (!value) {
+                      handleChange({ name: "courseId", value: "" })
+                    } else {
+                      handleChange({ name: "courseId", value: parseInt(value.value) })
+                    }
+                  }}
+                  getOptionLabel={(option) => option.label}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  value={input.courseId.value == "" ? { value: "", label: "" } : { value: "" + input.courseId.value, label: courses.data.courses.find(s => s.id === "" + input.courseId.value).name }}
+                  renderInput={(params) =>
+                    <TextField {...params}
+                      label={input.courseId.label}
+                      variant="outlined"
+                      error={!!errors.courseId}
+                      helperText={!!errors.courseId ? errors.courseId : "Informe o curso"}
+                    />
+                  }
+                />
+              }
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              {classesRoom.loading ? "" :
+                <Autocomplete
+                  name="classId"
+                  options={
+                    classesRoom.data.classes.map(({ id, name, course }) => ({ value: id, label: name }))
+                  }
+                  onChange={(event, value) => {
+                    if (!value) {
+                      handleChange({ name: "classId", value: "" })
+                    } else {
+                      handleChange({ name: "classId", value: parseInt(value.value) })
+                    }
+                  }}
+                  getOptionLabel={(option) => option.label}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  value={input.classId.value == "" ? { value: "", label: "" } : { value: "" + input.classId.value, label: classesRoom.data.classes.find(s => s.id === "" + input.classId.value).name }}
+                  renderInput={(params) =>
+                    <TextField {...params}
+                      label={input.classId.label}
+                      variant="outlined"
+                      error={!!errors.classId}
+                      helperText={!!errors.classId ? errors.classId : "Informe a turma"}
+                    />
+                  }
+                />
+              }
+            </Grid>
           </Grid>
         </CardContent>
         <Divider />
@@ -276,12 +243,13 @@ const StudentDetails = ({ className, ...rest }) => {
             variant="contained"
             type="submit"
           >
-            Editar
+            Cadastrar
           </Button>
         </Box>
       </Card>
     </form>
   );
+
 };
 
 export default StudentDetails;

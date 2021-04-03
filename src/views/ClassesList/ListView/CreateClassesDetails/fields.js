@@ -11,10 +11,10 @@ export default {
             }
         }
     },
-    course_id:{
+    courseId:{
         label:'Curso',
         type:'number',
-        value:1,
+        value:'',
         rules:{
             required:"Este campo é obrigatório",
         }

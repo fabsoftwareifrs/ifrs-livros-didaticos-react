@@ -57,10 +57,7 @@ const StudentsList = (props) => {
     ]
   });
 
-
-
   if (error) return <p>Error :(</p>;
-
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
@@ -72,8 +69,6 @@ const StudentsList = (props) => {
   const deleteStudent = (id) => {
     mutationDelete({ variables: { id } })
   };
-
-
 
   return (
     <Page

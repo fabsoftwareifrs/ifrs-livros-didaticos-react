@@ -11,6 +11,18 @@ const CoursesQuery = gql`
     }
   }
 `;
+
+
+
+const AllCoursesQuery = gql`
+  query AllCoursesQuery {
+    courses{
+      id
+      name
+    }
+  }
+`;
+
 const CourseQuery = gql`
   query CourseQuery($id:ID!){
     course(id:$id) {
@@ -20,4 +32,4 @@ const CourseQuery = gql`
   }
 `;
 
-export { CoursesQuery, CourseQuery }
+export { CoursesQuery, CourseQuery, AllCoursesQuery }

@@ -2,7 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import clsx from 'clsx';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { useLazyQuery } from "@apollo/client";
-import { ClassesQuery, CoursesQuery } from '../../../../graphql/queries/class'
+import { ClassesQuery } from '../../../../graphql/queries/class'
+import { AllCoursesQuery } from '../../../../graphql/queries/course'
 import { ClassCreate } from '../../../../graphql/mutations/class'
 import fields from './fields'
 import { Link, useHistory } from 'react-router-dom';
@@ -55,18 +56,12 @@ const ClassDetails = ({ className, create, set, ...rest }) => {
     ]
   });
 
-  const createClass = (data) => {
-    data.course_id = parseInt(data.course_id)
-    mutationCreate({ variables: data })
+  const courses = useQuery(AllCoursesQuery);
+
+  const createClass = async (data) => {
+    await mutationCreate({ variables: { input: data } })
     history.push('/app/classes')
   };
-
-  const { loading, error, data } = useQuery(CoursesQuery);
-
-
-
-
-
 
   return (
     <form
@@ -107,20 +102,31 @@ const ClassDetails = ({ className, create, set, ...rest }) => {
               md={6}
               xs={12}
             >
-              <ReactSelect
-                id="autocomplete"
-                name="course_id"
-                onChange={e => {
-                  setCourse(e)
-                }}
-                options={
-                  data &&
-                  data.courses &&
-                  data.courses.map(({ id, name }) => ({ value: id, label: name }))
-                }
-                value={course}
-              />
-
+              {courses.loading ? "" :
+                <Autocomplete
+                  name="courseId"
+                  options={
+                    courses.data.courses.map(({ id, name }) => ({ value: id, label: name }))
+                  }
+                  onChange={(event, value) => {
+                    if (!value) {
+                      handleChange({ name: "courseId", value: "" })
+                    } else {
+                      handleChange({ name: "courseId", value: parseInt(value.value) })
+                    }
+                  }}
+                  getOptionLabel={(option) => option.label}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  renderInput={(params) =>
+                    <TextField {...params}
+                      label={input.courseId.label}
+                      variant="outlined"
+                      error={!!errors.courseId}
+                      helperText={!!errors.courseId ? errors.courseId : "Informe o curso"}
+                    />
+                  }
+                />
+              }
             </Grid>
           </Grid>
         </CardContent>
@@ -154,29 +160,3 @@ const ClassDetails = ({ className, create, set, ...rest }) => {
 export default ClassDetails;
 
 
-/*
-<Autocomplete
-                name="course_id"
-                id="autocomplete"
-                options={
-                  data &&
-                  data.courses &&
-                  data.courses.map(({ id, name }) => ({ value: id, label: name }))
-                }
-                onChange={(event, newValue) => {
-                  setCourse(newValue);
-                }}
-                value={course}
-                getOptionLabel={(option) => option.label}
-                getOptionSelected={(option, value) => option.id === value.id}
-                style={{ width: 300 }}
-                renderInput={(params) => 
-                  <TextField {...params} 
-                              label="Cursos" 
-                              variant="outlined" 
-                              error={!!errors.course_id}
-                              helperText={!!errors.course_id?errors.course_id:"Informe o curso"}
-                  />}
-              />
-
-*/

@@ -23,7 +23,6 @@ const StudentEdit = gql`
 const StudentCreate = gql`
   mutation StudentCreate($input:StudentInput){
     createStudent(
-      name:$name
       input:$input
   ),{
       id
