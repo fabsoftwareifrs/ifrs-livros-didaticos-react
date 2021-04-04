@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
 import { LoansQuery } from '../../../graphql/queries/loan'
-import { LoanCreate, LoanEdit, LoanDelete } from '../../../graphql/mutations/loan'
+import { LoanCreate, LoanEdit, LoanDelete, TerminateLoan, CancelTerminateLoan } from '../../../graphql/mutations/loan'
 import { useMutation, useQuery, gql } from '@apollo/client';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import Modal from '../../../components/ModalIcon';
+import ModalIcon from '../../../components/ModalIcon';
 import {
   Avatar,
   Box,
   Card,
   Container,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -24,8 +23,14 @@ import {
   TextField,
   Button
 } from '@material-ui/core';
-import { Trash2 as TrashIcon, Edit as EditIcon } from 'react-feather';
+import { 
+  Trash2 as TrashIcon, 
+  Edit as EditIcon, 
+  Check as CheckIcon, 
+  X as XIcon 
+} from 'react-feather';
 import { Link } from 'react-router-dom';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -39,13 +44,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
-
-
 const LoanList = (props) => {
   const classes = useStyles();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+
+  const [end, setTerminateDate] = useState(null);
+
   const { loading, error, data } = useQuery(LoansQuery, {
     variables: { input: { page: page, paginate: limit } },
   });
@@ -59,13 +64,27 @@ const LoanList = (props) => {
     ]
   });
 
+  const [mutationTerminate] = useMutation(TerminateLoan, {
 
+    refetchQueries: [
+      {
+        query: LoansQuery,
+        variables: { input: { page: page, paginate: limit } }
+      }
+    ]
+  });
 
+  const [mutationCancelTerminate] = useMutation(CancelTerminateLoan , {
+
+    refetchQueries: [
+      {
+        query: LoansQuery,
+        variables: { input: { page: page, paginate: limit } }
+      }
+    ]
+  });
 
   if (error) return <p>Error :(</p>;
-
-
-
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
@@ -78,7 +97,15 @@ const LoanList = (props) => {
     mutationDelete({ variables: { id } })
   };
 
+  const terminateLoan = (id) => {
+    mutationTerminate({ variables: { id: id, input: { end } } })
+    setTerminateDate(null)
+  };
 
+  const cancelTerminateLoan = (id) => {
+    mutationCancelTerminate({ variables: { id } })
+    setTerminateDate(null)
+  };
 
   return (
     <Page
@@ -98,19 +125,19 @@ const LoanList = (props) => {
                         <TableRow>
                           <TableCell>
                             Estudante
-                      </TableCell>
+                          </TableCell>
                           <TableCell>
                             Exemplar
-                      </TableCell>
+                          </TableCell>
                           <TableCell>
                             Entrege?
-                      </TableCell>
+                          </TableCell>
                           <TableCell>
                             Atrasado?
-                      </TableCell>
+                          </TableCell>
                           <TableCell>
                             Período
-                      </TableCell>
+                          </TableCell>
 
                           <TableCell>
 
@@ -131,7 +158,40 @@ const LoanList = (props) => {
                               {loan.copy.code}
                             </TableCell>
                             <TableCell>
-                              {loan.delivered ? "Sim" : "Não"}
+                              <ModalIcon
+                                className={classes.icon}
+                                icon={loan.delivered ? CheckIcon : XIcon}
+                              >
+                                <CardHeader
+                                  title="Concluir empréstimo"
+                                />
+                                <TextField
+                                  fullWidth
+                                  name="terminateData"
+                                  type="date"
+                                  defaultValue={loan.delivered ? loan.end : end}
+                                  value={end}
+                                  onChange={({ target }) => setTerminateDate(target.value)}
+                                  variant="outlined"
+                                  InputLabelProps={{
+                                    shrink: true,
+                                  }}
+                                />
+                                <Button
+                                  variant="contained"
+                                  style={{ margin: 10, backgroundColor: "#17882c", color: '#fff' }}
+                                  onClick={() => terminateLoan(loan.id)}
+                                >
+                                  Concluir Empréstimo
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{ margin: 10, backgroundColor: "#8B0000", color: '#fff' }}
+                                  onClick={() => cancelTerminateLoan(loan.id)}
+                                >
+                                  Remover data de entrega
+                                </Button>
+                              </ModalIcon>
                             </TableCell>
                             <TableCell>
                               {loan.late ? "ATRASADO" : "Em dia"}
@@ -141,7 +201,7 @@ const LoanList = (props) => {
                             </TableCell>
 
                             <TableCell>
-                              <Modal
+                              <ModalIcon
                                 className={classes.icon}
                                 icon={TrashIcon}
                               >
@@ -155,8 +215,8 @@ const LoanList = (props) => {
                                   onClick={() => deleteLoan(loan.id)}
                                 >
                                   Deletar
-                          </Button>
-                              </Modal>
+                                </Button>
+                              </ModalIcon>
 
                               <Link to={"/app/loans/edit/" + loan.id} style={{ color: '#263238' }}><EditIcon className={classes.icon} /></Link>
                             </TableCell>

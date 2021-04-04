@@ -7,6 +7,7 @@ const LoansQuery = gql`
         id
         late
         delivered
+        end
         student{
           id
           name

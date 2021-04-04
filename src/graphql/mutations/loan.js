@@ -32,4 +32,25 @@ mutation LoanCreate($input:LoanInput){
   }
 `;
 
-export { LoanCreate, LoanEdit, LoanDelete }
+const TerminateLoan = gql`
+  mutation TerminateLoan($id:ID!, $input:TerminateLoanInput){
+    terminateLoan(
+      id:$id
+      input:$input
+    ),{
+      id 
+    }
+  }
+`;
+
+const CancelTerminateLoan = gql`
+  mutation CancelTerminateLoan($id:ID!){
+    cancelTerminateLoan(
+      id:$id
+    ),{
+      id 
+    }
+  }
+`;
+
+export { LoanCreate, LoanEdit, LoanDelete, TerminateLoan, CancelTerminateLoan }
