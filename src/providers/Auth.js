@@ -1,38 +1,38 @@
-import React, { createContext, useReducer, useEffect, useContext } from "react";
+import React, { createContext, useReducer, useEffect, useContext } from 'react';
 
-
-import { createUploadLink } from "apollo-upload-client";
+import { createUploadLink } from 'apollo-upload-client';
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
   ApolloLink,
-  from,
-} from "@apollo/client";
+  from
+} from '@apollo/client';
 
-import { onError } from "@apollo/link-error";
+import { onError } from '@apollo/link-error';
 
-const env = process.env.NODE_ENV || "development";
+const env = process.env.NODE_ENV || 'development';
 
 const uploadLink = new createUploadLink({
-  uri:"//localhost:4000/graphql" 
+  uri:
+    env === 'development'
+      ? '//localhost:4000/graphql'
+      : `https://livros-didaticos-api.herokuapp.com/graphql`
 });
 
-
-
 const authLink = new ApolloLink((operation, forward) => {
-  const auth = JSON.parse(localStorage.getItem("auth"));
+  const auth = JSON.parse(localStorage.getItem('auth'));
 
   operation.setContext({
     headers: {
-      authorization: auth?.token ? `Bearer ${auth.token}` : "",
-    },
+      authorization: auth?.token ? `Bearer ${auth.token}` : ''
+    }
   });
 
   return forward(operation);
 });
 
-const errorLink = (dispatch) =>
+const errorLink = dispatch =>
   onError(({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ message }) => {
@@ -50,16 +50,16 @@ const Context = createContext();
 
 const initialState = {
   isAuthenticated: false,
-  user: { id: "", name: "", login: "" },
-  token: "",
+  user: { id: '', name: '', login: '' },
+  token: ''
 };
 
-const LOGIN = "LOGIN";
-const LOGOUT = "LOGOUT";
+const LOGIN = 'LOGIN';
+const LOGOUT = 'LOGOUT';
 
 const login = (user, token) => ({
   type: LOGIN,
-  payload: { user, token },
+  payload: { user, token }
 });
 
 const logout = () => {
@@ -68,13 +68,12 @@ const logout = () => {
 };
 
 const reducer = (state, { type, payload }) => {
-  
   switch (type) {
-    case "LOGIN": {
+    case 'LOGIN': {
       const { user, token } = payload;
       return { isAuthenticated: true, user, token };
     }
-    case "LOGOUT":
+    case 'LOGOUT':
       return initialState;
     default:
       return state;
@@ -84,22 +83,21 @@ const reducer = (state, { type, payload }) => {
 const useAuth = () => {
   const [auth, dispatch] = useContext(Context);
   if (auth === undefined)
-    throw new Error("useAuth deve ser utilizado dentro de um AuthProvider");
+    throw new Error('useAuth deve ser utilizado dentro de um AuthProvider');
 
   return { auth, dispatch };
 };
 
 const AuthenticatedProvider = ({ children }) => {
-  const localState = JSON.parse(localStorage.getItem("auth"));
+  const localState = JSON.parse(localStorage.getItem('auth'));
   const [auth, dispatch] = useReducer(reducer, localState || initialState);
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: from([errorLink(dispatch), authLink.concat(uploadLink)]),
+    link: from([errorLink(dispatch), authLink.concat(uploadLink)])
   });
 
   useEffect(() => {
-   
-    localStorage.setItem("auth", JSON.stringify(auth));
+    localStorage.setItem('auth', JSON.stringify(auth));
   }, [auth]);
 
   return (
@@ -108,8 +106,6 @@ const AuthenticatedProvider = ({ children }) => {
     </ApolloProvider>
   );
 };
-
-
 
 export default AuthenticatedProvider;
 export { useAuth, login, logout };
