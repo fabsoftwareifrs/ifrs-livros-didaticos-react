@@ -31,11 +31,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    whiteSpace: 'nowrap',
+    overflowX: 'auto'
   },
   icon: {
     margin: '0 10px',
     cursor: 'pointer'
+  },
+  endCell: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -86,13 +92,13 @@ const CourseList = (props) => {
           {loading ? '' :
             <Card>
               <PerfectScrollbar>
-                <Box minWidth={1050}>
+                <Box minWidth={300}>
                   <Table>
                     <TableHead>
                       <TableRow>
                         <TableCell>
                           Curso
-                      </TableCell>
+                        </TableCell>
 
                         <TableCell>
 
@@ -120,7 +126,7 @@ const CourseList = (props) => {
                               </Typography>
                             </Box>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={classes.endCell}>
                             <Modal
                               className={classes.icon}
                               icon={TrashIcon}
@@ -135,7 +141,7 @@ const CourseList = (props) => {
                                 onClick={() => deleteCourse(course.id)}
                               >
                                 Deletar
-                          </Button>
+                              </Button>
                             </Modal>
 
                             <Link style={{ color: '#263238' }} to={"/app/course/edit/" + course.id}><EditIcon className={classes.icon} /></Link>

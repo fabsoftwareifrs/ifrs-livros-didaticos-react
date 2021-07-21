@@ -34,11 +34,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    whiteSpace: 'nowrap',
+    overflowX: 'auto'
   },
   icon: {
     margin: '0 10px',
     cursor: 'pointer'
+  },
+  endCell: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -84,26 +90,26 @@ const ClassesList = (props) => {
           {loading ? '' :
             <Card>
               <PerfectScrollbar>
-                <Box minWidth={1050}>
+                <Box minWidth={300}>
                   <Table>
                     <TableHead>
                       <TableRow>
                         <TableCell>
                           Nome
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
                           Curso
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
 
                         </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {data.paginateClasses.docs.slice(0, limit).map((classes) => (
+                      {data.paginateClasses.docs.slice(0, limit).map((objClasses) => (
                         <TableRow
                           hover
-                          key={classes.id}
+                          key={objClasses.id}
                         >
 
                           <TableCell>
@@ -116,32 +122,32 @@ const ClassesList = (props) => {
                                 color="textPrimary"
                                 variant="body1"
                               >
-                                {classes.name}
+                                {objClasses.name}
                               </Typography>
                             </Box>
                           </TableCell>
                           <TableCell>
-                            {classes.course.name}
+                            {objClasses.course.name}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={classes.endCell}>
                             <Modal
                               className={classes.icon}
                               icon={TrashIcon}
                             >
                               <CardHeader
-                                subheader={'Tem certeza que deseja deletar a turma "' + classes.name + '"'}
+                                subheader={'Tem certeza que deseja deletar a turma "' + objClasses.name + '"'}
                                 title="Deletar turma"
                               />
                               <Button
                                 variant="contained"
                                 style={{ margin: 10, backgroundColor: "#8B0000", color: '#fff' }}
-                                onClick={() => deleteClass(classes.id)}
+                                onClick={() => deleteClass(objClasses.id)}
                               >
                                 Deletar
-                          </Button>
+                              </Button>
                             </Modal>
 
-                            <Link to={"/app/classes/edit/" + classes.id} style={{ color: '#263238' }}><EditIcon className={classes.icon} /></Link>
+                            <Link to={"/app/classes/edit/" + objClasses.id} style={{ color: '#263238' }}><EditIcon className={classes.icon} /></Link>
                           </TableCell>
                         </TableRow>
                       ))}

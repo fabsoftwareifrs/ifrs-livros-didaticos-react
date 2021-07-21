@@ -31,11 +31,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    whiteSpace: 'nowrap',
+    overflowX: 'auto'
   },
   icon: {
     margin: '0 10px',
     cursor: 'pointer'
+  },
+  endCell: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -91,19 +97,19 @@ const UsersList = (props) => {
           {loading ? '' :
             <Card>
               <PerfectScrollbar>
-                <Box minWidth={1050}>
+                <Box minWidth={300}>
                   <Table>
                     <TableHead>
                       <TableRow>
                         <TableCell>
                           Nome
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
                           Login
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
                           Nível de acesso
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
 
                         </TableCell>
@@ -137,7 +143,7 @@ const UsersList = (props) => {
                             {user.accessLevel}
                           </TableCell>
 
-                          <TableCell>
+                          <TableCell className={classes.endCell}>
                             <Modal
                               className={classes.icon}
                               icon={TrashIcon}
@@ -152,7 +158,7 @@ const UsersList = (props) => {
                                 onClick={() => deleteUser(user.id)}
                               >
                                 Deletar
-                          </Button>
+                              </Button>
                             </Modal>
 
                             <Link to={"/app/users/edit/" + user.id} style={{ color: '#263238' }}><EditIcon className={classes.icon} /></Link>

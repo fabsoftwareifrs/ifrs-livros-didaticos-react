@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { LoanEdit } from '../../../../graphql/mutations/loan'
 import useMyForm from '../../../../hooks/MyForm'
+import { AvailableCopiesQuery } from 'src/graphql/queries/copy';
 import fields from './fields'
 import {
   Box,
@@ -22,7 +23,7 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import { useAuth } from '../../../../providers/Auth'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { AllStudentsQuery } from 'src/graphql/queries/student';
-import { AvailableCopiesQuery } from 'src/graphql/queries/copy';
+import { CopiesQuery } from 'src/graphql/queries/copy';
 import { AllPeriodsQuery } from 'src/graphql/queries/period';
 const useStyles = makeStyles(() => ({
   root: {}
@@ -83,7 +84,7 @@ const LoanDetails = ({ className, ...rest }) => {
     history.push('/app/loans')
   };
   const students = useQuery(AllStudentsQuery);
-  const copies = useQuery(AvailableCopiesQuery);
+  const copies = useQuery(CopiesQuery);
   const periods = useQuery(AllPeriodsQuery);
 
 
@@ -119,7 +120,7 @@ const LoanDetails = ({ className, ...rest }) => {
                       <Autocomplete
                         name="copyId"
                         options={
-                          copies.data.availableCopies.map(({ id, code }) => ({ value: id, label: code }))
+                          copies.data.copies.map(({ id, code }) => ({ value: id, label: code }))
                         }
                         onChange={(event, value) => {
                           if (!value) {

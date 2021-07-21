@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 const LoansQuery = gql`
-  query LoansQuery($input:PaginateInput!){
-    paginateLoans(input:$input) {
+  query LoansQuery($input:PaginateInput!, $late:Boolean!){
+    paginateLoans(input:$input, late:$late) {
       docs{
         id
         late

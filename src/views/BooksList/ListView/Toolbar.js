@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ className,create,  ...rest }) => {
+const Toolbar = ({ className, create, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -39,12 +39,12 @@ const Toolbar = ({ className,create,  ...rest }) => {
         justifyContent="flex-end"
       >
         <Link to="/app/books/create">
-        <Button
-          color="primary"
-          
-          variant="contained"
-        >Adicionar Livro</Button>
-      </Link>
+          <Button
+            color="primary"
+
+            variant="contained"
+          >Adicionar Livro</Button>
+        </Link>
       </Box>
       <Box mt={3}>
         <Card>
@@ -64,7 +64,7 @@ const Toolbar = ({ className,create,  ...rest }) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Buscar Alunos"
+                placeholder="Buscar Livro"
                 variant="outlined"
               />
             </Box>

@@ -14,7 +14,8 @@ import {
   Divider,
   Grid,
   TextField,
-  makeStyles
+  makeStyles,
+  Container
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Link, useHistory } from 'react-router-dom';
@@ -69,144 +70,148 @@ const BookDetails = ({ className, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      <Card>
-        <CardHeader
-          subheader="Você pode cadastrar as informações de um livro."
-          title="Livro"
-        />
-        <Divider />
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
+      <Container maxWidth={false}>
+        <Box mt={3}>
+          <Card>
+            <CardHeader
+              subheader="Você pode cadastrar as informações de um livro."
+              title="Livro"
+            />
+            <Divider />
+            <CardContent>
+              <Grid
+                container
+                spacing={3}
+              >
 
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                error={!!errors.name}
-                fullWidth
-                helperText={!!errors.name ? errors.name : "Informe o título do livro"}
-                label={input.name.label}
-                name="name"
-                type={input.name.type}
-                onChange={({ target }) => handleChange(target)}
-                value={input.name.value}
-                variant="outlined"
-              />
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                >
+                  <TextField
+                    error={!!errors.name}
+                    fullWidth
+                    helperText={!!errors.name ? errors.name : "Informe o título do livro"}
+                    label={input.name.label}
+                    name="name"
+                    type={input.name.type}
+                    onChange={({ target }) => handleChange(target)}
+                    value={input.name.value}
+                    variant="outlined"
+                  />
 
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                error={!!errors.author}
-                fullWidth
-                helperText={errors.author}
-                label={input.author.label}
-                name="author"
-                type={input.author.type}
-                onChange={({ target }) => handleChange(target)}
-                value={input.author.value}
-                variant="outlined"
-              />
-            </Grid>
+                </Grid>
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                >
+                  <TextField
+                    error={!!errors.author}
+                    fullWidth
+                    helperText={errors.author}
+                    label={input.author.label}
+                    name="author"
+                    type={input.author.type}
+                    onChange={({ target }) => handleChange(target)}
+                    value={input.author.value}
+                    variant="outlined"
+                  />
+                </Grid>
 
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                error={!!errors.volume}
-                fullWidth
-                helperText={errors.volume}
-                label={input.volume.label}
-                name="volume"
-                type={input.volume.type}
-                onChange={({ target }) => handleChange(target)}
-                value={input.volume.value}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              {categories.loading ? "" :
-                <Autocomplete
-                  name="categoryId"
-                  options={
-                    categories.data.categories.map(({ id, name }) => ({ value: id, label: name }))
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                >
+                  <TextField
+                    error={!!errors.volume}
+                    fullWidth
+                    helperText={errors.volume}
+                    label={input.volume.label}
+                    name="volume"
+                    type={input.volume.type}
+                    onChange={({ target }) => handleChange(target)}
+                    value={input.volume.value}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                >
+                  {categories.loading ? "" :
+                    <Autocomplete
+                      name="categoryId"
+                      options={
+                        categories.data.categories.map(({ id, name }) => ({ value: id, label: name }))
+                      }
+                      onChange={(event, value) => {
+                        if (!value) {
+                          handleChange({ name: "categoryId", value: "" })
+                        } else {
+                          handleChange({ name: "categoryId", value: parseInt(value.value) })
+                        }
+                      }}
+                      getOptionLabel={(option) => option.label}
+                      getOptionSelected={(option, value) => option.id === value.id}
+                      renderInput={(params) =>
+                        <TextField {...params}
+                          label={input.categoryId.label}
+                          variant="outlined"
+                          fullWidth
+                          error={!!errors.categoryId}
+                          helperText={!!errors.categoryId ? errors.categoryId : "Informe a categoria"}
+                        />}
+                    />
                   }
-                  onChange={(event, value) => {
-                    if (!value) {
-                      handleChange({ name: "categoryId", value: "" })
-                    } else {
-                      handleChange({ name: "categoryId", value: parseInt(value.value) })
-                    }
-                  }}
-                  getOptionLabel={(option) => option.label}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  renderInput={(params) =>
-                    <TextField {...params}
-                      label={input.categoryId.label}
-                      variant="outlined"
-                      fullWidth
-                      error={!!errors.categoryId}
-                      helperText={!!errors.categoryId ? errors.categoryId : "Informe a categoria"}
-                    />}
-                />
-              }
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
+                </Grid>
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                >
+                  <TextField
+                    fullWidth
+                    helperText='Informe a quantidade de exemplares'
+                    label={input.quantity.label}
+                    name="quantity"
+                    type={input.quantity.type}
+                    onChange={({ target }) => handleChange(target)}
+                    value={input.quantity.value}
+                    variant="outlined"
+                    inputProps={{ min: 0 }}
+                  />
+                </Grid>
+              </Grid>
+            </CardContent>
+            <Divider />
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              p={2}
             >
-              <TextField
-                fullWidth
-                helperText='Informe a quantidade de exemplares'
-                label={input.quantity.label}
-                name="quantity"
-                type={input.quantity.type}
-                onChange={({ target }) => handleChange(target)}
-                value={input.quantity.value}
-                variant="outlined"
-                inputProps={{ min: 0 }}
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-        <Divider />
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          p={2}
-        >
-          <Link to="/app/books">
-            <Button
-              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
-              variant="contained"
-            >
-              Cancelar
-          </Button>
-          </Link>
-          <Button
-            color="primary"
-            variant="contained"
-            type="submit"
-          >
-            Cadastrar
-          </Button>
+              <Link to="/app/books">
+                <Button
+                  style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+                  variant="contained"
+                >
+                  Cancelar
+                </Button>
+              </Link>
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+              >
+                Cadastrar
+              </Button>
+            </Box>
+          </Card>
         </Box>
-      </Card>
+      </Container>
     </form>
   );
 };

@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
 import { LoansQuery } from '../../../graphql/queries/loan'
+import { LoanCreate, LoanEdit, LoanDelete, TerminateLoan, CancelTerminateLoan } from '../../../graphql/mutations/loan'
 import { useMutation, useQuery, gql } from '@apollo/client';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import Modal from '../../../components/ModalIcon';
+import ModalIcon from '../../../components/ModalIcon';
+import { LateMail } from '../../../graphql/mutations/mail'
+import { AvailableCopiesQuery } from 'src/graphql/queries/copy';
 import {
   Avatar,
   Box,
   Card,
   Container,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -21,20 +23,32 @@ import {
   makeStyles,
   CardHeader,
   TextField,
-  Button
+  Button,
+  Checkbox
 } from '@material-ui/core';
-import { Trash2 as TrashIcon, Edit as EditIcon } from 'react-feather';
+import {
+  Trash2 as TrashIcon,
+  Edit as EditIcon,
+  Check as CheckIcon,
+  X as XIcon
+} from 'react-feather';
 import { Link } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    whiteSpace: 'nowrap',
+    overflowX: 'auto'
   },
   icon: {
     margin: '0 10px',
     cursor: 'pointer'
+  },
+  endCell: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -45,17 +59,118 @@ const LoanList = (props) => {
   const classes = useStyles();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const [selectedLoanIds, setSelectedLoanIds] = useState([]);
+  const end = new Date()
+
   const { loading, error, data } = useQuery(LoansQuery, {
-    variables: { input: { page: page, paginate: limit } },
+    variables: { input: { page: page, paginate: limit }, late: true },
+  });
+  const [mutationDelete] = useMutation(LoanDelete, {
+
+    refetchQueries: [
+      {
+        query: LoansQuery,
+        variables: { input: { page: page, paginate: limit }, late: true }
+      },
+      {
+        query: LoansQuery,
+        variables: { input: { page: page, paginate: limit }, late: false }
+      },
+      {
+        query: AvailableCopiesQuery
+      }
+    ]
   });
 
+  const [mutationTerminate] = useMutation(TerminateLoan, {
 
+    refetchQueries: [
+      {
+        query: LoansQuery,
+        variables: { input: { page: page, paginate: limit }, late: true }
+      },
+      {
+        query: LoansQuery,
+        variables: { input: { page: page, paginate: limit }, late: false }
+      },
+      {
+        query: AvailableCopiesQuery
+      }
+    ]
+  });
+
+  const [mutationCancelTerminate] = useMutation(CancelTerminateLoan, {
+
+    refetchQueries: [
+      {
+        query: LoansQuery,
+        variables: { input: { page: page, paginate: limit }, late: true }
+      },
+      {
+        query: LoansQuery,
+        variables: { input: { page: page, paginate: limit }, late: false }
+      }
+
+    ]
+  });
+  const [mutationLateMail] = useMutation(LateMail);
 
 
 
   if (error) return <p>Error :(</p>;
 
+  const handleSelectAll = (event, loans) => {
+    let newSelectedLoanIds;
 
+    if (event.target.checked) {
+      newSelectedLoanIds = loans.map((loan) => loan.id);
+    } else {
+      newSelectedLoanIds = [];
+    }
+
+    setSelectedLoanIds(newSelectedLoanIds);
+  };
+
+  const handleSelectOne = (event, id) => {
+    const selectedIndex = selectedLoanIds.indexOf(id);
+    let newSelectedLoanIds = [];
+
+    if (selectedIndex === -1) {
+      newSelectedLoanIds = newSelectedLoanIds.concat(selectedLoanIds, id);
+    } else if (selectedIndex === 0) {
+      newSelectedLoanIds = newSelectedLoanIds.concat(selectedLoanIds.slice(1));
+    } else if (selectedIndex === selectedLoanIds.length - 1) {
+      newSelectedLoanIds = newSelectedLoanIds.concat(selectedLoanIds.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelectedLoanIds = newSelectedLoanIds.concat(
+        selectedLoanIds.slice(0, selectedIndex),
+        selectedLoanIds.slice(selectedIndex + 1)
+      );
+    }
+
+    setSelectedLoanIds(newSelectedLoanIds);
+  };
+
+  const sendLateMail = async () => {
+    let loans = []
+    if (selectedLoanIds.length == 0) {
+      alert('Nenhum usuáro selecionado!')
+    } else {
+      selectedLoanIds.map(async function (loanId) {
+        loans.push(parseInt(loanId))
+      })
+      let response = await mutationLateMail({ variables: { loans } })
+      if (response.data.lateMail.response[0] == "success") {
+        alert('Enviado com sucesso!')
+      } else {
+        console.log(response.data.lateMail.response)
+      }
+    }
+  };
+
+  const deleteLoan = (id) => {
+    mutationDelete({ variables: { id } })
+  };
 
 
   const handleLimitChange = (event) => {
@@ -66,6 +181,13 @@ const LoanList = (props) => {
     setPage(newPage + 1);
   };
 
+  const terminateLoan = (id) => {
+    mutationTerminate({ variables: { id: id, input: { end } } })
+  };
+
+  const cancelTerminateLoan = (id) => {
+    mutationCancelTerminate({ variables: { id } })
+  };
 
 
 
@@ -76,64 +198,117 @@ const LoanList = (props) => {
     >
       <Container maxWidth={false}>
         <>
-          <Toolbar />
+          <Toolbar mail={sendLateMail} />
           <Box mt={3}>
             {loading ? '' :
               <Card>
                 <PerfectScrollbar>
-                  <Box minWidth={1050}>
+                  <Box minWidth={300}>
                     <Table>
                       <TableHead>
                         <TableRow>
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={selectedLoanIds.length === data.paginateLoans.docs.slice(0, limit).length}
+                              color="primary"
+                              indeterminate={
+                                selectedLoanIds.length > 0
+                                && selectedLoanIds.length < data.paginateLoans.docs.slice(0, limit).length
+                              }
+                              onChange={(e) => handleSelectAll(e, data.paginateLoans.docs.slice(0, limit))}
+                            />
+                          </TableCell>
                           <TableCell>
                             Estudante
-                      </TableCell>
+                          </TableCell>
                           <TableCell>
                             Exemplar
-                      </TableCell>
-                          <TableCell>
-                            Entrege?
-                      </TableCell>
-                          <TableCell>
-                            Atrasado?
-                      </TableCell>
+                          </TableCell>
                           <TableCell>
                             Período
-                      </TableCell>
+                          </TableCell>
+                          <TableCell>
+                            Entrege?
+                          </TableCell>
+                          <TableCell>
 
+                          </TableCell>
 
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {data.paginateLoans.docs.slice(0, limit).map((loan) => (
-                          <>
-                            {loan.late ?
-                              <TableRow
-                                hover
-                                key={loan.id}
+                          <TableRow
+                            hover
+                            key={loan.id}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                color="primary"
+                                checked={selectedLoanIds.indexOf(loan.id) !== -1}
+                                onChange={(event) => handleSelectOne(event, loan.id)}
+                                value="true"
+                              />
+                            </TableCell>
+                            <TableCell>
+                              {loan.student.name}
+                            </TableCell>
+                            <TableCell>
+                              {loan.copy.code}
+                            </TableCell>
+                            <TableCell>
+                              {loan.period.name}
+                            </TableCell>
+                            <TableCell>
+                              <ModalIcon
+                                className={classes.icon}
+                                icon={loan.delivered ? CheckIcon : XIcon}
                               >
+                                <CardHeader
+                                  title="Mudar status empréstimo"
+                                />
+                                {loan.delivered ?
+                                  <Button
+                                    variant="contained"
+                                    style={{ margin: 10, backgroundColor: "#8B0000", color: '#fff' }}
+                                    onClick={() => cancelTerminateLoan(loan.id)}
+                                  >
+                                    Marcar como não entregue
+                                  </Button>
+                                  :
+                                  <Button
+                                    variant="contained"
+                                    style={{ margin: 10, backgroundColor: "#17882c", color: '#fff' }}
+                                    onClick={() => terminateLoan(loan.id)}
+                                  >
+                                    Marcar como entregue
+                                  </Button>
+                                }
+                              </ModalIcon>
+                            </TableCell>
+                            <TableCell className={classes.endCell}>
+                              <ModalIcon
+                                className={classes.icon}
+                                icon={TrashIcon}
+                              >
+                                <CardHeader
+                                  subheader={'Tem certeza que deseja deletar o empréstimo?'}
+                                  title="Deletar empréstimo"
+                                />
+                                <Button
+                                  variant="contained"
+                                  style={{ margin: 10, backgroundColor: "#8B0000", color: '#fff' }}
+                                  onClick={() => deleteLoan(loan.id)}
+                                >
+                                  Deletar
+                                </Button>
+                              </ModalIcon>
 
-                                <TableCell>
-                                  {loan.student.name}
-                                </TableCell>
-                                <TableCell>
-                                  {loan.copy.code}
-                                </TableCell>
-                                <TableCell>
-                                  {loan.delivered ? "Sim" : "Não"}
-                                </TableCell>
-                                <TableCell>
-                                  {loan.late ? "ATRASADO" : "Em dia"}
-                                </TableCell>
-                                <TableCell>
-                                  {loan.period.name}
-                                </TableCell>
-
-
-                              </TableRow>
-                              : ""}
-                          </>
-                        ))}
+                              <Link to={"/app/loans/edit/" + loan.id} style={{ color: '#263238' }}><EditIcon className={classes.icon} /></Link>
+                            </TableCell>
+                          </TableRow>
+                        )
+                        )}
                       </TableBody>
                     </Table>
                   </Box>
@@ -154,7 +329,7 @@ const LoanList = (props) => {
         </>
 
       </Container>
-    </Page>
+    </Page >
 
   );
 };

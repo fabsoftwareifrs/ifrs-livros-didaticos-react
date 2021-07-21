@@ -16,7 +16,8 @@ import {
   Divider,
   Grid,
   TextField,
-  makeStyles
+  makeStyles,
+  Container
 } from '@material-ui/core';
 
 
@@ -62,61 +63,65 @@ const CourseDetails = ({ className, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      <Card>
-        <CardHeader
-          subheader="Você pode cadastrar as informações de curso."
-          title="Curso"
-        />
-        <Divider />
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                error={!!errors.name}
-                fullWidth
-                helperText={!!errors.name ? errors.name : "Informe o nome do curso"}
-                label={input.name.label}
-                name="name"
-                type={input.name.type}
-                onChange={({ target }) => handleChange(target)}
-                value={input.name.value}
-                variant="outlined"
-              />
-            </Grid>
+      <Container maxWidth={false}>
+        <Box mt={3}>
+          <Card>
+            <CardHeader
+              subheader="Você pode cadastrar as informações de curso."
+              title="Curso"
+            />
+            <Divider />
+            <CardContent>
+              <Grid
+                container
+                spacing={3}
+              >
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                >
+                  <TextField
+                    error={!!errors.name}
+                    fullWidth
+                    helperText={!!errors.name ? errors.name : "Informe o nome do curso"}
+                    label={input.name.label}
+                    name="name"
+                    type={input.name.type}
+                    onChange={({ target }) => handleChange(target)}
+                    value={input.name.value}
+                    variant="outlined"
+                  />
+                </Grid>
 
 
-          </Grid>
-        </CardContent>
-        <Divider />
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          p={2}
-        >
-          <Link to="/app/course">
-            <Button
-              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
-              variant="contained"
+              </Grid>
+            </CardContent>
+            <Divider />
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              p={2}
             >
-              Cancelar
-          </Button>
-          </Link>
-          <Button
-            color="primary"
-            variant="contained"
-            type="submit"
-          >
-            Cadastrar
-          </Button>
+              <Link to="/app/course">
+                <Button
+                  style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+                  variant="contained"
+                >
+                  Cancelar
+                </Button>
+              </Link>
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+              >
+                Cadastrar
+              </Button>
+            </Box>
+          </Card>
         </Box>
-      </Card>
+      </Container>
     </form>
   );
 };

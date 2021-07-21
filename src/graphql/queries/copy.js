@@ -13,6 +13,18 @@ const CopiesQuery = gql`
     }
   }
 `;
+const AvailableCopiesQuery = gql`
+  query AvailableCopiesQuery{
+    availableCopies {
+      id
+      code
+      book{
+        id
+        name
+      }
+    }
+  }
+`;
 const CopiesByBookQuery = gql`
   query CopiesByBookQuery($bookId:Int!){
     copiesByBookId(bookId:$bookId) {
@@ -40,4 +52,5 @@ const CopyQuery = gql`
   }
 `;
 
-export { CopiesQuery, CopiesByBookQuery, CopyQuery }
+
+export { AvailableCopiesQuery, CopiesQuery, CopiesByBookQuery, CopyQuery }

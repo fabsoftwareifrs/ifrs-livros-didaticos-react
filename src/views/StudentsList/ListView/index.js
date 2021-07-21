@@ -31,11 +31,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    whiteSpace: 'nowrap',
+    overflowX: 'auto'
   },
   icon: {
     margin: '0 10px',
     cursor: 'pointer'
+  },
+  endCell: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -82,25 +88,25 @@ const StudentsList = (props) => {
           {loading ? '' :
             <Card>
               <PerfectScrollbar>
-                <Box minWidth={1050}>
+                <Box minWidth={300}>
                   <Table>
                     <TableHead>
                       <TableRow>
                         <TableCell>
                           Nome
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
                           E-mail
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
                           Matricula
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
                           Curso
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
                           Turma
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
 
                         </TableCell>
@@ -139,10 +145,8 @@ const StudentsList = (props) => {
                           <TableCell>
                             {student.classes.name}
                           </TableCell>
-                          <TableCell>
 
-                          </TableCell>
-                          <TableCell>
+                          <TableCell className={classes.endCell}>
                             <Modal
                               className={classes.icon}
                               icon={TrashIcon}
@@ -157,7 +161,7 @@ const StudentsList = (props) => {
                                 onClick={() => deleteStudent(student.id)}
                               >
                                 Deletar
-                          </Button>
+                              </Button>
                             </Modal>
 
                             <Link to={"/app/students/edit/" + student.id} style={{ color: '#263238' }}><EditIcon className={classes.icon} /></Link>

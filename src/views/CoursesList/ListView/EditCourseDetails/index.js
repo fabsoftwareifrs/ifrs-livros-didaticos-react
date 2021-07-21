@@ -14,7 +14,8 @@ import {
   Divider,
   Grid,
   TextField,
-  makeStyles
+  makeStyles,
+  Container
 } from '@material-ui/core';
 import { CourseQuery, CoursesQuery } from 'src/graphql/queries/course';
 import { Link, useParams, useHistory } from "react-router-dom";
@@ -81,63 +82,67 @@ const CourseDetails = ({ className, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      <Card>
-        <CardHeader
-          subheader="Você pode editar as informações de curso."
-          title="Curso"
-        />
-        <Divider />
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={6}
-              xs={12}
+      <Container maxWidth={false}>
+        <Box mt={3}>
+          <Card>
+            <CardHeader
+              subheader="Você pode editar as informações de curso."
+              title="Curso"
+            />
+            <Divider />
+            <CardContent>
+              <Grid
+                container
+                spacing={3}
+              >
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                >
+                  <input type="hidden" name="id" value={id} />
+                  <TextField
+                    error={!!errors.name}
+                    fullWidth
+                    helperText={!!errors.name ? errors.name : "Informe o nome do curso"}
+                    label={input.name.label}
+                    name="name"
+                    type={input.name.type}
+                    onChange={({ target }) => handleChange(target)}
+                    value={input.name.value}
+                    variant="outlined"
+                  />
+
+                </Grid>
+
+              </Grid>
+            </CardContent>
+            <Divider />
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              p={2}
             >
-              <input type="hidden" name="id" value={id} />
-              <TextField
-                error={!!errors.name}
-                fullWidth
-                helperText={!!errors.name ? errors.name : "Informe o nome do curso"}
-                label={input.name.label}
-                name="name"
-                type={input.name.type}
-                onChange={({ target }) => handleChange(target)}
-                value={input.name.value}
-                variant="outlined"
-              />
+              <Link to="/app/course">
+                <Button
+                  style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+                  variant="contained"
+                >
+                  Cancelar
+                </Button>
+              </Link>
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
 
-            </Grid>
-
-          </Grid>
-        </CardContent>
-        <Divider />
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          p={2}
-        >
-          <Link to="/app/course">
-            <Button
-              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
-              variant="contained"
-            >
-              Cancelar
-          </Button>
-          </Link>
-          <Button
-            color="primary"
-            variant="contained"
-            type="submit"
-
-          >
-            Editar
-          </Button>
+              >
+                Editar
+              </Button>
+            </Box>
+          </Card>
         </Box>
-      </Card>
+      </Container>
     </form>
   );
 };

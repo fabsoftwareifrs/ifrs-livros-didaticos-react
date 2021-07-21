@@ -32,11 +32,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    whiteSpace: 'nowrap',
+    overflowX: 'auto'
   },
   icon: {
     margin: '0 10px',
     cursor: 'pointer'
+  },
+  endCell: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -88,19 +94,19 @@ const CopyList = (props) => {
           {loading ? '' :
             <Card>
               <PerfectScrollbar>
-                <Box minWidth={1050}>
+                <Box minWidth={300}>
                   <Table>
                     <TableHead>
                       <TableRow>
                         <TableCell>
                           Código
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
                           Status
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
                           Livro
-                      </TableCell>
+                        </TableCell>
                         <TableCell>
 
                         </TableCell>
@@ -155,7 +161,7 @@ const CopyList = (props) => {
                               </Typography>
                             </Box>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={classes.endCell}>
                             <Modal
                               className={classes.icon}
                               icon={TrashIcon}
@@ -170,7 +176,7 @@ const CopyList = (props) => {
                                 onClick={() => deleteCourse(copy.id)}
                               >
                                 Deletar
-                          </Button>
+                              </Button>
                             </Modal>
 
                             <Link style={{ color: '#263238' }} to={"/app/copies/edit/" + copy.id}><EditIcon className={classes.icon} /></Link>

@@ -22,7 +22,7 @@ import {
   makeStyles,
   CardHeader,
   TextField,
-  Button
+  Button,
 } from '@material-ui/core';
 import { Trash2 as TrashIcon, Edit as EditIcon } from 'react-feather';
 import { Link } from 'react-router-dom';
@@ -31,11 +31,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    whiteSpace: 'nowrap',
+    overflowX: 'auto'
   },
   icon: {
     margin: '0 10px',
     cursor: 'pointer'
+  },
+  endCell: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -86,13 +92,13 @@ const CategoryList = (props) => {
           {loading ? '' :
             <Card>
               <PerfectScrollbar>
-                <Box minWidth={1050}>
+                <Box minWidth={300}>
                   <Table>
                     <TableHead>
                       <TableRow>
                         <TableCell>
                           Categoria
-                      </TableCell>
+                        </TableCell>
 
                         <TableCell>
 
@@ -120,7 +126,7 @@ const CategoryList = (props) => {
                               </Typography>
                             </Box>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={classes.endCell}>
                             <Modal
                               className={classes.icon}
                               icon={TrashIcon}
@@ -135,7 +141,7 @@ const CategoryList = (props) => {
                                 onClick={() => deleteCategory(category.id)}
                               >
                                 Deletar
-                          </Button>
+                              </Button>
                             </Modal>
 
                             <Link style={{ color: '#263238' }} to={"/app/category/edit/" + category.id}><EditIcon className={classes.icon} /></Link>

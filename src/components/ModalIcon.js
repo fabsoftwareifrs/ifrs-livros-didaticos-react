@@ -10,19 +10,19 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    
+
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
-    minWidth:'40%',
+    minWidth: '40%',
   },
 }));
 
 export default function TransitionsModal(props) {
   const classes = useStyles();
-  const Icon=props.icon
+  const Icon = props.icon
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -34,8 +34,8 @@ export default function TransitionsModal(props) {
 
   return (
     <>
-      <Icon onClick={handleOpen} className={props.className}/>
-        
+      <Icon onClick={handleOpen} className={props.className} />
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -49,8 +49,8 @@ export default function TransitionsModal(props) {
         }}
       >
         <Fade in={open}>
-          <div className={classes.paper}>
-          {props.children}
+          <div onClick={handleClose} className={classes.paper}>
+            {props.children}
           </div>
         </Fade>
       </Modal>

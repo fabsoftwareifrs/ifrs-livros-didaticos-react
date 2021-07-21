@@ -15,7 +15,8 @@ import {
   Divider,
   Grid,
   TextField,
-  makeStyles
+  makeStyles,
+  Container
 } from '@material-ui/core';
 import { CopyQuery, CopiesByBookQuery } from 'src/graphql/queries/copy';
 import { Link, useParams, useHistory } from "react-router-dom";
@@ -100,75 +101,79 @@ const CopyDetails = ({ className, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      <Card>
-        <CardHeader
-          subheader="Você pode editar as informações de curso."
-          title="Curso"
-        />
-        <Divider />
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <input type="hidden" name="id" value={id} />
-              {loading ? "" :
-                <Autocomplete
-                  name="status"
-                  options={options}
-                  onChange={(event, value) => {
+      <Container maxWidth={false}>
+        <Box mt={3}>
+          <Card>
+            <CardHeader
+              subheader="Você pode editar as informações de curso."
+              title="Curso"
+            />
+            <Divider />
+            <CardContent>
+              <Grid
+                container
+                spacing={3}
+              >
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                >
+                  <input type="hidden" name="id" value={id} />
+                  {loading ? "" :
+                    <Autocomplete
+                      name="status"
+                      options={options}
+                      onChange={(event, value) => {
 
-                    handleChange({ name: "status", value: value })
+                        handleChange({ name: "status", value: value })
 
-                  }}
-                  value={input.status.value}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  getOptionLabel={(option) => option.label}
-                  getOptionDisabled={(option) => option === options[2]}
-                  disabled={data.copy.status == "LOANED" ? true : false}
-                  renderInput={(params) =>
-                    <TextField {...params}
-                      label={input.status.label}
-                      variant="outlined"
-                      fullWidth
-                      error={!!errors.status}
-                      helperText={!!errors.status ? errors.copyId : "Informe o status do exemplar"}
+                      }}
+                      value={input.status.value}
+                      getOptionSelected={(option, value) => option.id === value.id}
+                      getOptionLabel={(option) => option.label}
+                      getOptionDisabled={(option) => option === options[2]}
+                      disabled={data.copy.status == "LOANED" ? true : false}
+                      renderInput={(params) =>
+                        <TextField {...params}
+                          label={input.status.label}
+                          variant="outlined"
+                          fullWidth
+                          error={!!errors.status}
+                          helperText={!!errors.status ? errors.copyId : "Informe o status do exemplar"}
+                        />}
                     />}
-                />}
 
-            </Grid>
+                </Grid>
 
-          </Grid>
-        </CardContent>
-        <Divider />
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          p={2}
-        >
-          <Link to={"/app/copies/" + bookId}>
-            <Button
-              style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
-              variant="contained"
+              </Grid>
+            </CardContent>
+            <Divider />
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              p={2}
             >
-              Cancelar
-          </Button>
-          </Link>
-          <Button
-            color="primary"
-            variant="contained"
-            type="submit"
+              <Link to={"/app/copies/" + bookId}>
+                <Button
+                  style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+                  variant="contained"
+                >
+                  Cancelar
+                </Button>
+              </Link>
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
 
-          >
-            Editar
-          </Button>
+              >
+                Editar
+              </Button>
+            </Box>
+          </Card>
         </Box>
-      </Card>
+      </Container>
     </form>
   );
 };

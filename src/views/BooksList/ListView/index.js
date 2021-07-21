@@ -31,11 +31,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    whiteSpace: 'nowrap',
+    overflowX: 'auto'
   },
   icon: {
     margin: '0 10px',
     cursor: 'pointer'
+  },
+  endCell: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -92,23 +98,23 @@ const BooksList = (props) => {
             {loading ? '' :
               <Card>
                 <PerfectScrollbar>
-                  <Box minWidth={1050}>
+                  <Box minWidth={300}>
                     <Table>
                       <TableHead>
                         <TableRow>
                           <TableCell>
                             Nome
-                      </TableCell>
+                          </TableCell>
 
                           <TableCell>
                             Autor
-                      </TableCell>
+                          </TableCell>
                           <TableCell>
                             Volume
-                      </TableCell>
+                          </TableCell>
                           <TableCell>
                             Categoria
-                      </TableCell>
+                          </TableCell>
                           <TableCell>
 
                           </TableCell>
@@ -152,12 +158,14 @@ const BooksList = (props) => {
                                 <Button
                                   color="primary"
                                   variant="contained"
+                                  size="small"
                                 >
                                   Exemplares
-                              </Button>
+                                </Button>
                               </Link>
                             </TableCell>
-                            <TableCell>
+                            <TableCell className={classes.endCell}>
+
                               <Modal
                                 className={classes.icon}
                                 icon={TrashIcon}
@@ -172,9 +180,8 @@ const BooksList = (props) => {
                                   onClick={() => deleteBook(book.id)}
                                 >
                                   Deletar
-                          </Button>
+                                </Button>
                               </Modal>
-
                               <Link to={"/app/books/edit/" + book.id} style={{ color: '#263238' }}><EditIcon className={classes.icon} /></Link>
                             </TableCell>
                           </TableRow>

@@ -10,14 +10,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    
+
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
-    minWidth:'40%',
-    minHeight:'40%',
+    minWidth: '40%',
   },
 }));
 
@@ -34,7 +33,7 @@ export default function TransitionsModal(props) {
 
   return (
     <div>
-      <Button color={props.color} variant="contained" onClick={handleOpen}>
+      <Button color={props.color} style={props.style} startIcon={props.startIcon} variant="contained" onClick={handleOpen}>
         {props.text}
       </Button>
       <Modal
@@ -50,8 +49,8 @@ export default function TransitionsModal(props) {
         }}
       >
         <Fade in={open}>
-          <div className={classes.paper}>
-          {props.children}
+          <div onClick={handleClose} className={classes.paper}>
+            {props.children}
           </div>
         </Fade>
       </Modal>

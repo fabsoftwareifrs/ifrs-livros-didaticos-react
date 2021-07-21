@@ -64,6 +64,11 @@ const items = [
     title: 'Estudantes'
   },
   {
+    href: '/app/periods',
+    icon: CalendarIcon,
+    title: 'Períodos'
+  },
+  {
     href: '/app/loans',
     icon: ArrowIcon,
     title: 'Empréstimos'
@@ -72,11 +77,6 @@ const items = [
     href: '/app/lates',
     icon: ClockIcon,
     title: 'Atrasados'
-  },
-  {
-    href: '/app/periods',
-    icon: CalendarIcon,
-    title: 'Períodos'
   },
 
 ];

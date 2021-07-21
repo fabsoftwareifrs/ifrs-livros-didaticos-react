@@ -31,11 +31,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    whiteSpace: 'nowrap',
+    overflowX: 'auto'
   },
   icon: {
     margin: '0 10px',
     cursor: 'pointer'
+  },
+  endCell: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -70,7 +76,12 @@ const PeriodsList = (props) => {
   const deletePeriod = (id) => {
     mutationDelete({ variables: { id } })
   };
+  const formatDate = (d) => {
+    let date = d.substr(8, 2) + "/" + d.substr(5, 2) + "/" + d.substr(0, 4);
+    return date
+  }
 
+  console.log(data)
   return (
     <Page
       className={classes.root}
@@ -83,7 +94,7 @@ const PeriodsList = (props) => {
             {loading ? '' :
               <Card>
                 <PerfectScrollbar>
-                  <Box minWidth={1050}>
+                  <Box minWidth={300}>
                     <Table>
                       <TableHead>
                         <TableRow>
@@ -111,12 +122,12 @@ const PeriodsList = (props) => {
                               {period.name}
                             </TableCell>
                             <TableCell>
-                              {period.start}
+                              {formatDate(period.start)}
                             </TableCell>
                             <TableCell>
-                              {period.end}
+                              {formatDate(period.end)}
                             </TableCell>
-                            <TableCell>
+                            <TableCell className={classes.endCell}>
                               <Modal
                                 className={classes.icon}
                                 icon={TrashIcon}
