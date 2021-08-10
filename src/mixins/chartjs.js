@@ -1,4 +1,20 @@
-import { Chart } from 'react-chartjs-2';
+/*
+ * This file is part of LMS Livros Didáticos.
+ *
+ * LMS Livros Didáticos is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License.
+ *
+ * LMS Livros Didáticos is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+import { Chart } from "react-chartjs-2";
 
 // ChartJS extension rounded bar chart
 // https://codepen.io/jedtrow/full/ygRYgo
@@ -23,7 +39,7 @@ function draw() {
     cornerRadius = 0;
   }
 
-  if (typeof cornerRadius === 'undefined') {
+  if (typeof cornerRadius === "undefined") {
     cornerRadius = 0;
   }
 
@@ -35,7 +51,7 @@ function draw() {
     bottom = vm.base;
     signX = 1;
     signY = bottom > top ? 1 : -1;
-    borderSkipped = vm.borderSkipped || 'bottom';
+    borderSkipped = vm.borderSkipped || "bottom";
   } else {
     // horizontal bar
     left = vm.base;
@@ -44,7 +60,7 @@ function draw() {
     bottom = vm.y + vm.height / 2;
     signX = right > left ? 1 : -1;
     signY = 1;
-    borderSkipped = vm.borderSkipped || 'left';
+    borderSkipped = vm.borderSkipped || "left";
   }
 
   // Canvas doesn't allow us to stroke inside the width so we can
@@ -55,10 +71,13 @@ function draw() {
     borderWidth = borderWidth > barSize ? barSize : borderWidth;
     const halfStroke = borderWidth / 2;
     // Adjust borderWidth when bar top position is near vm.base(zero).
-    const borderLeft = left + (borderSkipped !== 'left' ? halfStroke * signX : 0);
-    const borderRight = right + (borderSkipped !== 'right' ? -halfStroke * signX : 0);
-    const borderTop = top + (borderSkipped !== 'top' ? halfStroke * signY : 0);
-    const borderBottom = bottom + (borderSkipped !== 'bottom' ? -halfStroke * signY : 0);
+    const borderLeft =
+      left + (borderSkipped !== "left" ? halfStroke * signX : 0);
+    const borderRight =
+      right + (borderSkipped !== "right" ? -halfStroke * signX : 0);
+    const borderTop = top + (borderSkipped !== "top" ? halfStroke * signY : 0);
+    const borderBottom =
+      bottom + (borderSkipped !== "bottom" ? -halfStroke * signY : 0);
     // not become a vertical line?
     if (borderLeft !== borderRight) {
       top = borderTop;
@@ -79,10 +98,15 @@ function draw() {
   // Corner points, from bottom-left to bottom-right clockwise
   // | 1 2 |
   // | 0 3 |
-  const corners = [[left, bottom], [left, top], [right, top], [right, bottom]];
+  const corners = [
+    [left, bottom],
+    [left, top],
+    [right, top],
+    [right, bottom],
+  ];
 
   // Find first (starting) corner with fallback to 'bottom'
-  const borders = ['bottom', 'left', 'top', 'right'];
+  const borders = ["bottom", "left", "top", "right"];
   let startCorner = borders.indexOf(borderSkipped, 0);
   if (startCorner === -1) {
     startCorner = 0;
@@ -187,5 +211,5 @@ function draw() {
 }
 
 Chart.helpers.extend(Chart.elements.Rectangle.prototype, {
-  draw
+  draw,
 });

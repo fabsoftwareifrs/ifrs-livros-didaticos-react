@@ -14,22 +14,24 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { gql } from "@apollo/client";
+import React, { useState } from "react";
+import Barcode from "react-barcode";
+import { makeStyles } from "@material-ui/core";
+const useStyles = makeStyles(() => ({
+  root: {
+    width: "100%",
+  },
+}));
 
-const WarnMail = gql`
-  mutation WarnMail($loans: [Int]!) {
-    warnMail(loans: $loans) {
-      response
-    }
-  }
-`;
+const PrintCopyList = ({ copies }) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
+      {copies.map((copy) => (
+        <Barcode key={copy.id} value={copy.code} />
+      ))}
+    </div>
+  );
+};
 
-const LateMail = gql`
-  mutation LateMail($loans: [Int]!) {
-    lateMail(loans: $loans) {
-      response
-    }
-  }
-`;
-
-export { WarnMail, LateMail };
+export default PrintCopyList;

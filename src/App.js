@@ -1,51 +1,65 @@
-import 'react-perfect-scrollbar/dist/css/styles.css';
-import React from 'react';
-import { ThemeProvider } from '@material-ui/core';
-import GlobalStyles from 'src/components/GlobalStyles';
-import 'src/mixins/chartjs';
-import theme from 'src/theme';
+/*
+ * This file is part of LMS Livros Didáticos.
+ *
+ * LMS Livros Didáticos is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License.
+ *
+ * LMS Livros Didáticos is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+import "react-perfect-scrollbar/dist/css/styles.css";
+import React from "react";
+import { ThemeProvider } from "@material-ui/core";
+import GlobalStyles from "src/components/GlobalStyles";
+import "src/mixins/chartjs";
+import theme from "src/theme";
 import PrivateRoute from "./routes/PrivateRoute";
 import UnPrivateRoute from "./routes/UnPrivateRoute";
 import AuthProvider from "./providers/Auth";
-import Dashboard from "./layouts/DashboardLayout"
-import Main from "./layouts/MainLayout"
+import Dashboard from "./layouts/DashboardLayout";
+import Main from "./layouts/MainLayout";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import LoginView from 'src/views/auth';
-import ListView from 'src/views/StudentsList/ListView';
-import Books from 'src/views/BooksList/ListView';
-import BooksCreate from 'src/views/BooksList/ListView/CreateBooksDetails';
-import BooksEdit from 'src/views/BooksList/ListView/EditBookDetails';
-import BooksCategory from 'src/views/BooksCategoryList/ListView';
-import Classes from 'src/views/ClassesList/ListView';
-import ClassesCreate from 'src/views/ClassesList/ListView/CreateClassesDetails';
-import ClassesEdit from 'src/views/ClassesList/ListView/EditClassesDetails';
-import BooksCategoryCreate from 'src/views/BooksCategoryList/ListView/CreateCategoryDetails';
-import BooksCategoryEdit from 'src/views/BooksCategoryList/ListView/EditCategoryDetails';
-import Users from 'src/views/UsersList/ListView';
-import UsersCreate from 'src/views/UsersList/ListView/CreateUsersDetails';
-import UsersEdit from 'src/views/UsersList/ListView/EditUsersDetails';
-import Courses from 'src/views/CoursesList/ListView';
-import CoursesCreate from 'src/views/CoursesList/ListView/CreateCourseDetails';
-import CoursesEdit from 'src/views/CoursesList/ListView/EditCourseDetails';
-import Students from 'src/views/StudentsList/ListView';
-import StudentsCreate from 'src/views/StudentsList/ListView/CreateStudentsDetails';
-import StudentsEdit from 'src/views/StudentsList/ListView/EditStudentsDetails';
-import Loans from 'src/views/LoansList/ListView';
-import LoansCreate from 'src/views/LoansList/ListView/CreateLoansDetails';
-import LoansEdit from 'src/views/LoansList/ListView/EditLoansDetails';
-import Copies from 'src/views/CopiesList/ListView';
-import CopiesEdit from 'src/views/CopiesList/ListView/EditCopiesDetails';
-import Lates from 'src/views/LatesList/ListView';
-import Periods from 'src/views/PeriodsList/ListView';
-import PeriodCreate from 'src/views/PeriodsList/ListView/CreatePeriodDetails';
-import PeriodEdit from 'src/views/PeriodsList/ListView/EditPeriodDetails';
+import LoginView from "src/views/auth";
+import ListView from "src/views/StudentsList/ListView";
+import Books from "src/views/BooksList/ListView";
+import BooksCreate from "src/views/BooksList/ListView/CreateBooksDetails";
+import BooksEdit from "src/views/BooksList/ListView/EditBookDetails";
+import BooksCategory from "src/views/BooksCategoryList/ListView";
+import Classes from "src/views/ClassesList/ListView";
+import ClassesCreate from "src/views/ClassesList/ListView/CreateClassesDetails";
+import ClassesEdit from "src/views/ClassesList/ListView/EditClassesDetails";
+import BooksCategoryCreate from "src/views/BooksCategoryList/ListView/CreateCategoryDetails";
+import BooksCategoryEdit from "src/views/BooksCategoryList/ListView/EditCategoryDetails";
+import Users from "src/views/UsersList/ListView";
+import UsersCreate from "src/views/UsersList/ListView/CreateUsersDetails";
+import UsersEdit from "src/views/UsersList/ListView/EditUsersDetails";
+import Courses from "src/views/CoursesList/ListView";
+import CoursesCreate from "src/views/CoursesList/ListView/CreateCourseDetails";
+import CoursesEdit from "src/views/CoursesList/ListView/EditCourseDetails";
+import Students from "src/views/StudentsList/ListView";
+import StudentsCreate from "src/views/StudentsList/ListView/CreateStudentsDetails";
+import StudentsEdit from "src/views/StudentsList/ListView/EditStudentsDetails";
+import Loans from "src/views/LoansList/ListView";
+import LoansCreate from "src/views/LoansList/ListView/CreateLoansDetails";
+import LoansEdit from "src/views/LoansList/ListView/EditLoansDetails";
+import Copies from "src/views/CopiesList/ListView";
+import CopiesEdit from "src/views/CopiesList/ListView/EditCopiesDetails";
+import Lates from "src/views/LatesList/ListView";
+import Periods from "src/views/PeriodsList/ListView";
+import PeriodCreate from "src/views/PeriodsList/ListView/CreatePeriodDetails";
+import PeriodEdit from "src/views/PeriodsList/ListView/EditPeriodDetails";
 import { createBrowserHistory } from "history";
-import { LocationSearching } from '@material-ui/icons';
+import { LocationSearching } from "@material-ui/icons";
 var hist = createBrowserHistory();
 
 const App = () => {
-
-
   return (
     <Router>
       <ThemeProvider theme={theme}>

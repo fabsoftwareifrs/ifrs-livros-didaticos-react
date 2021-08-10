@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { useMutation, useQuery, gql } from '@apollo/client';
-import { BooksCreate } from '../../../../graphql/mutations/book'
-import { CopyCreate } from '../../../../graphql/mutations/copy'
-import { AllCategoriesQuery } from '../../../../graphql/queries/category'
+/*
+ * This file is part of LMS Livros Didáticos.
+ *
+ * LMS Livros Didáticos is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License.
+ *
+ * LMS Livros Didáticos is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+import React, { useState } from "react";
+import clsx from "clsx";
+import PropTypes from "prop-types";
+import { useMutation, useQuery, gql } from "@apollo/client";
+import { BooksCreate } from "../../../../graphql/mutations/book";
+import { CopyCreate } from "../../../../graphql/mutations/copy";
+import { AllCategoriesQuery } from "../../../../graphql/queries/category";
 import {
   Box,
   Button,
@@ -15,20 +31,20 @@ import {
   Grid,
   TextField,
   makeStyles,
-  Container
-} from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { Link, useHistory } from 'react-router-dom';
-import { BooksQuery } from 'src/graphql/queries/book';
-import useMyForm from '../../../../hooks/MyForm'
-import fields from './fields'
+  Container,
+} from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Link, useHistory } from "react-router-dom";
+import { BooksQuery } from "src/graphql/queries/book";
+import useMyForm from "../../../../hooks/MyForm";
+import fields from "./fields";
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const BookDetails = ({ className, ...rest }) => {
-  var history = useHistory()
+  var history = useHistory();
   const classes = useStyles();
   const {
     fields: input,
@@ -37,31 +53,36 @@ const BookDetails = ({ className, ...rest }) => {
     handleChange,
     setTouched,
     reset,
-    setValues
+    setValues,
   } = useMyForm(fields);
 
   const [mutationCreate] = useMutation(BooksCreate, {
-
     refetchQueries: [
       {
         query: BooksQuery,
-        variables: { input: { page: 1, paginate: 10 } }
-      }
-    ]
+        variables: { input: { page: 1, paginate: 10, search: "" } },
+      },
+    ],
   });
   const [mutationCreateCopy] = useMutation(CopyCreate);
   const categories = useQuery(AllCategoriesQuery);
   const createBook = async (data) => {
-    var { quantity } = data
-    quantity = parseInt(quantity)
-    delete data.quantity
+    var { quantity } = data;
+    quantity = parseInt(quantity);
+    delete data.quantity;
 
-    let book = await mutationCreate({ variables: { input: data } })
+    let book = await mutationCreate({ variables: { input: data } });
     for (let i = 0; i < quantity; i++) {
-      await mutationCreateCopy({ variables: { input: { status: "AVAILABLE", bookId: parseInt(book.data.createBook.id) } } })
+      await mutationCreateCopy({
+        variables: {
+          input: {
+            status: "AVAILABLE",
+            bookId: parseInt(book.data.createBook.id),
+          },
+        },
+      });
     }
-    history.push('/app/books')
-
+    history.push("/app/books");
   };
 
   return (
@@ -79,20 +100,14 @@ const BookDetails = ({ className, ...rest }) => {
             />
             <Divider />
             <CardContent>
-              <Grid
-                container
-                spacing={3}
-              >
-
-                <Grid
-                  item
-                  md={6}
-                  xs={12}
-                >
+              <Grid container spacing={3}>
+                <Grid item md={6} xs={12}>
                   <TextField
                     error={!!errors.name}
                     fullWidth
-                    helperText={!!errors.name ? errors.name : "Informe o título do livro"}
+                    helperText={
+                      !!errors.name ? errors.name : "Informe o título do livro"
+                    }
                     label={input.name.label}
                     name="name"
                     type={input.name.type}
@@ -100,17 +115,16 @@ const BookDetails = ({ className, ...rest }) => {
                     value={input.name.value}
                     variant="outlined"
                   />
-
                 </Grid>
-                <Grid
-                  item
-                  md={6}
-                  xs={12}
-                >
+                <Grid item md={6} xs={12}>
                   <TextField
                     error={!!errors.author}
                     fullWidth
-                    helperText={errors.author}
+                    helperText={
+                      !!errors.author
+                        ? errors.author
+                        : "Informe o autor do livro"
+                    }
                     label={input.author.label}
                     name="author"
                     type={input.author.type}
@@ -120,15 +134,15 @@ const BookDetails = ({ className, ...rest }) => {
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  md={6}
-                  xs={12}
-                >
+                <Grid item md={6} xs={12}>
                   <TextField
                     error={!!errors.volume}
                     fullWidth
-                    helperText={errors.volume}
+                    helperText={
+                      !!errors.volume
+                        ? errors.volume
+                        : "Informe o volume do livro"
+                    }
                     label={input.volume.label}
                     name="volume"
                     type={input.volume.type}
@@ -137,45 +151,50 @@ const BookDetails = ({ className, ...rest }) => {
                     variant="outlined"
                   />
                 </Grid>
-                <Grid
-                  item
-                  md={6}
-                  xs={12}
-                >
-                  {categories.loading ? "" :
+                <Grid item md={6} xs={12}>
+                  {categories.loading ? (
+                    ""
+                  ) : (
                     <Autocomplete
                       name="categoryId"
-                      options={
-                        categories.data.categories.map(({ id, name }) => ({ value: id, label: name }))
-                      }
+                      options={categories.data.categories.map(
+                        ({ id, name }) => ({ value: id, label: name })
+                      )}
                       onChange={(event, value) => {
                         if (!value) {
-                          handleChange({ name: "categoryId", value: "" })
+                          handleChange({ name: "categoryId", value: "" });
                         } else {
-                          handleChange({ name: "categoryId", value: parseInt(value.value) })
+                          handleChange({
+                            name: "categoryId",
+                            value: parseInt(value.value),
+                          });
                         }
                       }}
                       getOptionLabel={(option) => option.label}
-                      getOptionSelected={(option, value) => option.id === value.id}
-                      renderInput={(params) =>
-                        <TextField {...params}
+                      getOptionSelected={(option, value) =>
+                        option.id === value.id
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
                           label={input.categoryId.label}
                           variant="outlined"
                           fullWidth
                           error={!!errors.categoryId}
-                          helperText={!!errors.categoryId ? errors.categoryId : "Informe a categoria"}
-                        />}
+                          helperText={
+                            !!errors.categoryId
+                              ? errors.categoryId
+                              : "Informe a categoria do livro"
+                          }
+                        />
+                      )}
                     />
-                  }
+                  )}
                 </Grid>
-                <Grid
-                  item
-                  md={6}
-                  xs={12}
-                >
+                <Grid item md={6} xs={12}>
                   <TextField
                     fullWidth
-                    helperText='Informe a quantidade de exemplares'
+                    helperText="Informe a quantidade de exemplares do livro"
                     label={input.quantity.label}
                     name="quantity"
                     type={input.quantity.type}
@@ -188,24 +207,20 @@ const BookDetails = ({ className, ...rest }) => {
               </Grid>
             </CardContent>
             <Divider />
-            <Box
-              display="flex"
-              justifyContent="flex-end"
-              p={2}
-            >
+            <Box display="flex" justifyContent="flex-end" p={2}>
               <Link to="/app/books">
                 <Button
-                  style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+                  style={{
+                    marginRight: 10,
+                    backgroundColor: "#8B0000",
+                    color: "#fff",
+                  }}
                   variant="contained"
                 >
                   Cancelar
                 </Button>
               </Link>
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-              >
+              <Button color="primary" variant="contained" type="submit">
                 Cadastrar
               </Button>
             </Box>
@@ -215,7 +230,5 @@ const BookDetails = ({ className, ...rest }) => {
     </form>
   );
 };
-
-
 
 export default BookDetails;

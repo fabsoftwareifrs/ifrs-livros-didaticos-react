@@ -1,29 +1,48 @@
-import { createMuiTheme, colors } from '@material-ui/core';
-import shadows from './shadows';
-import typography from './typography';
-import { ptBR } from '@material-ui/core/locale';
+/*
+ * This file is part of LMS Livros Didáticos.
+ *
+ * LMS Livros Didáticos is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License.
+ *
+ * LMS Livros Didáticos is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
+ */
 
-const theme = createMuiTheme({
-  palette: {
-    background: {
-      dark: '#F4F6F8',
-      default: colors.common.white,
-      paper: colors.common.white
+import { createMuiTheme, colors } from "@material-ui/core";
+import shadows from "./shadows";
+import typography from "./typography";
+import { ptBR } from "@material-ui/core/locale";
+
+const theme = createMuiTheme(
+  {
+    palette: {
+      background: {
+        dark: "#F4F6F8",
+        default: colors.common.white,
+        paper: colors.common.white,
+      },
+      primary: {
+        main: "#17882c",
+      },
+      secondary: {
+        main: colors.indigo[500],
+      },
+
+      text: {
+        primary: colors.blueGrey[900],
+        secondary: colors.blueGrey[600],
+      },
     },
-    primary: {
-      main: '#17882c'
-    },
-    secondary: {
-      main: colors.indigo[500]
-    },
-  
-    text: {
-      primary: colors.blueGrey[900],
-      secondary: colors.blueGrey[600]
-    }
+    shadows,
+    typography,
   },
-  shadows,
-  typography
-},ptBR);
+  ptBR
+);
 
 export default theme;

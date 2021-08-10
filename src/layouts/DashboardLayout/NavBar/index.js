@@ -1,7 +1,23 @@
-import React, { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { useAuth } from '../../../providers/Auth'
-import PropTypes from 'prop-types';
+/*
+ * This file is part of LMS Livros Didáticos.
+ *
+ * LMS Livros Didáticos is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License.
+ *
+ * LMS Livros Didáticos is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+import React, { useEffect } from "react";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import { useAuth } from "../../../providers/Auth";
+import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
@@ -11,8 +27,8 @@ import {
   Hidden,
   List,
   Typography,
-  makeStyles
-} from '@material-ui/core';
+  makeStyles,
+} from "@material-ui/core";
 import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
@@ -27,80 +43,78 @@ import {
   PenTool as PenIcon,
   ArrowUp as ArrowIcon,
   Clock as ClockIcon,
-  Calendar as CalendarIcon
-} from 'react-feather';
-import NavItem from './NavItem';
-
+  Calendar as CalendarIcon,
+} from "react-feather";
+import NavItem from "./NavItem";
 
 const items = [
   {
-    href: '/app/books',
+    href: "/app/books",
     icon: BookIcon,
-    title: 'Livros'
+    title: "Livros",
   },
   {
-    href: '/app/category',
+    href: "/app/category",
     icon: BookMarkIcon,
-    title: 'Categorias de Livros'
+    title: "Categorias de Livros",
   },
   {
-    href: '/app/users',
+    href: "/app/users",
     icon: UserIcon,
-    title: 'Usuários'
+    title: "Usuários",
   },
   {
-    href: '/app/classes',
+    href: "/app/classes",
     icon: SquareIcon,
-    title: 'Turma'
+    title: "Turma",
   },
   {
-    href: '/app/course',
+    href: "/app/course",
     icon: PenIcon,
-    title: 'Cursos'
+    title: "Cursos",
   },
   {
-    href: '/app/student',
+    href: "/app/students",
     icon: UsersIcon,
-    title: 'Estudantes'
+    title: "Estudantes",
   },
   {
-    href: '/app/periods',
+    href: "/app/periods",
     icon: CalendarIcon,
-    title: 'Períodos'
+    title: "Períodos",
   },
   {
-    href: '/app/loans',
+    href: "/app/loans",
     icon: ArrowIcon,
-    title: 'Empréstimos'
+    title: "Empréstimos",
   },
   {
-    href: '/app/lates',
+    href: "/app/lates",
     icon: ClockIcon,
-    title: 'Atrasados'
+    title: "Atrasados",
   },
-
 ];
 
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
-    width: 256
+    width: 256,
   },
   desktopDrawer: {
     width: 256,
     top: 64,
-    height: 'calc(100% - 64px)'
+    height: "calc(100% - 64px)",
   },
   avatar: {
-    cursor: 'pointer',
+    cursor: "pointer",
     width: 64,
-    height: 64
-  }
+    height: 64,
+  },
 }));
 
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
-  const { auth } = useAuth()
+  const { auth } = useAuth();
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
@@ -109,22 +123,9 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const content = (
-    <Box
-      height="100%"
-      display="flex"
-      flexDirection="column"
-    >
-      <Box
-        alignItems="center"
-        display="flex"
-        flexDirection="column"
-        p={2}
-      >
-        <Typography
-          className={classes.name}
-          color="textPrimary"
-          variant="h5"
-        >
+    <Box height="100%" display="flex" flexDirection="column">
+      <Box alignItems="center" display="flex" flexDirection="column" p={2}>
+        <Typography className={classes.name} color="textPrimary" variant="h5">
           {"Bem-vindo, " + auth.user.name}
         </Typography>
       </Box>
@@ -142,8 +143,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </List>
       </Box>
       <Box flexGrow={1} />
-
-
     </Box>
   );
 
@@ -176,12 +175,12 @@ const NavBar = ({ onMobileClose, openMobile }) => {
 
 NavBar.propTypes = {
   onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool
+  openMobile: PropTypes.bool,
 };
 
 NavBar.defaultProps = {
-  onMobileClose: () => { },
-  openMobile: false
+  onMobileClose: () => {},
+  openMobile: false,
 };
 
 export default NavBar;

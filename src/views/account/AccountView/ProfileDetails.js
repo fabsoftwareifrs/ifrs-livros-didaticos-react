@@ -1,6 +1,22 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
+/*
+ * This file is part of LMS Livros Didáticos.
+ *
+ * LMS Livros Didáticos is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License.
+ *
+ * LMS Livros Didáticos is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+import React, { useState } from "react";
+import clsx from "clsx";
+import PropTypes from "prop-types";
 import {
   Box,
   Button,
@@ -10,43 +26,43 @@ import {
   Divider,
   Grid,
   TextField,
-  makeStyles
-} from '@material-ui/core';
+  makeStyles,
+} from "@material-ui/core";
 
 const states = [
   {
-    value: 'alabama',
-    label: 'Alabama'
+    value: "alabama",
+    label: "Alabama",
   },
   {
-    value: 'new-york',
-    label: 'New York'
+    value: "new-york",
+    label: "New York",
   },
   {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
+    value: "san-francisco",
+    label: "San Francisco",
+  },
 ];
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const ProfileDetails = ({ className, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
+    firstName: "Katarina",
+    lastName: "Smith",
+    email: "demo@devias.io",
+    phone: "",
+    state: "Alabama",
+    country: "USA",
   });
 
   const handleChange = (event) => {
     setValues({
       ...values,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -58,21 +74,11 @@ const ProfileDetails = ({ className, ...rest }) => {
       {...rest}
     >
       <Card>
-        <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
-        />
+        <CardHeader subheader="The information can be edited" title="Profile" />
         <Divider />
         <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+          <Grid container spacing={3}>
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 helperText="Please specify the first name"
@@ -84,11 +90,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Last name"
@@ -99,11 +101,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Email Address"
@@ -114,11 +112,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Phone Number"
@@ -129,11 +123,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Country"
@@ -144,11 +134,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Select State"
@@ -161,10 +147,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               >
                 {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
+                  <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
@@ -173,15 +156,8 @@ const ProfileDetails = ({ className, ...rest }) => {
           </Grid>
         </CardContent>
         <Divider />
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          p={2}
-        >
-          <Button
-            color="primary"
-            variant="contained"
-          >
+        <Box display="flex" justifyContent="flex-end" p={2}>
+          <Button color="primary" variant="contained">
             Save details
           </Button>
         </Box>
@@ -191,7 +167,7 @@ const ProfileDetails = ({ className, ...rest }) => {
 };
 
 ProfileDetails.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default ProfileDetails;

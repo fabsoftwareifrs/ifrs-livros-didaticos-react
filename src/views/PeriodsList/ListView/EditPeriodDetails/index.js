@@ -1,11 +1,31 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import clsx from 'clsx';
-import { useMutation, useQuery, gql } from '@apollo/client';
-import { PeriodQuery, PeriodsQuery } from '../../../../graphql/queries/period'
-import { PeriodCreate, PeriodEdit, PeriodDelete } from '../../../../graphql/mutations/period'
-import fields from './fields'
-import { Link, useHistory, useParams } from 'react-router-dom';
-import useMyForm from '../../../../hooks/MyForm'
+/*
+ * This file is part of LMS Livros Didáticos.
+ *
+ * LMS Livros Didáticos is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License.
+ *
+ * LMS Livros Didáticos is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+import React, { useCallback, useEffect, useState } from "react";
+import clsx from "clsx";
+import { useMutation, useQuery, gql } from "@apollo/client";
+import { PeriodQuery, PeriodsQuery } from "../../../../graphql/queries/period";
+import {
+  PeriodCreate,
+  PeriodEdit,
+  PeriodDelete,
+} from "../../../../graphql/mutations/period";
+import fields from "./fields";
+import { Link, useHistory, useParams } from "react-router-dom";
+import useMyForm from "../../../../hooks/MyForm";
 import {
   Box,
   Button,
@@ -18,16 +38,16 @@ import {
   makeStyles,
   Select,
   InputLabel,
-  Container
-} from '@material-ui/core';
+  Container,
+} from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
   const classes = useStyles();
-  var history = useHistory()
+  var history = useHistory();
 
   const {
     fields: input,
@@ -36,7 +56,7 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
     handleChange,
     setTouched,
     reset,
-    setValues
+    setValues,
   } = useMyForm(fields);
 
   var { id } = useParams();
@@ -48,11 +68,16 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
   var values = {
     name: "",
     start: "",
-    end: ""
-  }
+    end: "",
+  };
 
   if (!loading) {
-    values = { id: data.period.id, name: data.period.name, start: data.period.start, end: data.period.end }
+    values = {
+      id: data.period.id,
+      name: data.period.name,
+      start: data.period.start,
+      end: data.period.end,
+    };
   }
 
   const onCompleted = useCallback(
@@ -62,22 +87,22 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
     [setValues]
   );
   useEffect(() => {
-    onCompleted()
-  }, [loading])
+    onCompleted();
+  }, [loading]);
 
   const [mutationEdit] = useMutation(PeriodEdit, {
     refetchQueries: [
       {
         query: PeriodsQuery,
-        variables: { input: { page: 1, paginate: 10 } }
-      }
-    ]
+        variables: { input: { page: 1, paginate: 10, search: "" } },
+      },
+    ],
   });
 
   const editPeriod = async (data) => {
-    const { id, ...rest } = data
-    await mutationEdit({ variables: { id: id, input: { ...rest } } })
-    history.push('/app/periods')
+    const { id, ...rest } = data;
+    await mutationEdit({ variables: { id: id, input: { ...rest } } });
+    history.push("/app/periods");
   };
 
   return (
@@ -95,20 +120,16 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
             />
             <Divider />
             <CardContent>
-              <Grid
-                container
-                spacing={3}
-              >
-
-                <Grid
-                  item
-                  md={6}
-                  xs={12}
-                >
+              <Grid container spacing={3}>
+                <Grid item md={6} xs={12}>
                   <TextField
                     error={!!errors.name}
                     fullWidth
-                    helperText={!!errors.name ? errors.name : "Informe o nome do período"}
+                    helperText={
+                      !!errors.name
+                        ? errors.name
+                        : "Informe o nome do período letivo"
+                    }
                     label={input.name.label}
                     name="name"
                     type={input.name.type}
@@ -117,15 +138,15 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
                     variant="outlined"
                   />
                 </Grid>
-                <Grid
-                  item
-                  md={6}
-                  xs={12}
-                >
+                <Grid item md={6} xs={12}>
                   <TextField
                     error={!!errors.start}
                     fullWidth
-                    helperText={!!errors.start ? errors.start : "Informe a data de início"}
+                    helperText={
+                      !!errors.start
+                        ? errors.start
+                        : "Informe a data de início do período letivo"
+                    }
                     label={input.start.label}
                     name="start"
                     type={input.start.type}
@@ -137,22 +158,17 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
                     }}
                   />
                 </Grid>
-
               </Grid>
-              <Grid
-                container
-                spacing={3}
-              >
-
-                <Grid
-                  item
-                  md={6}
-                  xs={12}
-                >
+              <Grid container spacing={3}>
+                <Grid item md={6} xs={12}>
                   <TextField
                     error={!!errors.end}
                     fullWidth
-                    helperText={!!errors.end ? errors.end : "Informe a data de fim"}
+                    helperText={
+                      !!errors.end
+                        ? errors.end
+                        : "Informe a data final do período letivo"
+                    }
                     label={input.end.label}
                     name="end"
                     type={input.end.type}
@@ -167,24 +183,20 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
               </Grid>
             </CardContent>
             <Divider />
-            <Box
-              display="flex"
-              justifyContent="flex-end"
-              p={2}
-            >
+            <Box display="flex" justifyContent="flex-end" p={2}>
               <Link to="/app/periods">
                 <Button
-                  style={{ marginRight: 10, backgroundColor: "#8B0000", color: '#fff' }}
+                  style={{
+                    marginRight: 10,
+                    backgroundColor: "#8B0000",
+                    color: "#fff",
+                  }}
                   variant="contained"
                 >
                   Cancelar
                 </Button>
               </Link>
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-              >
+              <Button color="primary" variant="contained" type="submit">
                 Cadastrar
               </Button>
             </Box>
@@ -193,8 +205,6 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
       </Container>
     </form>
   );
-
 };
 
 export default PeriodDetails;
-

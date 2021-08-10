@@ -14,22 +14,12 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { gql } from "@apollo/client";
-
-const WarnMail = gql`
-  mutation WarnMail($loans: [Int]!) {
-    warnMail(loans: $loans) {
-      response
-    }
-  }
-`;
-
-const LateMail = gql`
-  mutation LateMail($loans: [Int]!) {
-    lateMail(loans: $loans) {
-      response
-    }
-  }
-`;
-
-export { WarnMail, LateMail };
+export default {
+  pageSize: "21.59cm 27.94cm",
+  pageMargin: "1.35cm 0cm",
+  ticketWidth: "10.795cm",
+  ticketHeight: "2.52cm",
+  barWidth: 1,
+  barHeight: 50,
+  barFontSize: 10,
+};
