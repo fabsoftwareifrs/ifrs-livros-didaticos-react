@@ -1,10 +1,7 @@
 {
-  "name": "react-material-dashboard",
-  "author": "DeviasIO",
-  "licence": "MIT",
+  "name": "ifrs-livros-didaticos",
   "version": "1.0.0",
-  "private": false,
-  "homepage": ".",
+  "private": true,
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
