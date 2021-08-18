@@ -16,6 +16,7 @@
 
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
+import logo from "src/assets/logo.png";
 const styles = (theme) => ({
   div: {
     width: 40,
@@ -33,7 +34,7 @@ const Logo = (props) => {
     <div className={classes.div}>
       <img
         alt="Logo"
-        src="../assets/logo.png"
+        src={logo}
         style={{
           width: 25,
         }}
