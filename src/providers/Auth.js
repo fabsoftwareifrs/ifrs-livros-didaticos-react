@@ -26,13 +26,8 @@ import {
 
 import { onError } from "@apollo/link-error";
 
-const env = process.env.NODE_ENV || "development";
-
 const uploadLink = new createUploadLink({
-  uri:
-    env === "development"
-      ? "//localhost:4000/graphql"
-      : `https://livros-didaticos-api.herokuapp.com/graphql`,
+  uri: `https://ifrs-livros-didaticos-back.herokuapp.com/graphql`,
 });
 
 const authLink = new ApolloLink((operation, forward) => {
