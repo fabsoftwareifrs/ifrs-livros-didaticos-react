@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "baseUrl": "https://ifrs-livros-didaticos-front.herokuapp.com/"
+  },
+  "include": ["src"]
+}
