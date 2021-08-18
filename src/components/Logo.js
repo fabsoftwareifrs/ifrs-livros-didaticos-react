@@ -33,7 +33,7 @@ const Logo = (props) => {
     <div className={classes.div}>
       <img
         alt="Logo"
-        src="/static/logo.png"
+        src="../assets/logo.png"
         style={{
           width: 25,
         }}

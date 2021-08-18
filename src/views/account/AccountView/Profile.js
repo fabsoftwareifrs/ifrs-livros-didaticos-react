@@ -30,14 +30,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 
-const user = {
-  avatar: "/static/images/avatars/avatar_6.png",
-  city: "Los Angeles",
-  country: "USA",
-  jobTitle: "Senior Developer",
-  name: "Katarina Smith",
-  timezone: "GTM-7",
-};
+
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -52,7 +45,7 @@ const Profile = ({ className, ...rest }) => {
 
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
-      <CardContent>
+      {/* <CardContent>
         <Box alignItems="center" display="flex" flexDirection="column">
           <Avatar className={classes.avatar} src={user.avatar} />
           <Typography color="textPrimary" gutterBottom variant="h3">
@@ -75,7 +68,7 @@ const Profile = ({ className, ...rest }) => {
         <Button color="primary" fullWidth variant="text">
           Upload picture
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 };
