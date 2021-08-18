@@ -4,6 +4,7 @@
   "licence": "MIT",
   "version": "1.0.0",
   "private": false,
+  "homepage": "https://ifrs-livros-didaticos-front.herokuapp.com/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
