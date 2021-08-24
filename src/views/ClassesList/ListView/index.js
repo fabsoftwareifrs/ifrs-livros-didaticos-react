@@ -66,6 +66,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  notContentText: {
+    padding: "5% 2%",
+    width: "100%",
+    textAlign: "center",
+    fontSize: 25,
+  },
 }));
 
 const ClassesList = (props) => {
@@ -103,84 +109,107 @@ const ClassesList = (props) => {
   return (
     <Page className={classes.root} title="Turmas">
       <Container maxWidth={false}>
-        <Toolbar search={setSearch} />
-        <Box mt={3}>
-          {loading ? (
-            ""
-          ) : (
-            <Card>
-              <PerfectScrollbar>
-                <Box minWidth={300}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Nome</TableCell>
-                        <TableCell>Curso</TableCell>
-                        <TableCell></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {data.paginateClasses.docs
-                        .slice(0, limit)
-                        .map((objClasses) => (
-                          <TableRow hover key={objClasses.id}>
-                            <TableCell>
-                              <Box alignItems="center" display="flex">
-                                <Typography color="textPrimary" variant="body1">
-                                  {objClasses.name}
-                                </Typography>
-                              </Box>
-                            </TableCell>
-                            <TableCell>{objClasses.course.name}</TableCell>
-                            <TableCell className={classes.endCell}>
-                              <Modal className={classes.icon} icon={TrashIcon}>
-                                <CardHeader
-                                  subheader={
-                                    'Tem certeza que deseja deletar a turma "' +
-                                    objClasses.name +
-                                    '"'
-                                  }
-                                  title="Deletar turma"
-                                />
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    margin: 10,
-                                    backgroundColor: "#8B0000",
-                                    color: "#fff",
-                                  }}
-                                  onClick={() => deleteClass(objClasses.id)}
-                                >
-                                  Deletar
-                                </Button>
-                              </Modal>
+        {loading ? (
+          ""
+        ) : (
+          <>
+            <Toolbar
+              content={data.paginateClasses.docs.length}
+              search={setSearch}
+            />
+            <Box mt={3}>
+              <Card>
+                {data.paginateClasses.docs.length ? (
+                  <>
+                    <PerfectScrollbar>
+                      <Box minWidth={300}>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Nome</TableCell>
+                              <TableCell>Curso</TableCell>
+                              <TableCell></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {data.paginateClasses.docs
+                              .slice(0, limit)
+                              .map((objClasses) => (
+                                <TableRow hover key={objClasses.id}>
+                                  <TableCell>
+                                    <Box alignItems="center" display="flex">
+                                      <Typography
+                                        color="textPrimary"
+                                        variant="body1"
+                                      >
+                                        {objClasses.name}
+                                      </Typography>
+                                    </Box>
+                                  </TableCell>
+                                  <TableCell>
+                                    {objClasses.course.name}
+                                  </TableCell>
+                                  <TableCell className={classes.endCell}>
+                                    <Modal
+                                      className={classes.icon}
+                                      icon={TrashIcon}
+                                    >
+                                      <CardHeader
+                                        subheader={
+                                          'Tem certeza que deseja deletar a turma "' +
+                                          objClasses.name +
+                                          '"'
+                                        }
+                                        title="Deletar turma"
+                                      />
+                                      <Button
+                                        variant="contained"
+                                        style={{
+                                          margin: 10,
+                                          backgroundColor: "#8B0000",
+                                          color: "#fff",
+                                        }}
+                                        onClick={() =>
+                                          deleteClass(objClasses.id)
+                                        }
+                                      >
+                                        Deletar
+                                      </Button>
+                                    </Modal>
 
-                              <Link
-                                to={"/app/classes/edit/" + objClasses.id}
-                                style={{ color: "#263238" }}
-                              >
-                                <EditIcon className={classes.icon} />
-                              </Link>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
-                </Box>
-              </PerfectScrollbar>
-              <TablePagination
-                component="div"
-                count={data.paginateClasses.total}
-                onChangePage={handlePageChange}
-                onChangeRowsPerPage={handleLimitChange}
-                page={page - 1}
-                rowsPerPage={limit}
-                rowsPerPageOptions={[5, 10, 25]}
-                labelRowsPerPage={"Itens por página:"}
-              />
-            </Card>
-          )}
-        </Box>
+                                    <Link
+                                      to={"/app/classes/edit/" + objClasses.id}
+                                      style={{ color: "#263238" }}
+                                    >
+                                      <EditIcon className={classes.icon} />
+                                    </Link>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
+                      </Box>
+                    </PerfectScrollbar>
+                    <TablePagination
+                      component="div"
+                      count={data.paginateClasses.total}
+                      onChangePage={handlePageChange}
+                      onChangeRowsPerPage={handleLimitChange}
+                      page={page - 1}
+                      rowsPerPage={limit}
+                      rowsPerPageOptions={[5, 10, 25]}
+                      labelRowsPerPage={"Itens por página:"}
+                    />
+                  </>
+                ) : (
+                  <Typography className={classes.notContentText}>
+                    Nenhum registro aqui.
+                  </Typography>
+                )}
+              </Card>
+            </Box>
+          </>
+        )}
       </Container>
     </Page>
   );

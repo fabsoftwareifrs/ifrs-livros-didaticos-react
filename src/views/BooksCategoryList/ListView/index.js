@@ -64,6 +64,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  notContentText: {
+    padding: "5% 2%",
+    width: "100%",
+    textAlign: "center",
+    fontSize: 25,
+  },
 }));
 
 const CategoryList = (props) => {
@@ -103,83 +109,104 @@ const CategoryList = (props) => {
   return (
     <Page className={classes.root} title="Categorias de Livros">
       <Container maxWidth={false}>
-        <Toolbar search={setSearch} />
-        <Box mt={3}>
-          {loading ? (
-            ""
-          ) : (
-            <Card>
-              <PerfectScrollbar>
-                <Box minWidth={300}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Categoria</TableCell>
+        {loading ? (
+          ""
+        ) : (
+          <>
+            <Toolbar
+              content={data.paginateCategories.docs.length}
+              search={setSearch}
+            />
+            <Box mt={3}>
+              <Card>
+                {data.paginateCategories.docs.length ? (
+                  <>
+                    <PerfectScrollbar>
+                      <Box minWidth={300}>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Categoria</TableCell>
 
-                        <TableCell></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {data.paginateCategories.docs
-                        .slice(0, limit)
-                        .map((category) => (
-                          <TableRow hover key={category.id}>
-                            <TableCell>
-                              <Box alignItems="center" display="flex">
-                                <Typography color="textPrimary" variant="body1">
-                                  {category.name}
-                                </Typography>
-                              </Box>
-                            </TableCell>
-                            <TableCell className={classes.endCell}>
-                              <Modal className={classes.icon} icon={TrashIcon}>
-                                <CardHeader
-                                  subheader={
-                                    'Tem certeza que deseja deletar a categoria "' +
-                                    category.name +
-                                    '"'
-                                  }
-                                  title="Deletar categoria"
-                                />
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    margin: 10,
-                                    backgroundColor: "#8B0000",
-                                    color: "#fff",
-                                  }}
-                                  onClick={() => deleteCategory(category.id)}
-                                >
-                                  Deletar
-                                </Button>
-                              </Modal>
+                              <TableCell></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {data.paginateCategories.docs
+                              .slice(0, limit)
+                              .map((category) => (
+                                <TableRow hover key={category.id}>
+                                  <TableCell>
+                                    <Box alignItems="center" display="flex">
+                                      <Typography
+                                        color="textPrimary"
+                                        variant="body1"
+                                      >
+                                        {category.name}
+                                      </Typography>
+                                    </Box>
+                                  </TableCell>
+                                  <TableCell className={classes.endCell}>
+                                    <Modal
+                                      className={classes.icon}
+                                      icon={TrashIcon}
+                                    >
+                                      <CardHeader
+                                        subheader={
+                                          'Tem certeza que deseja deletar a categoria "' +
+                                          category.name +
+                                          '"'
+                                        }
+                                        title="Deletar categoria"
+                                      />
+                                      <Button
+                                        variant="contained"
+                                        style={{
+                                          margin: 10,
+                                          backgroundColor: "#8B0000",
+                                          color: "#fff",
+                                        }}
+                                        onClick={() =>
+                                          deleteCategory(category.id)
+                                        }
+                                      >
+                                        Deletar
+                                      </Button>
+                                    </Modal>
 
-                              <Link
-                                style={{ color: "#263238" }}
-                                to={"/app/category/edit/" + category.id}
-                              >
-                                <EditIcon className={classes.icon} />
-                              </Link>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
-                </Box>
-              </PerfectScrollbar>
-              <TablePagination
-                component="div"
-                count={data.paginateCategories.total}
-                onChangePage={handlePageChange}
-                onChangeRowsPerPage={handleLimitChange}
-                page={page - 1}
-                rowsPerPage={limit}
-                rowsPerPageOptions={[5, 10, 25]}
-                labelRowsPerPage={"Itens por página:"}
-              />
-            </Card>
-          )}
-        </Box>
+                                    <Link
+                                      style={{ color: "#263238" }}
+                                      to={"/app/category/edit/" + category.id}
+                                    >
+                                      <EditIcon className={classes.icon} />
+                                    </Link>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
+                      </Box>
+                    </PerfectScrollbar>
+                    <TablePagination
+                      component="div"
+                      count={data.paginateCategories.total}
+                      onChangePage={handlePageChange}
+                      onChangeRowsPerPage={handleLimitChange}
+                      page={page - 1}
+                      rowsPerPage={limit}
+                      rowsPerPageOptions={[5, 10, 25]}
+                      labelRowsPerPage={"Itens por página:"}
+                    />
+                  </>
+                ) : (
+                  <Typography className={classes.notContentText}>
+                    Nenhum registro aqui.
+                  </Typography>
+                )}
+              </Card>
+            </Box>
+          </>
+        )}
       </Container>
     </Page>
   );

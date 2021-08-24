@@ -63,6 +63,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  notContentText: {
+    padding: "5% 2%",
+    width: "100%",
+    textAlign: "center",
+    fontSize: 25,
+  },
 }));
 
 const BooksList = (props) => {
@@ -98,100 +104,118 @@ const BooksList = (props) => {
   return (
     <Page className={classes.root} title="Livros">
       <Container maxWidth={false}>
-        <>
-          <Toolbar search={setSearch} />
-          <Box mt={3}>
-            {loading ? (
-              ""
-            ) : (
+        {loading ? (
+          ""
+        ) : (
+          <>
+            <Toolbar
+              content={data.paginateBooks.docs.length}
+              search={setSearch}
+            />
+            <Box mt={3}>
               <Card>
-                <PerfectScrollbar>
-                  <Box minWidth={300}>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Nome</TableCell>
-
-                          <TableCell>Autor</TableCell>
-                          <TableCell>Volume</TableCell>
-                          <TableCell>Categoria</TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {data.paginateBooks.docs.slice(0, limit).map((book) => (
-                          <TableRow hover key={book.id}>
-                            <TableCell>
-                              <Box alignItems="center" display="flex">
-                                <Typography color="textPrimary" variant="body1">
-                                  {book.name}
-                                </Typography>
-                              </Box>
-                            </TableCell>
-                            <TableCell>{book.author}</TableCell>
-                            <TableCell>{book.volume}</TableCell>
-                            <TableCell>{book.category.name}</TableCell>
-                            <TableCell>
-                              <Link to={"/app/copies/" + book.id}>
-                                <Button
-                                  color="primary"
-                                  variant="contained"
-                                  size="small"
-                                >
-                                  Exemplares
-                                </Button>
-                              </Link>
-                            </TableCell>
-                            <TableCell className={classes.endCell}>
-                              <Modal className={classes.icon} icon={TrashIcon}>
-                                <CardHeader
-                                  subheader={
-                                    'Tem certeza que deseja deletar o livro "' +
-                                    book.name +
-                                    '"'
-                                  }
-                                  title="Deletar livro"
-                                />
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    margin: 10,
-                                    backgroundColor: "#8B0000",
-                                    color: "#fff",
-                                  }}
-                                  onClick={() => deleteBook(book.id)}
-                                >
-                                  Deletar
-                                </Button>
-                              </Modal>
-                              <Link
-                                to={"/app/books/edit/" + book.id}
-                                style={{ color: "#263238" }}
-                              >
-                                <EditIcon className={classes.icon} />
-                              </Link>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </Box>
-                </PerfectScrollbar>
-                <TablePagination
-                  component="div"
-                  count={data.paginateBooks.total}
-                  onChangePage={handlePageChange}
-                  onChangeRowsPerPage={handleLimitChange}
-                  page={page - 1}
-                  rowsPerPage={limit}
-                  rowsPerPageOptions={[5, 10, 25]}
-                  labelRowsPerPage={"Itens por página:"}
-                />
+                {data.paginateBooks.docs.length ? (
+                  <>
+                    <PerfectScrollbar>
+                      <Box minWidth={300}>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Nome</TableCell>
+                              <TableCell>Autor</TableCell>
+                              <TableCell>Volume</TableCell>
+                              <TableCell>Categoria</TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {data.paginateBooks.docs
+                              .slice(0, limit)
+                              .map((book) => (
+                                <TableRow hover key={book.id}>
+                                  <TableCell>
+                                    <Box alignItems="center" display="flex">
+                                      <Typography
+                                        color="textPrimary"
+                                        variant="body1"
+                                      >
+                                        {book.name}
+                                      </Typography>
+                                    </Box>
+                                  </TableCell>
+                                  <TableCell>{book.author}</TableCell>
+                                  <TableCell>{book.volume}</TableCell>
+                                  <TableCell>{book.category.name}</TableCell>
+                                  <TableCell>
+                                    <Link to={"/app/copies/" + book.id}>
+                                      <Button
+                                        color="primary"
+                                        variant="contained"
+                                        size="small"
+                                      >
+                                        Exemplares
+                                      </Button>
+                                    </Link>
+                                  </TableCell>
+                                  <TableCell className={classes.endCell}>
+                                    <Modal
+                                      className={classes.icon}
+                                      icon={TrashIcon}
+                                    >
+                                      <CardHeader
+                                        subheader={
+                                          'Tem certeza que deseja deletar o livro "' +
+                                          book.name +
+                                          '"'
+                                        }
+                                        title="Deletar livro"
+                                      />
+                                      <Button
+                                        variant="contained"
+                                        style={{
+                                          margin: 10,
+                                          backgroundColor: "#8B0000",
+                                          color: "#fff",
+                                        }}
+                                        onClick={() => deleteBook(book.id)}
+                                      >
+                                        Deletar
+                                      </Button>
+                                    </Modal>
+                                    <Link
+                                      to={"/app/books/edit/" + book.id}
+                                      style={{ color: "#263238" }}
+                                    >
+                                      <EditIcon className={classes.icon} />
+                                    </Link>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
+                      </Box>
+                    </PerfectScrollbar>
+                    <TablePagination
+                      component="div"
+                      count={data.paginateBooks.total}
+                      onChangePage={handlePageChange}
+                      onChangeRowsPerPage={handleLimitChange}
+                      page={page - 1}
+                      rowsPerPage={limit}
+                      rowsPerPageOptions={[5, 10, 25]}
+                      labelRowsPerPage={"Itens por página:"}
+                    />
+                  </>
+                ) : (
+                  <Typography className={classes.notContentText}>
+                    Nenhum registro aqui.
+                  </Typography>
+                )}
               </Card>
-            )}
-          </Box>
-        </>
+            </Box>
+          </>
+        )}
       </Container>
     </Page>
   );

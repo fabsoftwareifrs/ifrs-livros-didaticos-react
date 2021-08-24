@@ -63,6 +63,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  notContentText: {
+    padding: "5% 2%",
+    width: "100%",
+    textAlign: "center",
+    fontSize: 25,
+  },
 }));
 
 const CourseList = (props) => {
@@ -98,83 +104,101 @@ const CourseList = (props) => {
   return (
     <Page className={classes.root} title="Curso">
       <Container maxWidth={false}>
-        <Toolbar search={setSearch} />
-        <Box mt={3}>
-          {loading ? (
-            ""
-          ) : (
-            <Card>
-              <PerfectScrollbar>
-                <Box minWidth={300}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Curso</TableCell>
+        {loading ? (
+          ""
+        ) : (
+          <>
+            <Toolbar
+              content={data.paginateCourses.docs.length}
+              search={setSearch}
+            />
+            <Box mt={3}>
+              <Card>
+                {data.paginateCourses.docs.length ? (
+                  <>
+                    <PerfectScrollbar>
+                      <Box minWidth={300}>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Curso</TableCell>
+                              <TableCell></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {data.paginateCourses.docs
+                              .slice(0, limit)
+                              .map((course) => (
+                                <TableRow hover key={course.id}>
+                                  <TableCell>
+                                    <Box alignItems="center" display="flex">
+                                      <Typography
+                                        color="textPrimary"
+                                        variant="body1"
+                                      >
+                                        {course.name}
+                                      </Typography>
+                                    </Box>
+                                  </TableCell>
+                                  <TableCell className={classes.endCell}>
+                                    <Modal
+                                      className={classes.icon}
+                                      icon={TrashIcon}
+                                    >
+                                      <CardHeader
+                                        subheader={
+                                          'Tem certeza que deseja deletar o curso "' +
+                                          course.name +
+                                          '"'
+                                        }
+                                        title="Deletar categoria"
+                                      />
+                                      <Button
+                                        variant="contained"
+                                        style={{
+                                          margin: 10,
+                                          backgroundColor: "#8B0000",
+                                          color: "#fff",
+                                        }}
+                                        onClick={() => deleteCourse(course.id)}
+                                      >
+                                        Deletar
+                                      </Button>
+                                    </Modal>
 
-                        <TableCell></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {data.paginateCourses.docs
-                        .slice(0, limit)
-                        .map((course) => (
-                          <TableRow hover key={course.id}>
-                            <TableCell>
-                              <Box alignItems="center" display="flex">
-                                <Typography color="textPrimary" variant="body1">
-                                  {course.name}
-                                </Typography>
-                              </Box>
-                            </TableCell>
-                            <TableCell className={classes.endCell}>
-                              <Modal className={classes.icon} icon={TrashIcon}>
-                                <CardHeader
-                                  subheader={
-                                    'Tem certeza que deseja deletar o curso "' +
-                                    course.name +
-                                    '"'
-                                  }
-                                  title="Deletar categoria"
-                                />
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    margin: 10,
-                                    backgroundColor: "#8B0000",
-                                    color: "#fff",
-                                  }}
-                                  onClick={() => deleteCourse(course.id)}
-                                >
-                                  Deletar
-                                </Button>
-                              </Modal>
-
-                              <Link
-                                style={{ color: "#263238" }}
-                                to={"/app/course/edit/" + course.id}
-                              >
-                                <EditIcon className={classes.icon} />
-                              </Link>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
-                </Box>
-              </PerfectScrollbar>
-              <TablePagination
-                component="div"
-                count={data.paginateCourses.total}
-                onChangePage={handlePageChange}
-                onChangeRowsPerPage={handleLimitChange}
-                page={page - 1}
-                rowsPerPage={limit}
-                rowsPerPageOptions={[5, 10, 25]}
-                labelRowsPerPage={"Itens por página:"}
-              />
-            </Card>
-          )}
-        </Box>
+                                    <Link
+                                      style={{ color: "#263238" }}
+                                      to={"/app/course/edit/" + course.id}
+                                    >
+                                      <EditIcon className={classes.icon} />
+                                    </Link>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
+                      </Box>
+                    </PerfectScrollbar>
+                    <TablePagination
+                      component="div"
+                      count={data.paginateCourses.total}
+                      onChangePage={handlePageChange}
+                      onChangeRowsPerPage={handleLimitChange}
+                      page={page - 1}
+                      rowsPerPage={limit}
+                      rowsPerPageOptions={[5, 10, 25]}
+                      labelRowsPerPage={"Itens por página:"}
+                    />
+                  </>
+                ) : (
+                  <Typography className={classes.notContentText}>
+                    Nenhum registro aqui.
+                  </Typography>
+                )}
+              </Card>
+            </Box>
+          </>
+        )}
       </Container>
     </Page>
   );

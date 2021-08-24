@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Toolbar = ({ className, create, mail, search, ...rest }) => {
+const Toolbar = ({ className, create, mail, search, content, ...rest }) => {
   const classes = useStyles();
   const handlePress = (e) => {
     if (e.which == 13) {
@@ -68,50 +68,54 @@ const Toolbar = ({ className, create, mail, search, ...rest }) => {
           </Button>
         </Link>
       </Box>
-      <Box mt={3}>
-        <Card>
-          <CardContent>
-            <Box className={classes.bar}>
-              <Box width={"100%"} maxWidth={500}>
-                <TextField
-                  fullWidth
-                  onKeyPress={handlePress}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SvgIcon fontSize="small" color="action">
-                          <SearchIcon />
-                        </SvgIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                  placeholder="Buscar Empréstimos"
-                  variant="outlined"
-                />
-              </Box>
-              <Box className={classes.warnButton} maxWidth={500}>
-                <Modal
-                  style={{ backgroundColor: "#e6ac00", color: "#fff" }}
-                  startIcon={<BellIcon />}
-                  variant="contained"
-                  text="Enviar notificação"
-                >
-                  <CardHeader title="Deseja enviar um e-mail de lembrete de entrega para os empréstimos selecionados?" />
-                  <Button
-                    color="primary"
-                    startIcon={<SendIcon />}
-                    style={{ margin: 10 }}
+      {content ? (
+        <Box mt={3}>
+          <Card>
+            <CardContent>
+              <Box className={classes.bar}>
+                <Box width={"100%"} maxWidth={500}>
+                  <TextField
+                    fullWidth
+                    onKeyPress={handlePress}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SvgIcon fontSize="small" color="action">
+                            <SearchIcon />
+                          </SvgIcon>
+                        </InputAdornment>
+                      ),
+                    }}
+                    placeholder="Buscar Empréstimos"
+                    variant="outlined"
+                  />
+                </Box>
+                <Box className={classes.warnButton} maxWidth={500}>
+                  <Modal
+                    style={{ backgroundColor: "#e6ac00", color: "#fff" }}
+                    startIcon={<BellIcon />}
                     variant="contained"
-                    onClick={mail}
+                    text="Enviar notificação"
                   >
-                    Enviar
-                  </Button>
-                </Modal>
+                    <CardHeader title="Deseja enviar um e-mail de lembrete de entrega para os empréstimos selecionados?" />
+                    <Button
+                      color="primary"
+                      startIcon={<SendIcon />}
+                      style={{ margin: 10 }}
+                      variant="contained"
+                      onClick={mail}
+                    >
+                      Enviar
+                    </Button>
+                  </Modal>
+                </Box>
               </Box>
-            </Box>
-          </CardContent>
-        </Card>
-      </Box>
+            </CardContent>
+          </Card>
+        </Box>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

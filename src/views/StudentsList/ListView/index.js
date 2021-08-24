@@ -59,6 +59,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  notContentText: {
+    padding: "5% 2%",
+    width: "100%",
+    textAlign: "center",
+    fontSize: 25,
+  },
 }));
 
 const StudentsList = (props) => {
@@ -94,91 +100,112 @@ const StudentsList = (props) => {
   return (
     <Page className={classes.root} title="Estudantes">
       <Container maxWidth={false}>
-        <Toolbar search={setSearch} />
-        <Box mt={3}>
-          {loading ? (
-            ""
-          ) : (
-            <Card>
-              <PerfectScrollbar>
-                <Box minWidth={300}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Nome</TableCell>
-                        <TableCell>E-mail</TableCell>
-                        <TableCell>Matricula</TableCell>
-                        <TableCell>Curso</TableCell>
-                        <TableCell>Turma</TableCell>
-                        <TableCell></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {data.paginateStudents.docs
-                        .slice(0, limit)
-                        .map((student) => (
-                          <TableRow hover key={student.id}>
-                            <TableCell>
-                              <Box alignItems="center" display="flex">
-                                <Typography color="textPrimary" variant="body1">
-                                  {student.name}
-                                </Typography>
-                              </Box>
-                            </TableCell>
-                            <TableCell>{student.email}</TableCell>
-                            <TableCell>{student.matriculation}</TableCell>
-                            <TableCell>{student.course.name}</TableCell>
-                            <TableCell>{student.classes.name}</TableCell>
+        {loading ? (
+          ""
+        ) : (
+          <>
+            <Toolbar
+              content={data.paginateStudents.docs.length}
+              search={setSearch}
+            />
+            <Box mt={3}>
+              <Card>
+                {data.paginateStudents.docs.length ? (
+                  <>
+                    <PerfectScrollbar>
+                      <Box minWidth={300}>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Nome</TableCell>
+                              <TableCell>E-mail</TableCell>
+                              <TableCell>Matricula</TableCell>
+                              <TableCell>Curso</TableCell>
+                              <TableCell>Turma</TableCell>
+                              <TableCell></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {data.paginateStudents.docs
+                              .slice(0, limit)
+                              .map((student) => (
+                                <TableRow hover key={student.id}>
+                                  <TableCell>
+                                    <Box alignItems="center" display="flex">
+                                      <Typography
+                                        color="textPrimary"
+                                        variant="body1"
+                                      >
+                                        {student.name}
+                                      </Typography>
+                                    </Box>
+                                  </TableCell>
+                                  <TableCell>{student.email}</TableCell>
+                                  <TableCell>{student.matriculation}</TableCell>
+                                  <TableCell>{student.course.name}</TableCell>
+                                  <TableCell>{student.classes.name}</TableCell>
 
-                            <TableCell className={classes.endCell}>
-                              <Modal className={classes.icon} icon={TrashIcon}>
-                                <CardHeader
-                                  subheader={
-                                    'Tem certeza que deseja deletar o estudante "' +
-                                    student.name +
-                                    '"'
-                                  }
-                                  title="Deletar estudante"
-                                />
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    margin: 10,
-                                    backgroundColor: "#8B0000",
-                                    color: "#fff",
-                                  }}
-                                  onClick={() => deleteStudent(student.id)}
-                                >
-                                  Deletar
-                                </Button>
-                              </Modal>
+                                  <TableCell className={classes.endCell}>
+                                    <Modal
+                                      className={classes.icon}
+                                      icon={TrashIcon}
+                                    >
+                                      <CardHeader
+                                        subheader={
+                                          'Tem certeza que deseja deletar o estudante "' +
+                                          student.name +
+                                          '"'
+                                        }
+                                        title="Deletar estudante"
+                                      />
+                                      <Button
+                                        variant="contained"
+                                        style={{
+                                          margin: 10,
+                                          backgroundColor: "#8B0000",
+                                          color: "#fff",
+                                        }}
+                                        onClick={() =>
+                                          deleteStudent(student.id)
+                                        }
+                                      >
+                                        Deletar
+                                      </Button>
+                                    </Modal>
 
-                              <Link
-                                to={"/app/students/edit/" + student.id}
-                                style={{ color: "#263238" }}
-                              >
-                                <EditIcon className={classes.icon} />
-                              </Link>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
-                </Box>
-              </PerfectScrollbar>
-              <TablePagination
-                component="div"
-                count={data.paginateStudents.total}
-                onChangePage={handlePageChange}
-                onChangeRowsPerPage={handleLimitChange}
-                page={page - 1}
-                rowsPerPage={limit}
-                rowsPerPageOptions={[5, 10, 25]}
-                labelRowsPerPage={"Itens por página:"}
-              />
-            </Card>
-          )}
-        </Box>
+                                    <Link
+                                      to={"/app/students/edit/" + student.id}
+                                      style={{ color: "#263238" }}
+                                    >
+                                      <EditIcon className={classes.icon} />
+                                    </Link>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
+                      </Box>
+                    </PerfectScrollbar>
+                    <TablePagination
+                      component="div"
+                      count={data.paginateStudents.total}
+                      onChangePage={handlePageChange}
+                      onChangeRowsPerPage={handleLimitChange}
+                      page={page - 1}
+                      rowsPerPage={limit}
+                      rowsPerPageOptions={[5, 10, 25]}
+                      labelRowsPerPage={"Itens por página:"}
+                    />
+                  </>
+                ) : (
+                  <Typography className={classes.notContentText}>
+                    Nenhum registro aqui.
+                  </Typography>
+                )}
+              </Card>
+            </Box>
+          </>
+        )}
       </Container>
     </Page>
   );

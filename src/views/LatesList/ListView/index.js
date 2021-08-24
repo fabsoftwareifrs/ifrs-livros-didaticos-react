@@ -72,6 +72,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  notContentText: {
+    padding: "5% 2%",
+    width: "100%",
+    textAlign: "center",
+    fontSize: 25,
+  },
 }));
 
 const LoanList = (props) => {
@@ -225,147 +231,165 @@ const LoanList = (props) => {
   return (
     <Page className={classes.root} title="Empréstimos">
       <Container maxWidth={false}>
-        <>
-          <Toolbar search={setSearch} mail={sendLateMail} />
-          <Box mt={3}>
-            {loading ? (
-              ""
-            ) : (
+        {loading ? (
+          ""
+        ) : (
+          <>
+            <Toolbar
+              content={data.paginateLoans.docs.length}
+              search={setSearch}
+              mail={sendLateMail}
+            />
+            <Box mt={3}>
               <Card>
-                <PerfectScrollbar>
-                  <Box minWidth={300}>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={
-                                selectedLoanIds.length ===
-                                data.paginateLoans.docs.slice(0, limit).length
-                              }
-                              color="primary"
-                              indeterminate={
-                                selectedLoanIds.length > 0 &&
-                                selectedLoanIds.length <
-                                  data.paginateLoans.docs.slice(0, limit).length
-                              }
-                              onChange={(e) =>
-                                handleSelectAll(
-                                  e,
-                                  data.paginateLoans.docs.slice(0, limit)
-                                )
-                              }
-                            />
-                          </TableCell>
-                          <TableCell>Estudante</TableCell>
-                          <TableCell>Exemplar</TableCell>
-                          <TableCell>Período</TableCell>
-                          <TableCell>Entrege?</TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {data.paginateLoans.docs.slice(0, limit).map((loan) => (
-                          <TableRow hover key={loan.id}>
-                            <TableCell padding="checkbox">
-                              <Checkbox
-                                color="primary"
-                                checked={
-                                  selectedLoanIds.indexOf(loan.id) !== -1
-                                }
-                                onChange={(event) =>
-                                  handleSelectOne(event, loan.id)
-                                }
-                                value="true"
-                              />
-                            </TableCell>
-                            <TableCell>{loan.student.name}</TableCell>
-                            <TableCell>{loan.copy.code}</TableCell>
-                            <TableCell>{loan.period.name}</TableCell>
-                            <TableCell>
-                              <ModalIcon
-                                className={classes.icon}
-                                icon={loan.delivered ? CheckIcon : XIcon}
-                              >
-                                <CardHeader title="Mudar status empréstimo" />
-                                {loan.delivered ? (
-                                  <Button
-                                    variant="contained"
-                                    style={{
-                                      margin: 10,
-                                      backgroundColor: "#8B0000",
-                                      color: "#fff",
-                                    }}
-                                    onClick={() => cancelTerminateLoan(loan.id)}
-                                  >
-                                    Marcar como não entregue
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    variant="contained"
-                                    style={{
-                                      margin: 10,
-                                      backgroundColor: "#17882c",
-                                      color: "#fff",
-                                    }}
-                                    onClick={() => terminateLoan(loan.id)}
-                                  >
-                                    Marcar como entregue
-                                  </Button>
-                                )}
-                              </ModalIcon>
-                            </TableCell>
-                            <TableCell className={classes.endCell}>
-                              <ModalIcon
-                                className={classes.icon}
-                                icon={TrashIcon}
-                              >
-                                <CardHeader
-                                  subheader={
-                                    "Tem certeza que deseja deletar o empréstimo?"
+                {data.paginateLoans.docs.length ? (
+                  <>
+                    <PerfectScrollbar>
+                      <Box minWidth={300}>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell padding="checkbox">
+                                <Checkbox
+                                  checked={
+                                    selectedLoanIds.length ===
+                                    data.paginateLoans.docs.slice(0, limit)
+                                      .length
                                   }
-                                  title="Deletar empréstimo"
+                                  color="primary"
+                                  indeterminate={
+                                    selectedLoanIds.length > 0 &&
+                                    selectedLoanIds.length <
+                                      data.paginateLoans.docs.slice(0, limit)
+                                        .length
+                                  }
+                                  onChange={(e) =>
+                                    handleSelectAll(
+                                      e,
+                                      data.paginateLoans.docs.slice(0, limit)
+                                    )
+                                  }
                                 />
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    margin: 10,
-                                    backgroundColor: "#8B0000",
-                                    color: "#fff",
-                                  }}
-                                  onClick={() => deleteLoan(loan.id)}
-                                >
-                                  Deletar
-                                </Button>
-                              </ModalIcon>
+                              </TableCell>
+                              <TableCell>Estudante</TableCell>
+                              <TableCell>Exemplar</TableCell>
+                              <TableCell>Período</TableCell>
+                              <TableCell>Entrege?</TableCell>
+                              <TableCell></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {data.paginateLoans.docs
+                              .slice(0, limit)
+                              .map((loan) => (
+                                <TableRow hover key={loan.id}>
+                                  <TableCell padding="checkbox">
+                                    <Checkbox
+                                      color="primary"
+                                      checked={
+                                        selectedLoanIds.indexOf(loan.id) !== -1
+                                      }
+                                      onChange={(event) =>
+                                        handleSelectOne(event, loan.id)
+                                      }
+                                      value="true"
+                                    />
+                                  </TableCell>
+                                  <TableCell>{loan.student.name}</TableCell>
+                                  <TableCell>{loan.copy.code}</TableCell>
+                                  <TableCell>{loan.period.name}</TableCell>
+                                  <TableCell>
+                                    <ModalIcon
+                                      className={classes.icon}
+                                      icon={loan.delivered ? CheckIcon : XIcon}
+                                    >
+                                      <CardHeader title="Mudar status empréstimo" />
+                                      {loan.delivered ? (
+                                        <Button
+                                          variant="contained"
+                                          style={{
+                                            margin: 10,
+                                            backgroundColor: "#8B0000",
+                                            color: "#fff",
+                                          }}
+                                          onClick={() =>
+                                            cancelTerminateLoan(loan.id)
+                                          }
+                                        >
+                                          Marcar como não entregue
+                                        </Button>
+                                      ) : (
+                                        <Button
+                                          variant="contained"
+                                          style={{
+                                            margin: 10,
+                                            backgroundColor: "#17882c",
+                                            color: "#fff",
+                                          }}
+                                          onClick={() => terminateLoan(loan.id)}
+                                        >
+                                          Marcar como entregue
+                                        </Button>
+                                      )}
+                                    </ModalIcon>
+                                  </TableCell>
+                                  <TableCell className={classes.endCell}>
+                                    <ModalIcon
+                                      className={classes.icon}
+                                      icon={TrashIcon}
+                                    >
+                                      <CardHeader
+                                        subheader={
+                                          "Tem certeza que deseja deletar o empréstimo?"
+                                        }
+                                        title="Deletar empréstimo"
+                                      />
+                                      <Button
+                                        variant="contained"
+                                        style={{
+                                          margin: 10,
+                                          backgroundColor: "#8B0000",
+                                          color: "#fff",
+                                        }}
+                                        onClick={() => deleteLoan(loan.id)}
+                                      >
+                                        Deletar
+                                      </Button>
+                                    </ModalIcon>
 
-                              <Link
-                                to={"/app/loans/edit/" + loan.id}
-                                style={{ color: "#263238" }}
-                              >
-                                <EditIcon className={classes.icon} />
-                              </Link>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </Box>
-                </PerfectScrollbar>
-                <TablePagination
-                  component="div"
-                  count={data.paginateLoans.total}
-                  onChangePage={handlePageChange}
-                  onChangeRowsPerPage={handleLimitChange}
-                  page={page - 1}
-                  rowsPerPage={limit}
-                  rowsPerPageOptions={[5, 10, 25]}
-                  labelRowsPerPage={"Itens por página:"}
-                />
+                                    <Link
+                                      to={"/app/loans/edit/" + loan.id}
+                                      style={{ color: "#263238" }}
+                                    >
+                                      <EditIcon className={classes.icon} />
+                                    </Link>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
+                      </Box>
+                    </PerfectScrollbar>
+                    <TablePagination
+                      component="div"
+                      count={data.paginateLoans.total}
+                      onChangePage={handlePageChange}
+                      onChangeRowsPerPage={handleLimitChange}
+                      page={page - 1}
+                      rowsPerPage={limit}
+                      rowsPerPageOptions={[5, 10, 25]}
+                      labelRowsPerPage={"Itens por página:"}
+                    />
+                  </>
+                ) : (
+                  <Typography className={classes.notContentText}>
+                    Nenhum registro aqui.
+                  </Typography>
+                )}
               </Card>
-            )}
-          </Box>
-        </>
+            </Box>
+          </>
+        )}
       </Container>
     </Page>
   );
