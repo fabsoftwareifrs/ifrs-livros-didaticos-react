@@ -235,11 +235,7 @@ const LoanList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar
-              content={data.paginateLoans.docs.length}
-              search={setSearch}
-              mail={sendLateMail}
-            />
+            <Toolbar search={setSearch} mail={sendLateMail} />
             <Box mt={3}>
               <Card>
                 {data.paginateLoans.docs.length ? (

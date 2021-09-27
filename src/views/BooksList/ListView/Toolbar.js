@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Toolbar = ({ className, create, search, content, ...rest }) => {
+const Toolbar = ({ className, create, search, ...rest }) => {
   const classes = useStyles();
   const handlePress = (e) => {
     if (e.which == 13) {
@@ -58,33 +58,29 @@ const Toolbar = ({ className, create, search, content, ...rest }) => {
           </Button>
         </Link>
       </Box>
-      {content ? (
-        <Box mt={3}>
-          <Card>
-            <CardContent>
-              <Box maxWidth={500}>
-                <TextField
-                  fullWidth
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SvgIcon fontSize="small" color="action">
-                          <SearchIcon />
-                        </SvgIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                  placeholder="Buscar Livro"
-                  variant="outlined"
-                  onKeyPress={handlePress}
-                />
-              </Box>
-            </CardContent>
-          </Card>
-        </Box>
-      ) : (
-        ""
-      )}
+      <Box mt={3}>
+        <Card>
+          <CardContent>
+            <Box maxWidth={500}>
+              <TextField
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SvgIcon fontSize="small" color="action">
+                        <SearchIcon />
+                      </SvgIcon>
+                    </InputAdornment>
+                  ),
+                }}
+                placeholder="Buscar Livro"
+                variant="outlined"
+                onKeyPress={handlePress}
+              />
+            </Box>
+          </CardContent>
+        </Card>
+      </Box>
     </div>
   );
 };

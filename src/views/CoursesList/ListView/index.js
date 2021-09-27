@@ -108,10 +108,7 @@ const CourseList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar
-              content={data.paginateCourses.docs.length}
-              search={setSearch}
-            />
+            <Toolbar search={setSearch} />
             <Box mt={3}>
               <Card>
                 {data.paginateCourses.docs.length ? (

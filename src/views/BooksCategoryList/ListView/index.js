@@ -113,10 +113,7 @@ const CategoryList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar
-              content={data.paginateCategories.docs.length}
-              search={setSearch}
-            />
+            <Toolbar search={setSearch} />
             <Box mt={3}>
               <Card>
                 {data.paginateCategories.docs.length ? (

@@ -108,10 +108,7 @@ const BooksList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar
-              content={data.paginateBooks.docs.length}
-              search={setSearch}
-            />
+            <Toolbar search={setSearch} />
             <Box mt={3}>
               <Card>
                 {data.paginateBooks.docs.length ? (

@@ -120,8 +120,8 @@ const CopyDetails = ({ className, ...rest }) => {
         <Box mt={3}>
           <Card>
             <CardHeader
-              subheader="Você pode editar as informações de curso."
-              title="Curso"
+              subheader="Você pode editar o status do exemplar."
+              title="Exemplar"
             />
             <Divider />
             <CardContent>

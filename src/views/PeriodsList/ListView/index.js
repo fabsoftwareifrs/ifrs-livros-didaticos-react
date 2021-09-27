@@ -112,10 +112,7 @@ const PeriodsList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar
-              content={data.paginatePeriods.docs.length}
-              search={setSearch}
-            />
+            <Toolbar search={setSearch} />
             <Box mt={3}>
               <Card>
                 {data.paginatePeriods.docs.length ? (

@@ -104,10 +104,7 @@ const StudentsList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar
-              content={data.paginateStudents.docs.length}
-              search={setSearch}
-            />
+            <Toolbar search={setSearch} />
             <Box mt={3}>
               <Card>
                 {data.paginateStudents.docs.length ? (
