@@ -235,7 +235,11 @@ const LoanList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar search={setSearch} mail={sendLateMail} />
+            <Toolbar
+              search={setSearch}
+              selected={selectedLoanIds.length > 0}
+              mail={sendLateMail}
+            />
             <Box mt={3}>
               <Card>
                 {data.paginateLoans.docs.length ? (
