@@ -268,6 +268,7 @@ const LoanList = (props) => {
                                 />
                               </TableCell>
                               <TableCell>Estudante</TableCell>
+                              <TableCell>Livro</TableCell>
                               <TableCell>Exemplar</TableCell>
                               <TableCell>Período</TableCell>
                               <TableCell>Entrege?</TableCell>
@@ -292,6 +293,13 @@ const LoanList = (props) => {
                                     />
                                   </TableCell>
                                   <TableCell>{loan.student.name}</TableCell>
+                                  <TableCell>
+                                    <Link
+                                      to={"/app/copies/" + loan.copy.book.id}
+                                    >
+                                      {loan.copy.book.name}
+                                    </Link>
+                                  </TableCell>
                                   <TableCell>{loan.copy.code}</TableCell>
                                   <TableCell>{loan.period.name}</TableCell>
                                   <TableCell>

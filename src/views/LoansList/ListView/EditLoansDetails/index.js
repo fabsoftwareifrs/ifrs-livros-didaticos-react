@@ -38,7 +38,7 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import { useAuth } from "../../../../providers/Auth";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { AllStudentsQuery } from "src/graphql/queries/student";
-import { AvailableCopiesQuery } from "src/graphql/queries/copy";
+import { AvailableCopiesQuery, CopyQuery } from "src/graphql/queries/copy";
 import { AllPeriodsQuery } from "src/graphql/queries/period";
 const useStyles = makeStyles(() => ({
   root: {},
@@ -58,8 +58,11 @@ const LoanDetails = ({ className, ...rest }) => {
     setValues,
   } = useMyForm(fields);
   var { id } = useParams();
+  var copyId = "";
   const { loading, error, data } = useQuery(LoanQuery, {
     variables: { id: id },
+    fetchPolicy: "no-cache",
+    nextFetchPolicy: "no-cache",
   });
 
   var values = {
@@ -68,6 +71,7 @@ const LoanDetails = ({ className, ...rest }) => {
     periodId: "",
   };
   if (!loading) {
+    copyId = parseInt(data.loan.copy.id);
     values = {
       id: data.loan.id,
       studentId: parseInt(data.loan.student.id),
@@ -110,8 +114,25 @@ const LoanDetails = ({ className, ...rest }) => {
   };
   const students = useQuery(AllStudentsQuery);
   const copies = useQuery(AvailableCopiesQuery);
+  const selectedCopy = useQuery(CopyQuery, {
+    variables: { id: input.copyId.value },
+    fetchPolicy: "no-cache",
+    nextFetchPolicy: "no-cache",
+    skip: loading,
+  });
+  const firstSelectedCopy = useQuery(CopyQuery, {
+    variables: { id: copyId },
+    fetchPolicy: "no-cache",
+    nextFetchPolicy: "no-cache",
+    skip: loading,
+  });
+  if (!copies.loading && !firstSelectedCopy.loading && !loading) {
+    var availableCopies = Object.keys(copies.data.availableCopies).map(
+      (key) => copies.data.availableCopies[key]
+    );
+    availableCopies.push(firstSelectedCopy.data.copy);
+  }
   const periods = useQuery(AllPeriodsQuery);
-
   return (
     <>
       {loading ? (
@@ -134,14 +155,16 @@ const LoanDetails = ({ className, ...rest }) => {
                   <Grid container spacing={3}>
                     <input type="hidden" name="id" value={id} />
                     <Grid item md={6} xs={12}>
-                      {copies.loading ? (
+                      {copies.loading || selectedCopy.loading ? (
                         ""
                       ) : (
                         <Autocomplete
                           name="copyId"
-                          options={copies.data.availableCopies.map(
-                            ({ id, code }) => ({ value: id, label: code })
-                          )}
+                          options={availableCopies.map((option) => ({
+                            value: option.id,
+                            label: option.code,
+                            ...option,
+                          }))}
                           onChange={(event, value) => {
                             if (!value) {
                               handleChange({ name: "copyId", value: "" });
@@ -153,15 +176,14 @@ const LoanDetails = ({ className, ...rest }) => {
                             }
                           }}
                           value={
-                            input.copyId.value == ""
+                            input.copyId.value === ""
                               ? { value: "", label: "" }
                               : {
                                   value: "" + input.copyId.value,
-                                  label: copies.data.copies.find(
-                                    (s) => s.id === "" + input.copyId.value
-                                  ).code,
+                                  label: selectedCopy.data.copy.code,
                                 }
                           }
+                          groupBy={(option) => option.book.name}
                           getOptionLabel={(option) => option.label}
                           getOptionSelected={(option, value) =>
                             option.id === value.id

@@ -106,9 +106,11 @@ const LoanDetails = ({ className, ...rest }) => {
                   ) : (
                     <Autocomplete
                       name="copyId"
-                      options={copies.data.availableCopies.map(
-                        ({ id, code }) => ({ value: id, label: code })
-                      )}
+                      options={copies.data.availableCopies.map((option) => ({
+                        value: option.id,
+                        label: option.code,
+                        ...option,
+                      }))}
                       onChange={(event, value) => {
                         if (!value) {
                           handleChange({ name: "copyId", value: "" });
@@ -119,6 +121,7 @@ const LoanDetails = ({ className, ...rest }) => {
                           });
                         }
                       }}
+                      groupBy={(option) => option.book.name}
                       getOptionLabel={(option) => option.label}
                       getOptionSelected={(option, value) =>
                         option.id === value.id

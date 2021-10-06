@@ -54,6 +54,8 @@ export default function TransitionsModal(props) {
         startIcon={props.startIcon}
         variant="contained"
         onClick={handleOpen}
+        disabled={props.disabled}
+        className={props.className}
       >
         {props.text}
       </Button>

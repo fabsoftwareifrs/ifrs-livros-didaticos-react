@@ -50,9 +50,13 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: "5%",
     },
   },
+  disable: {
+    backgroundColor: "grey !important",
+    opacity: 0.6,
+  },
 }));
 
-const Toolbar = ({ className, create, mail, search, ...rest }) => {
+const Toolbar = ({ className, create, mail, search, selected, ...rest }) => {
   const classes = useStyles();
   const handlePress = (e) => {
     if (e.which == 13) {
@@ -92,6 +96,8 @@ const Toolbar = ({ className, create, mail, search, ...rest }) => {
               <Box className={classes.warnButton} maxWidth={500}>
                 <Modal
                   style={{ backgroundColor: "#e6ac00", color: "#fff" }}
+                  className={selected ? "" : classes.disable}
+                  disabled={selected ? false : true}
                   startIcon={<BellIcon />}
                   variant="contained"
                   text="Enviar notificação"

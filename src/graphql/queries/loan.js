@@ -34,6 +34,10 @@ const LoansQuery = gql`
           id
           code
           status
+          book {
+            id
+            name
+          }
         }
         period {
           id

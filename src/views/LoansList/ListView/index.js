@@ -118,11 +118,17 @@ const LoanList = (props) => {
     refetchQueries: [
       {
         query: LoansQuery,
-        variables: { input: { page: page, paginate: limit }, late: false },
+        variables: {
+          input: { page: page, paginate: limit, search },
+          late: false,
+        },
       },
       {
         query: LoansQuery,
-        variables: { input: { page: page, paginate: limit }, late: true },
+        variables: {
+          input: { page: page, paginate: limit, search },
+          late: true,
+        },
       },
     ],
   });
@@ -131,11 +137,17 @@ const LoanList = (props) => {
     refetchQueries: [
       {
         query: LoansQuery,
-        variables: { input: { page: page, paginate: limit }, late: false },
+        variables: {
+          input: { page: page, paginate: limit, search },
+          late: false,
+        },
       },
       {
         query: LoansQuery,
-        variables: { input: { page: page, paginate: limit }, late: true },
+        variables: {
+          input: { page: page, paginate: limit, search },
+          late: true,
+        },
       },
     ],
   });
@@ -219,7 +231,11 @@ const LoanList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar search={setSearch} mail={sendWarnMail} />
+            <Toolbar
+              search={setSearch}
+              selected={selectedLoanIds.length > 0}
+              mail={sendWarnMail}
+            />
             <Box mt={3}>
               <Card>
                 {data.paginateLoans.docs.length ? (
@@ -252,6 +268,7 @@ const LoanList = (props) => {
                                 />
                               </TableCell>
                               <TableCell>Estudante</TableCell>
+                              <TableCell>Livro</TableCell>
                               <TableCell>Exemplar</TableCell>
                               <TableCell>Período</TableCell>
                               <TableCell>Entrege?</TableCell>
@@ -277,8 +294,14 @@ const LoanList = (props) => {
                                     />
                                   </TableCell>
                                   <TableCell>{loan.student.name}</TableCell>
+                                  <TableCell>
+                                    <Link
+                                      to={"/app/copies/" + loan.copy.book.id}
+                                    >
+                                      {loan.copy.book.name}
+                                    </Link>
+                                  </TableCell>
                                   <TableCell>{loan.copy.code}</TableCell>
-
                                   <TableCell>{loan.period.name}</TableCell>
                                   <TableCell>
                                     <ModalIcon
