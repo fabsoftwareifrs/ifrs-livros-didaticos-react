@@ -16,8 +16,7 @@
 
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { CourseEdit } from "../../../../graphql/mutations/course";
 import useMyForm from "../../../../hooks/MyForm";
 import fields from "./fields";
@@ -29,10 +28,11 @@ import {
   CardHeader,
   Divider,
   Grid,
-  TextField,
   makeStyles,
   Container,
 } from "@material-ui/core";
+import { Field } from "src/reusable";
+
 import { CourseQuery, CoursesQuery } from "src/graphql/queries/course";
 import { Link, useParams, useHistory } from "react-router-dom";
 
@@ -42,18 +42,18 @@ const useStyles = makeStyles(() => ({
 
 const CourseDetails = ({ className, ...rest }) => {
   const classes = useStyles();
-  var history = useHistory();
+  var { push } = useHistory();
+  var { id } = useParams();
   const {
     fields: input,
     errors,
     handleSubmit,
     handleChange,
     setTouched,
-    reset,
     setValues,
   } = useMyForm(fields);
-  var { id } = useParams();
-  const { loading, error, data } = useQuery(CourseQuery, {
+
+  const { loading, data } = useQuery(CourseQuery, {
     variables: { id: id },
   });
   var values = {
@@ -72,7 +72,7 @@ const CourseDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [values]);
 
-  const [mutationEdit] = useMutation(CourseEdit, {
+  const [edit] = useMutation(CourseEdit, {
     refetchQueries: [
       {
         query: CoursesQuery,
@@ -81,9 +81,9 @@ const CourseDetails = ({ className, ...rest }) => {
     ],
   });
   const editCourse = async (data) => {
-    const { id, ...rest } = data;
-    await mutationEdit({ variables: { id: data.id, input: { ...rest } } });
-    history.push("/app/course");
+    const { ...rest } = data;
+    await edit({ variables: { id: +id, input: { ...rest } } });
+    push("/app/course");
   };
 
   return (
@@ -103,19 +103,12 @@ const CourseDetails = ({ className, ...rest }) => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
-                  <input type="hidden" name="id" value={id} />
-                  <TextField
-                    error={!!errors.name}
-                    fullWidth
-                    helperText={
-                      !!errors.name ? errors.name : "Informe o nome do curso"
-                    }
-                    label={input.name.label}
+                  <Field
                     name="name"
-                    type={input.name.type}
+                    field={input.name}
+                    error={errors.name}
+                    onFocus={({ target }) => setTouched(target)}
                     onChange={({ target }) => handleChange(target)}
-                    value={input.name.value}
-                    variant="outlined"
                   />
                 </Grid>
               </Grid>

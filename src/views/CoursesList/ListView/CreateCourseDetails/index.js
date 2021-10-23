@@ -14,10 +14,9 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useState } from "react";
+import React from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { CourseCreate } from "../../../../graphql/mutations/course";
 import { Link, useHistory } from "react-router-dom";
 import { CoursesQuery } from "src/graphql/queries/course";
@@ -31,10 +30,11 @@ import {
   CardHeader,
   Divider,
   Grid,
-  TextField,
   makeStyles,
   Container,
 } from "@material-ui/core";
+
+import { Field } from "src/reusable";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -42,18 +42,16 @@ const useStyles = makeStyles(() => ({
 
 const CourseDetails = ({ className, ...rest }) => {
   const classes = useStyles();
-  var history = useHistory();
+  const { push } = useHistory();
   const {
     fields: input,
     errors,
     handleSubmit,
     handleChange,
     setTouched,
-    reset,
-    setValues,
   } = useMyForm(fields);
 
-  const [mutationCreate] = useMutation(CourseCreate, {
+  const [add, { loading }] = useMutation(CourseCreate, {
     refetchQueries: [
       {
         query: CoursesQuery,
@@ -63,8 +61,8 @@ const CourseDetails = ({ className, ...rest }) => {
   });
 
   const createCourse = async (data) => {
-    await mutationCreate({ variables: { input: data } });
-    history.push("/app/course");
+    await add({ variables: { input: data } });
+    push("/app/course");
   };
 
   return (
@@ -84,18 +82,12 @@ const CourseDetails = ({ className, ...rest }) => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.name}
-                    fullWidth
-                    helperText={
-                      !!errors.name ? errors.name : "Informe o nome do curso"
-                    }
-                    label={input.name.label}
+                  <Field
                     name="name"
-                    type={input.name.type}
+                    field={input.name}
+                    error={errors.name}
+                    onFocus={({ target }) => setTouched(target)}
                     onChange={({ target }) => handleChange(target)}
-                    value={input.name.value}
-                    variant="outlined"
                   />
                 </Grid>
               </Grid>
@@ -114,7 +106,12 @@ const CourseDetails = ({ className, ...rest }) => {
                   Cancelar
                 </Button>
               </Link>
-              <Button color="primary" variant="contained" type="submit">
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                disabled={loading}
+              >
                 Cadastrar
               </Button>
             </Box>

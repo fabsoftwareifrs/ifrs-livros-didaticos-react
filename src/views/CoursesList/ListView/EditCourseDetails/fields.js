@@ -14,15 +14,12 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-export default {
-  id: {
-    type: "hidden",
-    value: "",
-  },
+const fields = {
   name: {
     label: "Curso",
     type: "text",
     value: "",
+    placeholder: "Entre com o nome do curso.",
     rules: {
       required: "Este campo é obrigatório",
       minLength: {
@@ -32,3 +29,5 @@ export default {
     },
   },
 };
+
+export default fields;
