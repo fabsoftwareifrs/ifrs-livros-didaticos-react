@@ -16,13 +16,11 @@
 
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { BooksEdit } from "../../../../graphql/mutations/book";
 import useMyForm from "../../../../hooks/MyForm";
 import fields from "./fields";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { AllCategoriesQuery } from "../../../../graphql/queries/category";
 import {
   Box,
   Button,
@@ -37,6 +35,7 @@ import {
 } from "@material-ui/core";
 import { BookQuery, BooksQuery } from "src/graphql/queries/book";
 import { Link, useParams, useHistory } from "react-router-dom";
+import { Categories } from "src/reusable";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -50,12 +49,10 @@ const BookDetails = ({ className, ...rest }) => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
     setValues,
   } = useMyForm(fields);
   var { id } = useParams();
-  const { loading, error, data } = useQuery(BookQuery, {
+  const { loading, data } = useQuery(BookQuery, {
     variables: { id: id },
   });
   var values = {
@@ -90,7 +87,6 @@ const BookDetails = ({ className, ...rest }) => {
     await mutationEdit({ variables: { id: data.id, input: { ...rest } } });
     history.push("/app/books");
   };
-  const categories = useQuery(AllCategoriesQuery);
 
   return (
     <form
@@ -161,54 +157,11 @@ const BookDetails = ({ className, ...rest }) => {
                 </Grid>
 
                 <Grid item md={6} xs={12}>
-                  {categories.loading ? (
-                    ""
-                  ) : (
-                    <Autocomplete
-                      name="categoryId"
-                      options={categories.data.categories.map(
-                        ({ id, name }) => ({ value: id, label: name })
-                      )}
-                      onChange={(event, value) => {
-                        if (!value) {
-                          handleChange({ name: "categoryId", value: "" });
-                        } else {
-                          handleChange({
-                            name: "categoryId",
-                            value: parseInt(value.value),
-                          });
-                        }
-                      }}
-                      value={
-                        input.categoryId.value == ""
-                          ? { value: "", label: "" }
-                          : {
-                              value: "" + input.categoryId.value,
-                              label: categories.data.categories.find(
-                                (s) => s.id === "" + input.categoryId.value
-                              ).name,
-                            }
-                      }
-                      getOptionLabel={(option) => option.label}
-                      getOptionSelected={(option, value) =>
-                        option.id === value.id
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label={input.categoryId.label}
-                          variant="outlined"
-                          fullWidth
-                          error={!!errors.categoryId}
-                          helperText={
-                            !!errors.categoryId
-                              ? errors.categoryId
-                              : "Informe a categoria do livro"
-                          }
-                        />
-                      )}
-                    />
-                  )}
+                  <Categories
+                    onChange={handleChange}
+                    field={input.categoryId}
+                    error={errors.categoryId}
+                  />
                 </Grid>
               </Grid>
             </CardContent>

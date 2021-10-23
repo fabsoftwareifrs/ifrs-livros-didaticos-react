@@ -14,23 +14,13 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useEffect, useCallback } from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { useMutation, gql } from "@apollo/client";
+import React from "react";
+import { useMutation } from "@apollo/client";
 import { Login } from "../../graphql/mutations/auth";
 import { login as AuthLogin, useAuth } from "../../providers/Auth";
 import useMyForm from "../../hooks/MyForm";
 import fields from "./fields";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
+import { Box, Button, TextField, Typography } from "@material-ui/core";
 
 const LoginView = () => {
   const { dispatch } = useAuth();
@@ -39,18 +29,17 @@ const LoginView = () => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
-    setValues,
   } = useMyForm(fields);
 
-  const [mutationLogin, { loading: mutationLoading, error: mutationError }] =
-    useMutation(Login, {
+  const [mutationLogin, { loading, error: mutationError }] = useMutation(
+    Login,
+    {
       onError() {},
       onCompleted({ login }) {
         dispatch(AuthLogin(login.user, login.token));
       },
-    });
+    }
+  );
   const onSubmit = async (data) => {
     await mutationLogin({ variables: { input: data } });
   };
@@ -102,6 +91,7 @@ const LoginView = () => {
           size="large"
           type="submit"
           variant="contained"
+          disabled={loading}
         >
           Entrar
         </Button>

@@ -14,11 +14,10 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ClassQuery, ClassesQuery } from "../../../../graphql/queries/class";
-import { AllCoursesQuery } from "../../../../graphql/queries/course";
 import { ClassEdit } from "../../../../graphql/mutations/class";
 import fields from "./fields";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -33,12 +32,10 @@ import {
   Grid,
   TextField,
   makeStyles,
-  Select,
-  InputLabel,
   Container,
 } from "@material-ui/core";
 
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Courses } from "src/reusable";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -53,18 +50,14 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
     setValues,
   } = useMyForm(fields);
 
   var { id } = useParams();
 
-  const { loading, error, data } = useQuery(ClassQuery, {
+  const { loading, data } = useQuery(ClassQuery, {
     variables: { id: id },
   });
-
-  const courses = useQuery(AllCoursesQuery);
 
   var values = {
     name: "",
@@ -121,6 +114,13 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
+                  <Courses
+                    onChange={handleChange}
+                    field={input.courseId}
+                    error={errors.courseId}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
                   <input type="hidden" name="id" value={id} />
                   <TextField
                     error={!!errors.name}
@@ -137,56 +137,6 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
                     value={input.name.value}
                     variant="outlined"
                   />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  {courses.loading ? (
-                    ""
-                  ) : (
-                    <Autocomplete
-                      name="courseId"
-                      options={courses.data.courses.map(({ id, name }) => ({
-                        value: id,
-                        label: name,
-                      }))}
-                      onChange={(event, value) => {
-                        if (!value) {
-                          handleChange({ name: "courseId", value: "" });
-                        } else {
-                          handleChange({
-                            name: "courseId",
-                            value: parseInt(value.value),
-                          });
-                        }
-                      }}
-                      value={
-                        input.courseId.value == ""
-                          ? { value: "", label: "" }
-                          : {
-                              value: "" + input.courseId.value,
-                              label: courses.data.courses.find(
-                                (s) => s.id === "" + input.courseId.value
-                              ).name,
-                            }
-                      }
-                      getOptionLabel={(option) => option.label}
-                      getOptionSelected={(option, value) =>
-                        option.id === value.id
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label={input.courseId.label}
-                          variant="outlined"
-                          error={!!errors.courseId}
-                          helperText={
-                            !!errors.courseId
-                              ? errors.courseId
-                              : "Informe o curso da turma"
-                          }
-                        />
-                      )}
-                    />
-                  )}
                 </Grid>
               </Grid>
             </CardContent>

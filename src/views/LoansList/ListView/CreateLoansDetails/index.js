@@ -14,10 +14,9 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useState } from "react";
+import React from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { LoanCreate } from "../../../../graphql/mutations/loan";
 import {
   Box,
@@ -27,19 +26,16 @@ import {
   CardHeader,
   Divider,
   Grid,
-  TextField,
   makeStyles,
   Container,
 } from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Link, useHistory } from "react-router-dom";
 import { LoansQuery } from "src/graphql/queries/loan";
-import { AllStudentsQuery } from "src/graphql/queries/student";
 import { AvailableCopiesQuery } from "src/graphql/queries/copy";
-import { AllPeriodsQuery } from "src/graphql/queries/period";
+
 import useMyForm from "../../../../hooks/MyForm";
-import { useAuth } from "../../../../providers/Auth";
 import fields from "./fields";
+import { Copies, Periods, Students } from "src/reusable";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -53,9 +49,6 @@ const LoanDetails = ({ className, ...rest }) => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
-    setValues,
   } = useMyForm(fields);
 
   const [mutationCreate] = useMutation(LoanCreate, {
@@ -76,9 +69,6 @@ const LoanDetails = ({ className, ...rest }) => {
       },
     ],
   });
-  const students = useQuery(AllStudentsQuery);
-  const copies = useQuery(AvailableCopiesQuery);
-  const periods = useQuery(AllPeriodsQuery);
   const createLoan = async (data) => {
     await mutationCreate({ variables: { input: data } });
     history.push("/app/loans");
@@ -101,130 +91,27 @@ const LoanDetails = ({ className, ...rest }) => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
-                  {copies.loading ? (
-                    ""
-                  ) : (
-                    <Autocomplete
-                      name="copyId"
-                      options={copies.data.availableCopies.map((option) => ({
-                        value: option.id,
-                        label: option.code,
-                        ...option,
-                      }))}
-                      onChange={(event, value) => {
-                        if (!value) {
-                          handleChange({ name: "copyId", value: "" });
-                        } else {
-                          handleChange({
-                            name: "copyId",
-                            value: parseInt(value.value),
-                          });
-                        }
-                      }}
-                      groupBy={(option) => option.book.name}
-                      getOptionLabel={(option) => option.label}
-                      getOptionSelected={(option, value) =>
-                        option.id === value.id
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label={input.copyId.label}
-                          variant="outlined"
-                          fullWidth
-                          error={!!errors.copyId}
-                          helperText={
-                            !!errors.copyId
-                              ? errors.copyId
-                              : "Informe o exemplar"
-                          }
-                        />
-                      )}
-                    />
-                  )}
+                  <Copies
+                    onChange={handleChange}
+                    field={input.copyId}
+                    error={errors.copyId}
+                  />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  {students.loading ? (
-                    ""
-                  ) : (
-                    <Autocomplete
-                      name="studentId"
-                      options={students.data.students.map(({ id, name }) => ({
-                        value: id,
-                        label: name,
-                      }))}
-                      onChange={(event, value) => {
-                        if (!value) {
-                          handleChange({ name: "studentId", value: "" });
-                        } else {
-                          handleChange({
-                            name: "studentId",
-                            value: parseInt(value.value),
-                          });
-                        }
-                      }}
-                      getOptionLabel={(option) => option.label}
-                      getOptionSelected={(option, value) =>
-                        option.id === value.id
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label={input.studentId.label}
-                          variant="outlined"
-                          error={!!errors.studentId}
-                          helperText={
-                            !!errors.studentId
-                              ? errors.studentId
-                              : "Informe o estudante"
-                          }
-                        />
-                      )}
-                    />
-                  )}
+                  <Students
+                    onChange={handleChange}
+                    field={input.studentId}
+                    error={errors.studentId}
+                  />
                 </Grid>
               </Grid>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
-                  {periods.loading ? (
-                    ""
-                  ) : (
-                    <Autocomplete
-                      name="periodId"
-                      options={periods.data.periods.map(({ id, name }) => ({
-                        value: id,
-                        label: name,
-                      }))}
-                      onChange={(event, value) => {
-                        if (!value) {
-                          handleChange({ name: "periodId", value: "" });
-                        } else {
-                          handleChange({
-                            name: "periodId",
-                            value: parseInt(value.value),
-                          });
-                        }
-                      }}
-                      getOptionLabel={(option) => option.label}
-                      getOptionSelected={(option, value) =>
-                        option.id === value.id
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label={input.periodId.label}
-                          variant="outlined"
-                          fullWidth
-                          error={!!errors.periodId}
-                          helperText={
-                            !!errors.periodId
-                              ? errors.periodId
-                              : "Informe o período letivo"
-                          }
-                        />
-                      )}
-                    />
-                  )}
+                  <Periods
+                    onChange={handleChange}
+                    field={input.periodId}
+                    error={errors.periodId}
+                  />
                 </Grid>
               </Grid>
             </CardContent>

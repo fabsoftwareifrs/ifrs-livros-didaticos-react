@@ -14,7 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-export default {
+const fields = {
   login: {
     label: "Login",
     type: "text",
@@ -40,3 +40,5 @@ export default {
     },
   },
 };
+
+export default fields;

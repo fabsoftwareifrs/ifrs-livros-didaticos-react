@@ -14,12 +14,10 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 import clsx from "clsx";
-import { useMutation, useQuery, gql } from "@apollo/client";
-import { useLazyQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { ClassesQuery } from "../../../../graphql/queries/class";
-import { AllCoursesQuery } from "../../../../graphql/queries/course";
 import { ClassCreate } from "../../../../graphql/mutations/class";
 import fields from "./fields";
 import { Link, useHistory } from "react-router-dom";
@@ -34,12 +32,10 @@ import {
   Grid,
   TextField,
   makeStyles,
-  Select,
-  InputLabel,
   Container,
 } from "@material-ui/core";
 
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Courses } from "src/reusable";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -55,9 +51,6 @@ const ClassDetails = ({ className, create, set, ...rest }) => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
-    setValues,
   } = useMyForm(fields);
 
   const [mutationCreate] = useMutation(ClassCreate, {
@@ -68,8 +61,6 @@ const ClassDetails = ({ className, create, set, ...rest }) => {
       },
     ],
   });
-
-  const courses = useQuery(AllCoursesQuery);
 
   const createClass = async (data) => {
     await mutationCreate({ variables: { input: data } });
@@ -93,6 +84,13 @@ const ClassDetails = ({ className, create, set, ...rest }) => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
+                  <Courses
+                    onChange={handleChange}
+                    field={input.courseId}
+                    error={errors.courseId}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
                   <TextField
                     error={!!errors.name}
                     fullWidth
@@ -108,46 +106,6 @@ const ClassDetails = ({ className, create, set, ...rest }) => {
                     value={input.name.value}
                     variant="outlined"
                   />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  {courses.loading ? (
-                    ""
-                  ) : (
-                    <Autocomplete
-                      name="courseId"
-                      options={courses.data.courses.map(({ id, name }) => ({
-                        value: id,
-                        label: name,
-                      }))}
-                      onChange={(event, value) => {
-                        if (!value) {
-                          handleChange({ name: "courseId", value: "" });
-                        } else {
-                          handleChange({
-                            name: "courseId",
-                            value: parseInt(value.value),
-                          });
-                        }
-                      }}
-                      getOptionLabel={(option) => option.label}
-                      getOptionSelected={(option, value) =>
-                        option.id === value.id
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label={input.courseId.label}
-                          variant="outlined"
-                          error={!!errors.courseId}
-                          helperText={
-                            !!errors.courseId
-                              ? errors.courseId
-                              : "Informe o curso da turma"
-                          }
-                        />
-                      )}
-                    />
-                  )}
                 </Grid>
               </Grid>
             </CardContent>

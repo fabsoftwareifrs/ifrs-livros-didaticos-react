@@ -58,4 +58,17 @@ const ClassQuery = gql`
   }
 `;
 
-export { ClassesQuery, ClassQuery, AllClassesQuery };
+const CLASSES_BY_COURSE_ID = gql`
+  query classesByCourseId($courseId: Int!) {
+    classesByCourseId(courseId: $courseId) {
+      id
+      name
+      course {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export { ClassesQuery, ClassQuery, AllClassesQuery, CLASSES_BY_COURSE_ID };
