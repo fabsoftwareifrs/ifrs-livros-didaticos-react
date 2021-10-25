@@ -16,8 +16,7 @@
 
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { LoanEdit } from "../../../../graphql/mutations/loan";
 import useMyForm from "../../../../hooks/MyForm";
 import fields from "./fields";
@@ -35,7 +34,6 @@ import {
 } from "@material-ui/core";
 import { LoanQuery, LoansQuery } from "src/graphql/queries/loan";
 import { Link, useParams, useHistory } from "react-router-dom";
-import { useAuth } from "../../../../providers/Auth";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { AllStudentsQuery } from "src/graphql/queries/student";
 import { AvailableCopiesQuery, CopyQuery } from "src/graphql/queries/copy";
@@ -45,21 +43,21 @@ const useStyles = makeStyles(() => ({
 }));
 
 const LoanDetails = ({ className, ...rest }) => {
+  var { id } = useParams();
+
   const classes = useStyles();
-  var history = useHistory();
-  const { auth } = useAuth();
+  var { push } = useHistory();
+
   const {
     fields: input,
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
     setValues,
   } = useMyForm(fields);
-  var { id } = useParams();
+
   var copyId = "";
-  const { loading, error, data } = useQuery(LoanQuery, {
+  const { loading, data } = useQuery(LoanQuery, {
     variables: { id: id },
     fetchPolicy: "no-cache",
     nextFetchPolicy: "no-cache",
@@ -110,7 +108,7 @@ const LoanDetails = ({ className, ...rest }) => {
   const editLoan = async (data) => {
     const { id, ...rest } = data;
     await mutationEdit({ variables: { id: id, input: { ...rest } } });
-    history.push("/app/loans");
+    push("/app/loans");
   };
   const students = useQuery(AllStudentsQuery);
   const copies = useQuery(AvailableCopiesQuery);
