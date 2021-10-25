@@ -16,8 +16,7 @@
 
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import useMyForm from "../../../../hooks/MyForm";
 import fields from "./fields";
 import { UserEdit } from "../../../../graphql/mutations/user";
@@ -48,12 +47,10 @@ const UserDetails = ({ className, ...rest }) => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
     setValues,
   } = useMyForm(fields);
   var { id } = useParams();
-  const { loading, error, data } = useQuery(UserQuery, {
+  const { loading, data } = useQuery(UserQuery, {
     variables: { id: id },
   });
   var values = {

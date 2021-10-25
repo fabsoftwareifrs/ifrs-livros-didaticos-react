@@ -14,10 +14,9 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useState } from "react";
+import React from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { UserCreate } from "../../../../graphql/mutations/user";
 import { UsersQuery } from "../../../../graphql/queries/user";
 import useMyForm from "../../../../hooks/MyForm";
@@ -48,9 +47,6 @@ const UserDetails = ({ className, ...rest }) => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
-    setValues,
   } = useMyForm(fields);
   const [mutationCreate] = useMutation(UserCreate, {
     refetchQueries: [

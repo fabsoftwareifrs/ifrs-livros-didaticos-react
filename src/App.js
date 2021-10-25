@@ -25,7 +25,7 @@ import UnPrivateRoute from "./routes/UnPrivateRoute";
 import AuthProvider from "./providers/Auth";
 import Dashboard from "./layouts/DashboardLayout";
 import Main from "./layouts/MainLayout";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import LoginView from "src/views/auth";
 import ListView from "src/views/StudentsList/ListView";
 import Books from "src/views/BooksList/ListView";
@@ -55,9 +55,6 @@ import Lates from "src/views/LatesList/ListView";
 import Periods from "src/views/PeriodsList/ListView";
 import PeriodCreate from "src/views/PeriodsList/ListView/CreatePeriodDetails";
 import PeriodEdit from "src/views/PeriodsList/ListView/EditPeriodDetails";
-import { createBrowserHistory } from "history";
-import { LocationSearching } from "@material-ui/icons";
-var hist = createBrowserHistory();
 
 const App = () => {
   return (

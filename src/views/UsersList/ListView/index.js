@@ -18,20 +18,14 @@ import React, { useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
 import { UsersQuery } from "../../../graphql/queries/user";
-import {
-  UserCreate,
-  UserDelete,
-  UserEdit,
-} from "../../../graphql/mutations/user";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { UserDelete } from "../../../graphql/mutations/user";
+import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Modal from "../../../components/ModalIcon";
 import {
-  Avatar,
   Box,
   Card,
   Container,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -41,7 +35,6 @@ import {
   Typography,
   makeStyles,
   CardHeader,
-  TextField,
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
