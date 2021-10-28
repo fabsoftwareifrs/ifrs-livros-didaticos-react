@@ -180,8 +180,8 @@ const PeriodsList = (props) => {
                     <TablePagination
                       component="div"
                       count={data.paginatePeriods.total}
-                      onChangePage={handlePageChange}
-                      onChangeRowsPerPage={handleLimitChange}
+                      onPageChange={handlePageChange}
+                      onRowsPerPageChange={handleLimitChange}
                       page={page - 1}
                       rowsPerPage={limit}
                       rowsPerPageOptions={[5, 10, 25]}

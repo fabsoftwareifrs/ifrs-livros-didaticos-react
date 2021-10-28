@@ -190,8 +190,8 @@ const ClassesList = (props) => {
                     <TablePagination
                       component="div"
                       count={data.paginateClasses.total}
-                      onChangePage={handlePageChange}
-                      onChangeRowsPerPage={handleLimitChange}
+                      onPageChange={handlePageChange}
+                      onRowsPerPageChange={handleLimitChange}
                       page={page - 1}
                       rowsPerPage={limit}
                       rowsPerPageOptions={[5, 10, 25]}

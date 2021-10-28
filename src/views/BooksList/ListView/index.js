@@ -191,8 +191,8 @@ const BooksList = (props) => {
                     <TablePagination
                       component="div"
                       count={data.paginateBooks.total}
-                      onChangePage={handlePageChange}
-                      onChangeRowsPerPage={handleLimitChange}
+                      onPageChange={handlePageChange}
+                      onRowsPerPageChange={handleLimitChange}
                       page={page - 1}
                       rowsPerPage={limit}
                       rowsPerPageOptions={[5, 10, 25]}
