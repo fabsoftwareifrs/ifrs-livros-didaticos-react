@@ -71,23 +71,24 @@ const CategoryList = (props) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { loading, error, data } = useQuery(CategoriesQuery, {
-    variables: { input: { page: page, paginate: limit, search } },
-  });
-  const [mutationDelete] = useMutation(REMOVE_CATEGORY, {
-    refetchQueries: [
-      {
-        query: CategoriesQuery,
-        variables: { input: { page: page, paginate: limit, search } },
-      },
-      {
-        query: BooksQuery,
-        variables: { input: { page: page, paginate: limit, search } },
-      },
-    ],
-  });
 
-  if (error) return <p>Error :(</p>;
+  const [removeCategory, { loading: loadingRemove }] = useMutation(
+    REMOVE_CATEGORY,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+      onError: (err) => {
+        console.log(err.message);
+      },
+    }
+  );
+
+  const { data, loading, refetch } = useQuery(CategoriesQuery, {
+    variables: { input: { page: page, paginate: limit, search } },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "cache-and-network",
+  });
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
@@ -96,8 +97,8 @@ const CategoryList = (props) => {
   const handlePageChange = (event, newPage) => {
     setPage(newPage + 1);
   };
-  const deleteCategory = (id) => {
-    mutationDelete({ variables: { id } });
+  const remove = async (id) => {
+    await removeCategory({ variables: { id } });
   };
 
   return (
@@ -157,9 +158,8 @@ const CategoryList = (props) => {
                                           backgroundColor: "#8B0000",
                                           color: "#fff",
                                         }}
-                                        onClick={() =>
-                                          deleteCategory(category.id)
-                                        }
+                                        onClick={() => remove(category.id)}
+                                        disabled={loadingRemove}
                                       >
                                         Deletar
                                       </Button>
