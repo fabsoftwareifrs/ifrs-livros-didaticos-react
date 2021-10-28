@@ -18,7 +18,6 @@ import React, { useState } from "react";
 
 import { CategoriesQuery } from "src/graphql/queries";
 import { REMOVE_CATEGORY } from "src/graphql/mutations";
-import { BooksQuery } from "src/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Page from "src/components/Page";

@@ -15,48 +15,62 @@
  */
 
 import "react-perfect-scrollbar/dist/css/styles.css";
+import "src/mixins/chartjs";
+
 import React from "react";
 import { ThemeProvider } from "@material-ui/core";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
+
 import GlobalStyles from "src/components/GlobalStyles";
-import "src/mixins/chartjs";
 import theme from "src/theme";
 import PrivateRoute from "./routes/PrivateRoute";
 import UnPrivateRoute from "./routes/UnPrivateRoute";
+
 import AuthProvider from "./providers/Auth";
+
 import Dashboard from "./layouts/DashboardLayout";
 import Main from "./layouts/MainLayout";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+
 import LoginView from "src/views/auth";
-import ListView from "src/views/StudentsList/ListView";
-import Books from "src/views/BooksList/ListView";
-import BooksCreate from "src/views/BooksList/ListView/CreateBooksDetails";
-import BooksImport from "src/views/BooksList/ListView/ImportBooksDetails";
-import BooksEdit from "src/views/BooksList/ListView/EditBookDetails";
-import BooksCategory from "src/views/BooksCategoryList/ListView";
-import Classes from "src/views/ClassesList/ListView";
-import ClassesCreate from "src/views/ClassesList/ListView/CreateClassesDetails";
-import ClassesEdit from "src/views/ClassesList/ListView/EditClassesDetails";
-import BooksCategoryCreate from "src/views/BooksCategoryList/ListView/CreateCategoryDetails";
-import BooksCategoryEdit from "src/views/BooksCategoryList/ListView/EditCategoryDetails";
-import Users from "src/views/UsersList/ListView";
-import UsersCreate from "src/views/UsersList/ListView/CreateUsersDetails";
-import UsersEdit from "src/views/UsersList/ListView/EditUsersDetails";
-import Courses from "src/views/CoursesList/ListView";
-import CoursesCreate from "src/views/CoursesList/ListView/CreateCourseDetails";
-import CoursesEdit from "src/views/CoursesList/ListView/EditCourseDetails";
-import Students from "src/views/StudentsList/ListView";
-import StudentsCreate from "src/views/StudentsList/ListView/CreateStudentsDetails";
-import StudentsEdit from "src/views/StudentsList/ListView/EditStudentsDetails";
-import StudentsImport from "src/views/StudentsList/ListView/ImportStudentsDetails";
-import Loans from "src/views/LoansList/ListView";
-import LoansCreate from "src/views/LoansList/ListView/CreateLoansDetails";
-import LoansEdit from "src/views/LoansList/ListView/EditLoansDetails";
-import Copies from "src/views/CopiesList/ListView";
-import CopiesEdit from "src/views/CopiesList/ListView/EditCopiesDetails";
-import Lates from "src/views/LatesList/ListView";
-import Periods from "src/views/PeriodsList/ListView";
-import PeriodCreate from "src/views/PeriodsList/ListView/CreatePeriodDetails";
-import PeriodEdit from "src/views/PeriodsList/ListView/EditPeriodDetails";
+
+import Books from "src/views/Books/ListView";
+import BooksCreate from "src/views/Books/Add";
+import BooksEdit from "src/views/Books/Edit";
+import BooksImport from "src/views/Books/Import";
+
+import BooksCategory from "src/views/BooksCategory/ListView";
+import BooksCategoryCreate from "src/views/BooksCategory/Add";
+import BooksCategoryEdit from "src/views/BooksCategory/Edit";
+
+import Classes from "src/views/Classes/ListView";
+import ClassesCreate from "src/views/Classes/Add";
+import ClassesEdit from "src/views/Classes/Edit";
+
+import Copies from "src/views/Copies/ListView";
+import CopiesEdit from "src/views/Copies/Edit";
+
+import Courses from "src/views/Courses/ListView";
+import CoursesCreate from "src/views/Courses/Add";
+import CoursesEdit from "src/views/Courses/Edit";
+
+import Lates from "src/views/Lates/ListView";
+
+import Loans from "src/views/Loans/ListView";
+import LoansCreate from "src/views/Loans/Add";
+import LoansEdit from "src/views/Loans/Edit";
+
+import Periods from "src/views/Periods/ListView";
+import PeriodCreate from "src/views/Periods/Add";
+import PeriodEdit from "src/views/Periods/Edit";
+
+import Students from "src/views/Students/ListView";
+import StudentsCreate from "src/views/Students/Add";
+import StudentsEdit from "src/views/Students/Edit";
+import StudentsImport from "src/views/Students/Import";
+
+import Users from "src/views/Users/ListView";
+import UsersCreate from "src/views/Users/Add";
+import UsersEdit from "src/views/Users/Edit";
 
 const App = () => {
   return (
@@ -72,11 +86,6 @@ const App = () => {
             />
             <PrivateRoute
               exact
-              path="/app/student"
-              component={() => <Dashboard Children={ListView} />}
-            />
-            <PrivateRoute
-              exact
               path="/app/books"
               component={() => <Dashboard Children={Books} />}
             />
@@ -87,13 +96,13 @@ const App = () => {
             />
             <PrivateRoute
               exact
-              path="/app/books/import"
-              component={() => <Dashboard Children={BooksImport} />}
+              path="/app/books/edit/:id"
+              component={() => <Dashboard Children={BooksEdit} />}
             />
             <PrivateRoute
               exact
-              path="/app/books/edit/:id"
-              component={() => <Dashboard Children={BooksEdit} />}
+              path="/app/books/import"
+              component={() => <Dashboard Children={BooksImport} />}
             />
             <PrivateRoute
               exact
@@ -112,18 +121,28 @@ const App = () => {
             />
             <PrivateRoute
               exact
-              path="/app/users"
-              component={() => <Dashboard Children={Users} />}
+              path="/app/classes"
+              component={() => <Dashboard Children={Classes} />}
             />
             <PrivateRoute
               exact
-              path="/app/users/create"
-              component={() => <Dashboard Children={UsersCreate} />}
+              path="/app/classes/create"
+              component={() => <Dashboard Children={ClassesCreate} />}
             />
             <PrivateRoute
               exact
-              path="/app/users/edit/:id"
-              component={() => <Dashboard Children={UsersEdit} />}
+              path="/app/classes/edit/:id"
+              component={() => <Dashboard Children={ClassesEdit} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/copies/:id"
+              component={() => <Dashboard Children={Copies} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/copies/edit/:id"
+              component={() => <Dashboard Children={CopiesEdit} />}
             />
             <PrivateRoute
               exact
@@ -142,38 +161,8 @@ const App = () => {
             />
             <PrivateRoute
               exact
-              path="/app/classes"
-              component={() => <Dashboard Children={Classes} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/classes/create"
-              component={() => <Dashboard Children={ClassesCreate} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/classes/edit/:id"
-              component={() => <Dashboard Children={ClassesEdit} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/students"
-              component={() => <Dashboard Children={Students} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/students/create"
-              component={() => <Dashboard Children={StudentsCreate} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/students/import"
-              component={() => <Dashboard Children={StudentsImport} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/students/edit/:id"
-              component={() => <Dashboard Children={StudentsEdit} />}
+              path="/app/lates"
+              component={() => <Dashboard Children={Lates} />}
             />
             <PrivateRoute
               exact
@@ -192,21 +181,6 @@ const App = () => {
             />
             <PrivateRoute
               exact
-              path="/app/copies/:id"
-              component={() => <Dashboard Children={Copies} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/copies/edit/:id"
-              component={() => <Dashboard Children={CopiesEdit} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/lates"
-              component={() => <Dashboard Children={Lates} />}
-            />
-            <PrivateRoute
-              exact
               path="/app/periods"
               component={() => <Dashboard Children={Periods} />}
             />
@@ -219,6 +193,41 @@ const App = () => {
               exact
               path="/app/periods/edit/:id"
               component={() => <Dashboard Children={PeriodEdit} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/students"
+              component={() => <Dashboard Children={Students} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/students/create"
+              component={() => <Dashboard Children={StudentsCreate} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/students/edit/:id"
+              component={() => <Dashboard Children={StudentsEdit} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/students/import"
+              component={() => <Dashboard Children={StudentsImport} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/users"
+              component={() => <Dashboard Children={Users} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/users/create"
+              component={() => <Dashboard Children={UsersCreate} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/users/edit/:id"
+              component={() => <Dashboard Children={UsersEdit} />}
             />
           </Switch>
         </AuthProvider>

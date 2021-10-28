@@ -18,9 +18,9 @@ import React from "react";
 import clsx from "clsx";
 import { useMutation } from "@apollo/client";
 import { CategoriesQuery } from "src/graphql/queries";
-import { ADD_CATEGORY } from "../../../../graphql/mutations";
+import { ADD_CATEGORY } from "../../../graphql/mutations";
 import { Link, useHistory } from "react-router-dom";
-import useMyForm from "../../../../hooks/MyForm";
+import useMyForm from "../../../hooks/MyForm";
 import fields from "./fields";
 import {
   Box,

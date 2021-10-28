@@ -33,7 +33,7 @@ import { Link, useHistory } from "react-router-dom";
 import { LoansQuery } from "src/graphql/queries/loans";
 import { AvailableCopiesQuery } from "src/graphql/queries";
 
-import useMyForm from "../../../../hooks/MyForm";
+import useMyForm from "src/hooks/MyForm";
 import { fields } from "./fields";
 import { Copies, Periods, Students } from "src/reusable";
 

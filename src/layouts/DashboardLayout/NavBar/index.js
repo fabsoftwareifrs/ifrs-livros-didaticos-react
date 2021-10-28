@@ -42,39 +42,14 @@ import NavItem from "./NavItem";
 
 const items = [
   {
-    href: "/app/books",
-    icon: BookIcon,
-    title: "Livros",
-  },
-  {
     href: "/app/category",
     icon: BookMarkIcon,
     title: "Categorias de Livros",
   },
   {
-    href: "/app/users",
-    icon: UserIcon,
-    title: "Usuários",
-  },
-  {
-    href: "/app/classes",
-    icon: SquareIcon,
-    title: "Turma",
-  },
-  {
-    href: "/app/course",
-    icon: PenIcon,
-    title: "Cursos",
-  },
-  {
-    href: "/app/students",
-    icon: UsersIcon,
-    title: "Estudantes",
-  },
-  {
-    href: "/app/periods",
-    icon: CalendarIcon,
-    title: "Períodos",
+    href: "/app/books",
+    icon: BookIcon,
+    title: "Livros",
   },
   {
     href: "/app/loans",
@@ -85,6 +60,32 @@ const items = [
     href: "/app/lates",
     icon: ClockIcon,
     title: "Atrasados",
+  },
+  {
+    href: "/app/periods",
+    icon: CalendarIcon,
+    title: "Períodos",
+  },
+  {
+    href: "/app/course",
+    icon: PenIcon,
+    title: "Cursos",
+  },
+  {
+    href: "/app/classes",
+    icon: SquareIcon,
+    title: "Turma",
+  },
+  {
+    href: "/app/students",
+    icon: UsersIcon,
+    title: "Estudantes",
+  },
+
+  {
+    href: "/app/users",
+    icon: UserIcon,
+    title: "Usuários",
   },
 ];
 
