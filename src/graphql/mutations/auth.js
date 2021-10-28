@@ -16,7 +16,7 @@
 
 import { gql } from "@apollo/client";
 
-const Login = gql`
+export const SIGN_IN = gql`
   mutation Login($input: AuthInput) {
     login(input: $input) {
       token
@@ -27,5 +27,3 @@ const Login = gql`
     }
   }
 `;
-
-export { Login };

@@ -16,27 +16,32 @@
 
 import { gql } from "@apollo/client";
 
-const UserDelete = gql`
-  mutation UserDelete($id: ID!) {
-    deleteUser(id: $id) {
-      id
+export const CategoriesQuery = gql`
+  query CategoriesQuery($input: PaginateInput!) {
+    paginateCategories(input: $input) {
+      docs {
+        id
+        name
+      }
+      total
     }
   }
 `;
 
-const UserEdit = gql`
-  mutation UserEdit($id: ID!, $input: UserInput) {
-    updateUser(id: $id, input: $input) {
+export const AllCategoriesQuery = gql`
+  query AllCategoriesQuery {
+    categories {
       id
-    }
-  }
-`;
-const UserCreate = gql`
-  mutation UserCreate($input: UserInput) {
-    createUser(input: $input) {
-      id
+      name
     }
   }
 `;
 
-export { UserDelete, UserEdit, UserCreate };
+export const CategoryQuery = gql`
+  query CategoryQuery($id: ID!) {
+    category(id: $id) {
+      id
+      name
+    }
+  }
+`;

@@ -16,50 +16,31 @@
 
 import { gql } from "@apollo/client";
 
-const BooksQuery = gql`
-  query BooksQuery($input: PaginateInput!) {
-    paginateBooks(input: $input) {
-      docs {
-        id
-        name
-        author
-        volume
-        category {
-          id
-          name
-        }
-      }
-      total
-    }
-  }
-`;
-const AllBooksQuery = gql`
-  query AllBooksQuery {
-    books {
+export const REMOVE_STUDENT = gql`
+  mutation studentDelete($id: ID!) {
+    deleteStudent(id: $id) {
       id
-      name
-      author
-      volume
-      category {
-        id
-        name
-      }
-    }
-  }
-`;
-const BookQuery = gql`
-  query BookQuery($id: ID!) {
-    book(id: $id) {
-      id
-      name
-      author
-      volume
-      category {
-        id
-        name
-      }
     }
   }
 `;
 
-export { BooksQuery, BookQuery, AllBooksQuery };
+export const IMPORT_STUDENTS = gql`
+  mutation ImportStudents($input: StudentImportInput) {
+    importStudents(input: $input)
+  }
+`;
+
+export const EDIT_STUDENT = gql`
+  mutation StudentEdit($id: ID, $input: StudentInput) {
+    updateStudent(id: $id, input: $input) {
+      id
+    }
+  }
+`;
+export const ADD_STUDENT = gql`
+  mutation StudentCreate($input: StudentInput) {
+    createStudent(input: $input) {
+      id
+    }
+  }
+`;

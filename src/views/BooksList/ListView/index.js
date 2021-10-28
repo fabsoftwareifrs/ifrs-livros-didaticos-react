@@ -15,13 +15,14 @@
  */
 
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
-import { BooksQuery } from "../../../graphql/queries/book";
-import { BooksDelete } from "../../../graphql/mutations/book";
+import { BooksQuery } from "src/graphql/queries";
+import { REMOVE_BOOK } from "src/graphql/mutations";
 import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import Modal from "../../../components/ModalIcon";
+import Modal from "src/components/ModalIcon";
 import {
   Box,
   Card,
@@ -38,7 +39,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
-import { Link } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -74,7 +75,7 @@ const BooksList = (props) => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(BooksDelete, {
+  const [mutationDelete] = useMutation(REMOVE_BOOK, {
     refetchQueries: [
       {
         query: BooksQuery,

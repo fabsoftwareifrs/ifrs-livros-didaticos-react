@@ -17,23 +17,15 @@
 import React, { useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
-import ClassesDetails from "./EditClassesDetails";
-import CreateClasses from "./CreateClassesDetails/index";
-import { ClassesQuery } from "../../../graphql/queries/class";
-import {
-  ClassCreate,
-  ClassDelete,
-  ClassEdit,
-} from "../../../graphql/mutations/class";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { ClassesQuery } from "../../../graphql/queries/classrooms";
+import { REMOVE_CLASSROOM } from "../../../graphql/mutations";
+import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Modal from "../../../components/ModalIcon";
 import {
-  Avatar,
   Box,
   Card,
   Container,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -43,7 +35,6 @@ import {
   Typography,
   makeStyles,
   CardHeader,
-  TextField,
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
@@ -83,7 +74,7 @@ const ClassesList = (props) => {
     variables: { input: { page: page, paginate: limit, search } },
   });
 
-  const [mutationDelete] = useMutation(ClassDelete, {
+  const [mutationDelete] = useMutation(REMOVE_CLASSROOM, {
     refetchQueries: [
       {
         query: ClassesQuery,

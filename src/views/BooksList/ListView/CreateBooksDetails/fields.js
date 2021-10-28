@@ -14,7 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-const fields = {
+export const fields = {
   name: {
     label: "Título",
     type: "text",
@@ -61,5 +61,3 @@ const fields = {
     value: "",
   },
 };
-
-export default fields;

@@ -15,14 +15,15 @@
  */
 
 import React, { useState } from "react";
-import Page from "src/components/Page";
-import Toolbar from "./Toolbar";
-import { CategoriesQuery } from "../../../graphql/queries/category";
-import { BooksQuery } from "../../../graphql/queries/book";
-import { CategoryDelete } from "../../../graphql/mutations/category";
+
+import { CategoriesQuery } from "src/graphql/queries";
+import { REMOVE_CATEGORY } from "src/graphql/mutations";
+import { BooksQuery } from "src/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import Modal from "../../../components/ModalIcon";
+import Page from "src/components/Page";
+import Modal from "src/components/ModalIcon";
+import Toolbar from "./Toolbar";
 import {
   Box,
   Card,
@@ -73,7 +74,7 @@ const CategoryList = (props) => {
   const { loading, error, data } = useQuery(CategoriesQuery, {
     variables: { input: { page: page, paginate: limit, search } },
   });
-  const [mutationDelete] = useMutation(CategoryDelete, {
+  const [mutationDelete] = useMutation(REMOVE_CATEGORY, {
     refetchQueries: [
       {
         query: CategoriesQuery,

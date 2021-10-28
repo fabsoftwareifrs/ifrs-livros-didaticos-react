@@ -16,10 +16,10 @@
 
 import React from "react";
 import { useMutation } from "@apollo/client";
-import { Login } from "../../graphql/mutations/auth";
-import { login as AuthLogin, useAuth } from "../../providers/Auth";
-import useMyForm from "../../hooks/MyForm";
-import fields from "./fields";
+import { SIGN_IN } from "src/graphql/mutations";
+import { login as AuthLogin, useAuth } from "src/providers/Auth";
+import useMyForm from "src/hooks/MyForm";
+import { fields } from "./fields";
 import { Box, Button, TextField, Typography } from "@material-ui/core";
 
 const LoginView = () => {
@@ -32,7 +32,7 @@ const LoginView = () => {
   } = useMyForm(fields);
 
   const [mutationLogin, { loading, error: mutationError }] = useMutation(
-    Login,
+    SIGN_IN,
     {
       onError() {},
       onCompleted({ login }) {

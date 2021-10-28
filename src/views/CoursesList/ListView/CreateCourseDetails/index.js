@@ -17,11 +17,11 @@
 import React from "react";
 import clsx from "clsx";
 import { useMutation } from "@apollo/client";
-import { CourseCreate } from "../../../../graphql/mutations/course";
+import { ADD_COURSE } from "src/graphql/mutations";
 import { Link, useHistory } from "react-router-dom";
-import { CoursesQuery } from "src/graphql/queries/course";
-import useMyForm from "../../../../hooks/MyForm";
-import fields from "./fields";
+import { CoursesQuery } from "src/graphql/queries";
+import useMyForm from "src/hooks/MyForm";
+import { fields } from "./fields";
 import {
   Box,
   Button,
@@ -51,7 +51,7 @@ const CourseDetails = ({ className, ...rest }) => {
     setTouched,
   } = useMyForm(fields);
 
-  const [add, { loading }] = useMutation(CourseCreate, {
+  const [add, { loading }] = useMutation(ADD_COURSE, {
     refetchQueries: [
       {
         query: CoursesQuery,

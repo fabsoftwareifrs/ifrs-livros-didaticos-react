@@ -16,12 +16,11 @@
 
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { useMutation, useQuery, gql } from "@apollo/client";
-import { CopyEdit } from "../../../../graphql/mutations/copy";
-import useMyForm from "../../../../hooks/MyForm";
+import { useMutation, useQuery } from "@apollo/client";
+import { EDIT_COPY } from "src/graphql/mutations";
+import useMyForm from "src/hooks/MyForm";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import fields from "./fields";
+
 import {
   Box,
   Button,
@@ -34,8 +33,10 @@ import {
   makeStyles,
   Container,
 } from "@material-ui/core";
-import { CopyQuery, CopiesByBookQuery } from "src/graphql/queries/copy";
+import { CopyQuery, CopiesByBookQuery } from "src/graphql/queries/copies";
 import { Link, useParams, useHistory } from "react-router-dom";
+
+import { fields } from "./fields";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -49,12 +50,10 @@ const CopyDetails = ({ className, ...rest }) => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
     setValues,
   } = useMyForm(fields);
   var { id } = useParams();
-  const { loading, error, data } = useQuery(CopyQuery, {
+  const { loading, data } = useQuery(CopyQuery, {
     variables: { id: id, search: "" },
   });
   var values = {
@@ -62,13 +61,13 @@ const CopyDetails = ({ className, ...rest }) => {
   };
   var bookId = "";
   const translate = (word) => {
-    if (word == "MISPLACED") {
+    if (word === "MISPLACED") {
       return "EXTRAVIADO";
     }
-    if (word == "LOANED") {
+    if (word === "LOANED") {
       return "EMPRESTADO";
     }
-    if (word == "AVAILABLE") {
+    if (word === "AVAILABLE") {
       return "DISPONIVEL";
     }
   };
@@ -89,7 +88,7 @@ const CopyDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(CopyEdit, {
+  const [mutationEdit] = useMutation(EDIT_COPY, {
     refetchQueries: [
       {
         query: CopiesByBookQuery,
@@ -143,7 +142,7 @@ const CopyDetails = ({ className, ...rest }) => {
                       }
                       getOptionLabel={(option) => option.label}
                       getOptionDisabled={(option) => option === options[2]}
-                      disabled={data.copy.status == "LOANED" ? true : false}
+                      disabled={data.copy.status === "LOANED" ? true : false}
                       renderInput={(params) => (
                         <TextField
                           {...params}

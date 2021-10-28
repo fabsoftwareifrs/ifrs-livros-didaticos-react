@@ -17,10 +17,10 @@
 import React from "react";
 import clsx from "clsx";
 import { useMutation } from "@apollo/client";
-import { UserCreate } from "../../../../graphql/mutations/user";
-import { UsersQuery } from "../../../../graphql/queries/user";
-import useMyForm from "../../../../hooks/MyForm";
-import fields from "./fields";
+import { ADD_USER } from "src/graphql/mutations";
+import { UsersQuery } from "src/graphql/queries";
+import useMyForm from "src/hooks/MyForm";
+import { fields } from "./fields";
 import { Link, useHistory } from "react-router-dom";
 import {
   Box,
@@ -48,7 +48,7 @@ const UserDetails = ({ className, ...rest }) => {
     handleSubmit,
     handleChange,
   } = useMyForm(fields);
-  const [mutationCreate] = useMutation(UserCreate, {
+  const [mutationCreate] = useMutation(ADD_USER, {
     refetchQueries: [
       {
         query: UsersQuery,

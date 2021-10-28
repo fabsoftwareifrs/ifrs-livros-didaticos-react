@@ -15,23 +15,21 @@
  */
 
 import React, { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
-import { LoansQuery } from "../../../graphql/queries/loan";
+import { LoansQuery } from "../../../graphql/queries/loans";
 import {
-  LoanCreate,
-  LoanEdit,
-  LoanDelete,
-  TerminateLoan,
-  CancelTerminateLoan,
-} from "../../../graphql/mutations/loan";
-import { useMutation, useQuery, gql } from "@apollo/client";
+  REMOVE_LOAN,
+  TERMINATE_LOAN,
+  CANCEL_TERMINATE_LOAN,
+} from "src/graphql/mutations";
+
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ModalIcon from "../../../components/ModalIcon";
 import { LateMail } from "../../../graphql/mutations/mail";
-import { AvailableCopiesQuery } from "src/graphql/queries/copy";
+import { AvailableCopiesQuery } from "src/graphql/queries";
 import {
-  Avatar,
   Box,
   Card,
   Container,
@@ -44,7 +42,6 @@ import {
   Typography,
   makeStyles,
   CardHeader,
-  TextField,
   Button,
   Checkbox,
 } from "@material-ui/core";
@@ -91,7 +88,7 @@ const LoanList = (props) => {
   const { loading, error, data } = useQuery(LoansQuery, {
     variables: { input: { page: page, paginate: limit, search }, late: true },
   });
-  const [mutationDelete] = useMutation(LoanDelete, {
+  const [mutationDelete] = useMutation(REMOVE_LOAN, {
     refetchQueries: [
       {
         query: LoansQuery,
@@ -113,7 +110,7 @@ const LoanList = (props) => {
     ],
   });
 
-  const [mutationTerminate] = useMutation(TerminateLoan, {
+  const [mutationTerminate] = useMutation(TERMINATE_LOAN, {
     refetchQueries: [
       {
         query: LoansQuery,
@@ -135,7 +132,7 @@ const LoanList = (props) => {
     ],
   });
 
-  const [mutationCancelTerminate] = useMutation(CancelTerminateLoan, {
+  const [mutationCancelTerminate] = useMutation(CANCEL_TERMINATE_LOAN, {
     refetchQueries: [
       {
         query: LoansQuery,
@@ -193,14 +190,14 @@ const LoanList = (props) => {
 
   const sendLateMail = async () => {
     let loans = [];
-    if (selectedLoanIds.length == 0) {
+    if (selectedLoanIds.length === 0) {
       alert("Nenhum usuáro selecionado!");
     } else {
       selectedLoanIds.map(async function (loanId) {
         loans.push(parseInt(loanId));
       });
       let response = await mutationLateMail({ variables: { loans } });
-      if (response.data.lateMail.response[0] == "success") {
+      if (response.data.lateMail.response[0] === "success") {
         alert("Enviado com sucesso!");
       } else {
         console.log(response.data.lateMail.response);

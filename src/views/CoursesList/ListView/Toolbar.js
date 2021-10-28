@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 const Toolbar = ({ className, create, search, ...rest }) => {
   const classes = useStyles();
   const handlePress = (e) => {
-    if (e.which == 13) {
+    if (e.which === 13) {
       search(e.target.value);
     }
   };

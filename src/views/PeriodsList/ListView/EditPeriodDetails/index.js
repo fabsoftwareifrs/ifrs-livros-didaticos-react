@@ -14,18 +14,16 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useCallback, useEffect, useState } from "react";
-import clsx from "clsx";
-import { useMutation, useQuery, gql } from "@apollo/client";
-import { PeriodQuery, PeriodsQuery } from "../../../../graphql/queries/period";
-import {
-  PeriodCreate,
-  PeriodEdit,
-  PeriodDelete,
-} from "../../../../graphql/mutations/period";
-import fields from "./fields";
+import React, { useCallback, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import useMyForm from "../../../../hooks/MyForm";
+import { useMutation, useQuery } from "@apollo/client";
+import clsx from "clsx";
+
+import { PeriodQuery, PeriodsQuery } from "src/graphql/queries";
+import { EDIT_PERIOD } from "src/graphql/mutations";
+import { fields } from "./fields";
+
+import useMyForm from "src/hooks/MyForm";
 import {
   Box,
   Button,
@@ -36,8 +34,6 @@ import {
   Grid,
   TextField,
   makeStyles,
-  Select,
-  InputLabel,
   Container,
 } from "@material-ui/core";
 
@@ -54,8 +50,6 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
     setValues,
   } = useMyForm(fields);
 
@@ -90,7 +84,7 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(PeriodEdit, {
+  const [mutationEdit] = useMutation(EDIT_PERIOD, {
     refetchQueries: [
       {
         query: PeriodsQuery,

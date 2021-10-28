@@ -16,43 +16,26 @@
 
 import { gql } from "@apollo/client";
 
-const LoanDelete = gql`
-  mutation LoanDelete($id: ID!) {
-    deleteLoan(id: $id) {
+export const REMOVE_PERIOD = gql`
+  mutation PeriodDelete($id: ID!) {
+    deletePeriod(id: $id) {
       id
     }
   }
 `;
 
-const LoanEdit = gql`
-  mutation LoanEdit($id: ID!, $input: LoanInput) {
-    updateLoan(id: $id, input: $input) {
-      id
-    }
-  }
-`;
-const LoanCreate = gql`
-  mutation LoanCreate($input: LoanInput) {
-    createLoan(input: $input) {
+export const EDIT_PERIOD = gql`
+  mutation PeriodEdit($id: ID!, $input: PeriodInput) {
+    updatePeriod(id: $id, input: $input) {
       id
     }
   }
 `;
 
-const TerminateLoan = gql`
-  mutation TerminateLoan($id: ID!, $input: TerminateLoanInput) {
-    terminateLoan(id: $id, input: $input) {
+export const ADD_PERIOD = gql`
+  mutation PeriodCreate($input: PeriodInput) {
+    createPeriod(input: $input) {
       id
     }
   }
 `;
-
-const CancelTerminateLoan = gql`
-  mutation CancelTerminateLoan($id: ID!) {
-    cancelTerminateLoan(id: $id) {
-      id
-    }
-  }
-`;
-
-export { LoanCreate, LoanEdit, LoanDelete, TerminateLoan, CancelTerminateLoan };

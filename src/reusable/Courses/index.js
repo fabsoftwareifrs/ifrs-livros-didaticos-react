@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState } from "react";
 
 import { useQuery } from "@apollo/client";
-import { AllCoursesQuery } from "src/graphql/queries/course";
+import { AllCoursesQuery } from "src/graphql/queries/courses";
 
 import { TextField } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";

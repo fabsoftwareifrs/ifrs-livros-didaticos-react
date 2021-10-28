@@ -17,10 +17,10 @@
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
 import { useMutation, useQuery } from "@apollo/client";
-import useMyForm from "../../../../hooks/MyForm";
-import fields from "./fields";
-import { UserEdit } from "../../../../graphql/mutations/user";
-import { UsersQuery, UserQuery } from "../../../../graphql/queries/user";
+import useMyForm from "src/hooks/MyForm";
+import { fields } from "./fields";
+import { EDIT_USER } from "src/graphql/mutations";
+import { UsersQuery, UserQuery } from "src/graphql/queries";
 import { Link, useHistory, useParams } from "react-router-dom";
 import {
   Box,
@@ -73,7 +73,7 @@ const UserDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [values]);
 
-  const [mutationEdit] = useMutation(UserEdit, {
+  const [mutationEdit] = useMutation(EDIT_USER, {
     refetchQueries: [
       {
         query: UsersQuery,

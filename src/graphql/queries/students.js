@@ -16,26 +16,62 @@
 
 import { gql } from "@apollo/client";
 
-const CopyDelete = gql`
-  mutation CopyDelete($id: ID!) {
-    deleteCopy(id: $id) {
-      id
-    }
-  }
-`;
-const CopyEdit = gql`
-  mutation CopyEdit($id: ID!, $input: CopyInput) {
-    updateCopy(id: $id, input: $input) {
-      id
-    }
-  }
-`;
-const CopyCreate = gql`
-  mutation CopyCreate($input: CopyInput) {
-    createCopy(input: $input) {
-      id
+export const StudentsQuery = gql`
+  query StudentsQuery($input: PaginateInput!) {
+    paginateStudents(input: $input) {
+      docs {
+        id
+        name
+        email
+        matriculation
+        course {
+          id
+          name
+        }
+        classes {
+          id
+          name
+        }
+      }
+      total
     }
   }
 `;
 
-export { CopyCreate, CopyEdit, CopyDelete };
+export const AllStudentsQuery = gql`
+  query AllStudentsQuery {
+    students {
+      id
+      name
+      email
+      matriculation
+      course {
+        id
+        name
+      }
+      classes {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const StudentQuery = gql`
+  query StudentQuery($id: ID!) {
+    student(id: $id) {
+      id
+      name
+      email
+      matriculation
+      course {
+        id
+        name
+      }
+      classes {
+        id
+        name
+      }
+    }
+  }
+`;

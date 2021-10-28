@@ -14,11 +14,11 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useState } from "react";
+import React from "react";
+import { useMutation } from "@apollo/client";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { useMutation, useQuery, gql } from "@apollo/client";
-import { PeriodCreate } from "../../../../graphql/mutations/period";
+
+import { ADD_PERIOD } from "src/graphql/mutations";
 import {
   Box,
   Button,
@@ -32,10 +32,10 @@ import {
   Container,
 } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
-import { PeriodsQuery } from "src/graphql/queries/period";
-import useMyForm from "../../../../hooks/MyForm";
-import { useAuth } from "../../../../providers/Auth";
-import fields from "./fields";
+import { PeriodsQuery } from "src/graphql/queries";
+import useMyForm from "src/hooks/MyForm";
+
+import { fields } from "./fields";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -49,12 +49,9 @@ const PeriodDetails = ({ className, ...rest }) => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
-    setValues,
   } = useMyForm(fields);
 
-  const [mutationCreate] = useMutation(PeriodCreate, {
+  const [mutationCreate] = useMutation(ADD_PERIOD, {
     refetchQueries: [
       {
         query: PeriodsQuery,

@@ -16,32 +16,26 @@
 
 import { gql } from "@apollo/client";
 
-const CategoriesQuery = gql`
-  query CategoriesQuery($input: PaginateInput!) {
-    paginateCategories(input: $input) {
-      docs {
-        id
-        name
-      }
-      total
-    }
-  }
-`;
-const AllCategoriesQuery = gql`
-  query AllCategoriesQuery {
-    categories {
+export const REMOVE_CLASSROOM = gql`
+  mutation ClassDelete($id: ID!) {
+    deleteClass(id: $id) {
       id
-      name
-    }
-  }
-`;
-const CategoryQuery = gql`
-  query CategoryQuery($id: ID!) {
-    category(id: $id) {
-      id
-      name
     }
   }
 `;
 
-export { CategoriesQuery, CategoryQuery, AllCategoriesQuery };
+export const EDIT_CLASSROOM = gql`
+  mutation ClassEdit($id: ID!, $input: ClassInput) {
+    updateClass(id: $id, input: $input) {
+      id
+    }
+  }
+`;
+
+export const ADD_CLASSROOM = gql`
+  mutation ClassCreate($input: ClassInput) {
+    createClass(input: $input) {
+      id
+    }
+  }
+`;

@@ -16,59 +16,26 @@
 
 import { gql } from "@apollo/client";
 
-const ClassesQuery = gql`
-  query ClassesQuery($input: PaginateInput!) {
-    paginateClasses(input: $input) {
-      docs {
-        id
-        name
-        course {
-          id
-          name
-        }
-      }
-      total
-    }
-  }
-`;
-
-const AllClassesQuery = gql`
-  query AllClassesQuery {
-    classes {
+export const REMOVE_USER = gql`
+  mutation UserDelete($id: ID!) {
+    deleteUser(id: $id) {
       id
-      name
-      course {
-        id
-        name
-      }
     }
   }
 `;
 
-const ClassQuery = gql`
-  query ClassQuery($id: ID!) {
-    classRoom(id: $id) {
+export const EDIT_USER = gql`
+  mutation UserEdit($id: ID!, $input: UserInput) {
+    updateUser(id: $id, input: $input) {
       id
-      name
-      course {
-        id
-        name
-      }
     }
   }
 `;
 
-const CLASSES_BY_COURSE_ID = gql`
-  query classesByCourseId($courseId: Int!) {
-    classesByCourseId(courseId: $courseId) {
+export const ADD_USER = gql`
+  mutation UserCreate($input: UserInput) {
+    createUser(input: $input) {
       id
-      name
-      course {
-        id
-        name
-      }
     }
   }
 `;
-
-export { ClassesQuery, ClassQuery, AllClassesQuery, CLASSES_BY_COURSE_ID };

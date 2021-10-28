@@ -16,11 +16,10 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import Modal from "../../../components/Modal";
 import clsx from "clsx";
-import { CopiesByBookQuery } from "../../../graphql/queries/copy";
-import { CopyCreate } from "../../../graphql/mutations/copy";
-import { useMutation, useQuery } from "@apollo/client";
+import { CopiesByBookQuery } from "../../../graphql/queries";
+import { ADD_COPY } from "../../../graphql/mutations";
+import { useMutation } from "@apollo/client";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ReactToPrint from "react-to-print";
 import PrintIcon from "@material-ui/icons/Print";
@@ -34,9 +33,6 @@ import {
   InputAdornment,
   SvgIcon,
   makeStyles,
-  CardHeader,
-  IconButton,
-  Typography,
 } from "@material-ui/core";
 import { Search as SearchIcon } from "react-feather";
 import { Link } from "react-router-dom";
@@ -53,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 const Toolbar = ({ className, id, search, componentRef, ...rest }) => {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(0);
-  const [mutationCreate] = useMutation(CopyCreate, {
+  const [mutationCreate] = useMutation(ADD_COPY, {
     refetchQueries: [
       {
         query: CopiesByBookQuery,
@@ -62,7 +58,7 @@ const Toolbar = ({ className, id, search, componentRef, ...rest }) => {
     ],
   });
   const handlePress = (e) => {
-    if (e.which == 13) {
+    if (e.which === 13) {
       search(e.target.value);
     }
   };

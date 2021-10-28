@@ -16,7 +16,6 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Modal from "../../../components/Modal";
 import clsx from "clsx";
 import {
   Box,
@@ -27,7 +26,6 @@ import {
   InputAdornment,
   SvgIcon,
   makeStyles,
-  CardHeader,
 } from "@material-ui/core";
 import { Search as SearchIcon } from "react-feather";
 import { Link } from "react-router-dom";
@@ -45,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 const Toolbar = ({ className, search, ...rest }) => {
   const classes = useStyles();
   const handlePress = (e) => {
-    if (e.which == 13) {
+    if (e.which === 13) {
       search(e.target.value);
     }
   };

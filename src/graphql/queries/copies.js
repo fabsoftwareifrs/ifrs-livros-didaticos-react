@@ -16,57 +16,26 @@
 
 import { gql } from "@apollo/client";
 
-const StudentsQuery = gql`
-  query StudentsQuery($input: PaginateInput!) {
-    paginateStudents(input: $input) {
-      docs {
+export const CopiesQuery = gql`
+  query CopiesQuery {
+    copies {
+      id
+      code
+      book {
         id
         name
-        email
-        matriculation
-        course {
-          id
-          name
-        }
-        classes {
-          id
-          name
-        }
       }
-      total
+      status
     }
   }
 `;
-const AllStudentsQuery = gql`
-  query AllStudentsQuery {
-    students {
+
+export const AvailableCopiesQuery = gql`
+  query AvailableCopiesQuery {
+    availableCopies {
       id
-      name
-      email
-      matriculation
-      course {
-        id
-        name
-      }
-      classes {
-        id
-        name
-      }
-    }
-  }
-`;
-const StudentQuery = gql`
-  query StudentQuery($id: ID!) {
-    student(id: $id) {
-      id
-      name
-      email
-      matriculation
-      course {
-        id
-        name
-      }
-      classes {
+      code
+      book {
         id
         name
       }
@@ -74,4 +43,30 @@ const StudentQuery = gql`
   }
 `;
 
-export { StudentsQuery, StudentQuery, AllStudentsQuery };
+export const CopiesByBookQuery = gql`
+  query CopiesByBookQuery($bookId: Int!, $search: String!) {
+    copiesByBookId(bookId: $bookId, search: $search) {
+      id
+      code
+      book {
+        id
+        name
+      }
+      status
+    }
+  }
+`;
+
+export const CopyQuery = gql`
+  query CopyQuery($id: ID!) {
+    copy(id: $id) {
+      id
+      code
+      book {
+        id
+        name
+      }
+      status
+    }
+  }
+`;

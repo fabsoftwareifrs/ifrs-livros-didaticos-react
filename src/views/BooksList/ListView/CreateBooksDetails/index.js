@@ -15,11 +15,13 @@
  */
 
 import React from "react";
+import { Link, useHistory } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 import clsx from "clsx";
 
-import { useMutation } from "@apollo/client";
-import { BooksCreate } from "../../../../graphql/mutations/book";
-import { CopyCreate } from "../../../../graphql/mutations/copy";
+import { BooksQuery } from "src/graphql/queries";
+import { ADD_BOOK } from "src/graphql/mutations";
+import { ADD_COPY } from "src/graphql/mutations";
 
 import {
   Box,
@@ -34,10 +36,9 @@ import {
   Container,
 } from "@material-ui/core";
 import { Categories } from "src/reusable";
-import { Link, useHistory } from "react-router-dom";
-import { BooksQuery } from "src/graphql/queries/book";
-import useMyForm from "../../../../hooks/MyForm";
-import fields from "./fields";
+import useMyForm from "src/hooks/MyForm";
+
+import { fields } from "./fields";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -53,7 +54,7 @@ const BookDetails = ({ className, ...rest }) => {
     handleChange,
   } = useMyForm(fields);
 
-  const [mutationCreate] = useMutation(BooksCreate, {
+  const [mutationCreate] = useMutation(ADD_BOOK, {
     refetchQueries: [
       {
         query: BooksQuery,
@@ -61,7 +62,7 @@ const BookDetails = ({ className, ...rest }) => {
       },
     ],
   });
-  const [mutationCreateCopy] = useMutation(CopyCreate);
+  const [mutationCreateCopy] = useMutation(ADD_COPY);
 
   const createBook = async (data) => {
     var { quantity } = data;

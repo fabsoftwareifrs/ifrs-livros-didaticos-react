@@ -15,13 +15,12 @@
  */
 
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
-import { useMutation } from "@apollo/client";
 import clsx from "clsx";
-
-import { IMPORT_BOOKS } from "src/graphql/mutations";
-import useMyForm from "src/hooks/MyForm";
-
+import { useMutation } from "@apollo/client";
+import { IMPORT_STUDENTS } from "../../../../graphql/mutations/students";
+import useMyForm from "../../../../hooks/MyForm";
+import fields from "./fields";
+import { Link, useHistory } from "react-router-dom";
 import {
   Box,
   Button,
@@ -35,13 +34,11 @@ import {
 } from "@material-ui/core";
 import { UploadInput } from "src/reusable";
 
-import { fields } from "./fields";
-
 const useStyles = makeStyles(() => ({
   root: {},
 }));
 
-const BookImport = ({ className, ...rest }) => {
+const StudentDetails = ({ className, ...rest }) => {
   const classes = useStyles();
   var { push } = useHistory();
 
@@ -51,23 +48,24 @@ const BookImport = ({ className, ...rest }) => {
     handleSubmit,
     handleChange,
   } = useMyForm(fields);
-  const [mutationCreate] = useMutation(IMPORT_BOOKS, {
+  const [mutationCreate] = useMutation(IMPORT_STUDENTS, {
     onCompleted: () => {
-      push("/app/books");
+      push("/app/students");
     },
     onError: (error) => {
       console.log(error.message);
     },
   });
 
-  const importBooks = async (data) => {
+  const createStudent = async (data) => {
     const { file } = data;
-    await mutationCreate({ variables: { input: { file: file[0] } } });
+    const d = await mutationCreate({ variables: { input: { file: file[0] } } });
+    console.log(d);
   };
 
   return (
     <form
-      onSubmit={handleSubmit(importBooks)}
+      onSubmit={handleSubmit(createStudent)}
       className={clsx(classes.root, className)}
       {...rest}
     >
@@ -75,8 +73,8 @@ const BookImport = ({ className, ...rest }) => {
         <Box mt={3}>
           <Card>
             <CardHeader
-              subheader="Você pode fazer a importação de livros."
-              title="Livros"
+              subheader="Você pode cadastrar as informações de um estudante."
+              title="Estudante"
             />
             <Divider />
             <CardContent>
@@ -93,7 +91,7 @@ const BookImport = ({ className, ...rest }) => {
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/books">
+              <Link to="/app/students">
                 <Button
                   style={{
                     marginRight: 10,
@@ -116,4 +114,4 @@ const BookImport = ({ className, ...rest }) => {
   );
 };
 
-export default BookImport;
+export default StudentDetails;

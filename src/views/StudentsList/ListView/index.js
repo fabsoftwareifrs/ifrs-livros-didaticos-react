@@ -17,11 +17,11 @@
 import React, { useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
-import { StudentsQuery } from "../../../graphql/queries/student";
-import { StudentDelete } from "../../../graphql/mutations/student";
+import { StudentsQuery } from "src/graphql/queries";
+import { REMOVE_STUDENT } from "src/graphql/mutations";
 import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import Modal from "../../../components/ModalIcon";
+import Modal from "src/components/ModalIcon";
 import {
   Box,
   Card,
@@ -74,7 +74,7 @@ const StudentsList = (props) => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(StudentDelete, {
+  const [mutationDelete] = useMutation(REMOVE_STUDENT, {
     refetchQueries: [
       {
         query: StudentsQuery,

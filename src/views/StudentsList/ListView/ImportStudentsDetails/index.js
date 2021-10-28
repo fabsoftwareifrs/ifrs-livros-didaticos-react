@@ -17,7 +17,7 @@
 import React from "react";
 import clsx from "clsx";
 import { useMutation } from "@apollo/client";
-import { IMPORT_STUDENTS } from "../../../../graphql/mutations/student";
+import { IMPORT_STUDENTS } from "../../../../graphql/mutations/students";
 import useMyForm from "../../../../hooks/MyForm";
 import fields from "./fields";
 import { Link, useHistory } from "react-router-dom";

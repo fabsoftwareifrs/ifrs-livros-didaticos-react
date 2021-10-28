@@ -17,21 +17,15 @@
 import React, { useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
-import { CoursesQuery } from "../../../graphql/queries/course";
-import {
-  CourseCreate,
-  CourseDelete,
-  CourseEdit,
-} from "../../../graphql/mutations/course";
+import { CoursesQuery } from "src/graphql/queries";
+import { REMOVE_COURSE } from "src/graphql/mutations";
 import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import Modal from "../../../components/ModalIcon";
+import Modal from "src/components/ModalIcon";
 import {
-  Avatar,
   Box,
   Card,
   Container,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -41,7 +35,6 @@ import {
   Typography,
   makeStyles,
   CardHeader,
-  TextField,
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
@@ -79,7 +72,7 @@ const CourseList = (props) => {
   const { loading, error, data } = useQuery(CoursesQuery, {
     variables: { input: { page: page, paginate: limit, search } },
   });
-  const [mutationDelete] = useMutation(CourseDelete, {
+  const [mutationDelete] = useMutation(REMOVE_COURSE, {
     refetchQueries: [
       {
         query: CoursesQuery,

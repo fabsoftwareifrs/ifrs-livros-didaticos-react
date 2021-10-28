@@ -17,9 +17,9 @@
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
 import { useMutation, useQuery } from "@apollo/client";
-import { CourseEdit } from "../../../../graphql/mutations/course";
-import useMyForm from "../../../../hooks/MyForm";
-import fields from "./fields";
+import { EDIT_COURSE } from "src/graphql/mutations";
+import useMyForm from "src/hooks/MyForm";
+import { fields } from "./fields";
 import {
   Box,
   Button,
@@ -33,7 +33,7 @@ import {
 } from "@material-ui/core";
 import { Field } from "src/reusable";
 
-import { CourseQuery, CoursesQuery } from "src/graphql/queries/course";
+import { CourseQuery, CoursesQuery } from "src/graphql/queries/courses";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
@@ -72,7 +72,7 @@ const CourseDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [values]);
 
-  const [edit] = useMutation(CourseEdit, {
+  const [edit] = useMutation(EDIT_COURSE, {
     refetchQueries: [
       {
         query: CoursesQuery,

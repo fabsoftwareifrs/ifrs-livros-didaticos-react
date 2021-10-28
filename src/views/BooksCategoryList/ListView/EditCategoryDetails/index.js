@@ -17,7 +17,7 @@
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
 import { useMutation, useQuery } from "@apollo/client";
-import { CategoryEdit } from "../../../../graphql/mutations/category";
+import { EDIT_CATEGORY } from "../../../../graphql/mutations";
 import useMyForm from "../../../../hooks/MyForm";
 import fields from "./fields";
 import {
@@ -32,7 +32,7 @@ import {
   makeStyles,
   Container,
 } from "@material-ui/core";
-import { CategoryQuery, CategoriesQuery } from "src/graphql/queries/category";
+import { CategoryQuery, CategoriesQuery } from "src/graphql/queries/categories";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
@@ -69,7 +69,7 @@ const CategoryDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [values]);
 
-  const [mutationEdit] = useMutation(CategoryEdit, {
+  const [mutationEdit] = useMutation(EDIT_CATEGORY, {
     refetchQueries: [
       {
         query: CategoriesQuery,

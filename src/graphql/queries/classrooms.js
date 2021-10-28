@@ -16,27 +16,57 @@
 
 import { gql } from "@apollo/client";
 
-const CourseDelete = gql`
-  mutation CourseDelete($id: ID!) {
-    deleteCourse(id: $id) {
-      id
+export const ClassesQuery = gql`
+  query ClassesQuery($input: PaginateInput!) {
+    paginateClasses(input: $input) {
+      docs {
+        id
+        name
+        course {
+          id
+          name
+        }
+      }
+      total
     }
   }
 `;
 
-const CourseEdit = gql`
-  mutation CourseEdit($id: ID!, $input: CourseInput) {
-    updateCourse(id: $id, input: $input) {
+export const AllClassesQuery = gql`
+  query AllClassesQuery {
+    classes {
       id
-    }
-  }
-`;
-const CourseCreate = gql`
-  mutation CourseCreate($input: CourseInput) {
-    createCourse(input: $input) {
-      id
+      name
+      course {
+        id
+        name
+      }
     }
   }
 `;
 
-export { CourseCreate, CourseEdit, CourseDelete };
+export const ClassQuery = gql`
+  query ClassQuery($id: ID!) {
+    classRoom(id: $id) {
+      id
+      name
+      course {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const CLASSES_BY_COURSE_ID = gql`
+  query classesByCourseId($courseId: Int!) {
+    classesByCourseId(courseId: $courseId) {
+      id
+      name
+      course {
+        id
+        name
+      }
+    }
+  }
+`;

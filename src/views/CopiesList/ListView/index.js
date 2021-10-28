@@ -15,35 +15,33 @@
  */
 
 import React, { useState, useRef } from "react";
-import Page from "src/components/Page";
-import { CopiesByBookQuery } from "../../../graphql/queries/copy";
-import { CopyDelete } from "../../../graphql/mutations/copy";
+import { Link, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
+
+import Page from "src/components/Page";
+import { CopiesByBookQuery } from "src/graphql/queries";
+import { REMOVE_COPY } from "src/graphql/mutations";
+
 import PerfectScrollbar from "react-perfect-scrollbar";
-import Modal from "../../../components/ModalIcon";
+import Modal from "src/components/ModalIcon";
 import Toolbar from "./Toolbar";
 import Barcode from "react-barcode";
 import PrintConfig from "src/utils/printConfig";
 import {
-  Avatar,
   Box,
   Card,
   Container,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableRow,
   Typography,
   makeStyles,
   CardHeader,
-  TextField,
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
-import { Link, useParams, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,7 +87,7 @@ const CopyList = (props) => {
   const { loading, error, data } = useQuery(CopiesByBookQuery, {
     variables: { bookId: id, search },
   });
-  const [mutationDelete] = useMutation(CopyDelete, {
+  const [mutationDelete] = useMutation(REMOVE_COPY, {
     refetchQueries: [
       {
         query: CopiesByBookQuery,
@@ -99,13 +97,13 @@ const CopyList = (props) => {
   });
 
   const translate = (word) => {
-    if (word == "MISPLACED") {
+    if (word === "MISPLACED") {
       return "EXTRAVIADO";
     }
-    if (word == "LOANED") {
+    if (word === "LOANED") {
       return "EMPRESTADO";
     }
-    if (word == "AVAILABLE") {
+    if (word === "AVAILABLE") {
       return "DISPONIVEL";
     }
   };

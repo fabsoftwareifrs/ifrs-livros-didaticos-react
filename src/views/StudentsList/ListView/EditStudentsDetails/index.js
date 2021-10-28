@@ -17,13 +17,10 @@
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
 import { useMutation, useQuery } from "@apollo/client";
-import useMyForm from "../../../../hooks/MyForm";
-import fields from "./fields";
-import { StudentEdit } from "../../../../graphql/mutations/student";
-import {
-  StudentsQuery,
-  StudentQuery,
-} from "../../../../graphql/queries/student";
+import useMyForm from "src/hooks/MyForm";
+import { fields } from "./fields";
+import { EDIT_STUDENT } from "src/graphql/mutations";
+import { StudentsQuery, StudentQuery } from "src/graphql/queries";
 
 import { Link, useHistory, useParams } from "react-router-dom";
 import {
@@ -92,7 +89,7 @@ const StudentDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(StudentEdit, {
+  const [mutationEdit] = useMutation(EDIT_STUDENT, {
     refetchQueries: [
       {
         query: StudentsQuery,

@@ -16,38 +16,32 @@
 
 import { gql } from "@apollo/client";
 
-const PeriodsQuery = gql`
-  query PeriodsQuery($input: PaginateInput!) {
-    paginatePeriods(input: $input) {
+export const CoursesQuery = gql`
+  query CoursesQuery($input: PaginateInput!) {
+    paginateCourses(input: $input) {
       docs {
         id
         name
-        start
-        end
       }
       total
     }
   }
 `;
-const AllPeriodsQuery = gql`
-  query AllPeriodsQuery {
-    periods {
+
+export const AllCoursesQuery = gql`
+  query AllCoursesQuery {
+    courses {
       id
       name
-      start
-      end
-    }
-  }
-`;
-const PeriodQuery = gql`
-  query PeriodQuery($id: ID!) {
-    period(id: $id) {
-      id
-      name
-      start
-      end
     }
   }
 `;
 
-export { PeriodsQuery, PeriodQuery, AllPeriodsQuery };
+export const CourseQuery = gql`
+  query CourseQuery($id: ID!) {
+    course(id: $id) {
+      id
+      name
+    }
+  }
+`;

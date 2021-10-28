@@ -17,8 +17,8 @@
 import React, { useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
-import { UsersQuery } from "../../../graphql/queries/user";
-import { UserDelete } from "../../../graphql/mutations/user";
+import { UsersQuery } from "src/graphql/queries";
+import { REMOVE_USER } from "src/graphql/mutations/";
 import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Modal from "../../../components/ModalIcon";
@@ -66,7 +66,7 @@ const UsersList = (props) => {
   const { loading, error, data } = useQuery(UsersQuery, {
     variables: { input: { page: page, paginate: limit, search } },
   });
-  const [mutationDelete] = useMutation(UserDelete, {
+  const [mutationDelete] = useMutation(REMOVE_USER, {
     refetchQueries: [
       {
         query: UsersQuery,

@@ -16,28 +16,50 @@
 
 import { gql } from "@apollo/client";
 
-const UsersQuery = gql`
-  query UsersQuery($input: PaginateInput!) {
-    paginateUsers(input: $input) {
+export const BooksQuery = gql`
+  query BooksQuery($input: PaginateInput!) {
+    paginateBooks(input: $input) {
       docs {
         id
         name
-        login
-        accessLevel
+        author
+        volume
+        category {
+          id
+          name
+        }
       }
       total
     }
   }
 `;
-const UserQuery = gql`
-  query UserQuery($id: ID!) {
-    user(id: $id) {
+
+export const AllBooksQuery = gql`
+  query AllBooksQuery {
+    books {
       id
       name
-      login
-      accessLevel
+      author
+      volume
+      category {
+        id
+        name
+      }
     }
   }
 `;
 
-export { UsersQuery, UserQuery };
+export const BookQuery = gql`
+  query BookQuery($id: ID!) {
+    book(id: $id) {
+      id
+      name
+      author
+      volume
+      category {
+        id
+        name
+      }
+    }
+  }
+`;

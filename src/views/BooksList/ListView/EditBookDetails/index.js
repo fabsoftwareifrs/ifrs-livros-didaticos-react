@@ -15,11 +15,13 @@
  */
 
 import React, { useCallback, useEffect } from "react";
-import clsx from "clsx";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
-import { BooksEdit } from "../../../../graphql/mutations/book";
-import useMyForm from "../../../../hooks/MyForm";
-import fields from "./fields";
+import clsx from "clsx";
+
+import { BookQuery, BooksQuery } from "src/graphql/queries";
+import { EDIT_BOOK } from "src/graphql/mutations";
+import useMyForm from "src/hooks/MyForm";
 
 import {
   Box,
@@ -33,9 +35,10 @@ import {
   makeStyles,
   Container,
 } from "@material-ui/core";
-import { BookQuery, BooksQuery } from "src/graphql/queries/book";
-import { Link, useParams, useHistory } from "react-router-dom";
+
 import { Categories } from "src/reusable";
+
+import { fields } from "./fields";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -74,7 +77,7 @@ const BookDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(BooksEdit, {
+  const [mutationEdit] = useMutation(EDIT_BOOK, {
     refetchQueries: [
       {
         query: BooksQuery,

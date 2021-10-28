@@ -14,7 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-export default {
+export const fields = {
   id: {
     type: "hidden",
     value: "",

@@ -15,13 +15,14 @@
  */
 
 import React, { useCallback, useEffect } from "react";
-import clsx from "clsx";
 import { useMutation, useQuery } from "@apollo/client";
-import { ClassQuery, ClassesQuery } from "../../../../graphql/queries/class";
-import { ClassEdit } from "../../../../graphql/mutations/class";
-import fields from "./fields";
 import { Link, useHistory, useParams } from "react-router-dom";
-import useMyForm from "../../../../hooks/MyForm";
+import clsx from "clsx";
+
+import { ClassQuery, ClassesQuery } from "src/graphql/queries";
+import { EDIT_CLASSROOM } from "src/graphql/mutations";
+import useMyForm from "src/hooks/MyForm";
+
 import {
   Box,
   Button,
@@ -36,6 +37,8 @@ import {
 } from "@material-ui/core";
 
 import { Courses } from "src/reusable";
+
+import { fields } from "./fields";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -82,7 +85,7 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(ClassEdit, {
+  const [mutationEdit] = useMutation(EDIT_CLASSROOM, {
     refetchQueries: [
       {
         query: ClassesQuery,

@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
   },
 }));
+
 const LoginView = () => {
   const classes = useStyles();
   return (

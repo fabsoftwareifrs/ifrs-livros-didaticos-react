@@ -16,27 +16,38 @@
 
 import { gql } from "@apollo/client";
 
-const PeriodDelete = gql`
-  mutation PeriodDelete($id: ID!) {
-    deletePeriod(id: $id) {
-      id
+export const PeriodsQuery = gql`
+  query PeriodsQuery($input: PaginateInput!) {
+    paginatePeriods(input: $input) {
+      docs {
+        id
+        name
+        start
+        end
+      }
+      total
     }
   }
 `;
 
-const PeriodEdit = gql`
-  mutation PeriodEdit($id: ID!, $input: PeriodInput) {
-    updatePeriod(id: $id, input: $input) {
+export const AllPeriodsQuery = gql`
+  query AllPeriodsQuery {
+    periods {
       id
-    }
-  }
-`;
-const PeriodCreate = gql`
-  mutation PeriodCreate($input: PeriodInput) {
-    createPeriod(input: $input) {
-      id
+      name
+      start
+      end
     }
   }
 `;
 
-export { PeriodCreate, PeriodEdit, PeriodDelete };
+export const PeriodQuery = gql`
+  query PeriodQuery($id: ID!) {
+    period(id: $id) {
+      id
+      name
+      start
+      end
+    }
+  }
+`;

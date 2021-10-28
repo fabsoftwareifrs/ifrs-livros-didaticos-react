@@ -16,56 +16,26 @@
 
 import { gql } from "@apollo/client";
 
-const CopiesQuery = gql`
-  query CopiesQuery {
-    copies {
+export const REMOVE_COPY = gql`
+  mutation CopyDelete($id: ID!) {
+    deleteCopy(id: $id) {
       id
-      code
-      book {
-        id
-        name
-      }
-      status
-    }
-  }
-`;
-const AvailableCopiesQuery = gql`
-  query AvailableCopiesQuery {
-    availableCopies {
-      id
-      code
-      book {
-        id
-        name
-      }
-    }
-  }
-`;
-const CopiesByBookQuery = gql`
-  query CopiesByBookQuery($bookId: Int!, $search: String!) {
-    copiesByBookId(bookId: $bookId, search: $search) {
-      id
-      code
-      book {
-        id
-        name
-      }
-      status
-    }
-  }
-`;
-const CopyQuery = gql`
-  query CopyQuery($id: ID!) {
-    copy(id: $id) {
-      id
-      code
-      book {
-        id
-        name
-      }
-      status
     }
   }
 `;
 
-export { AvailableCopiesQuery, CopiesQuery, CopiesByBookQuery, CopyQuery };
+export const EDIT_COPY = gql`
+  mutation CopyEdit($id: ID!, $input: CopyInput) {
+    updateCopy(id: $id, input: $input) {
+      id
+    }
+  }
+`;
+
+export const ADD_COPY = gql`
+  mutation CopyCreate($input: CopyInput) {
+    createCopy(input: $input) {
+      id
+    }
+  }
+`;

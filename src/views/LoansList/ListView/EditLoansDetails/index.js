@@ -17,9 +17,9 @@
 import React, { useCallback, useEffect } from "react";
 import clsx from "clsx";
 import { useMutation, useQuery } from "@apollo/client";
-import { LoanEdit } from "../../../../graphql/mutations/loan";
-import useMyForm from "../../../../hooks/MyForm";
-import fields from "./fields";
+import { EDIT_LOAN } from "src/graphql/mutations";
+import useMyForm from "src/hooks/MyForm";
+import { fields } from "./fields";
 import {
   Box,
   Button,
@@ -32,12 +32,12 @@ import {
   makeStyles,
   Container,
 } from "@material-ui/core";
-import { LoanQuery, LoansQuery } from "src/graphql/queries/loan";
+import { LoanQuery, LoansQuery } from "src/graphql/queries/loans";
 import { Link, useParams, useHistory } from "react-router-dom";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { AllStudentsQuery } from "src/graphql/queries/student";
-import { AvailableCopiesQuery, CopyQuery } from "src/graphql/queries/copy";
-import { AllPeriodsQuery } from "src/graphql/queries/period";
+import { AllStudentsQuery } from "src/graphql/queries/students";
+import { AvailableCopiesQuery, CopyQuery } from "src/graphql/queries";
+import { AllPeriodsQuery } from "src/graphql/queries/periods";
 const useStyles = makeStyles(() => ({
   root: {},
 }));
@@ -87,7 +87,7 @@ const LoanDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(LoanEdit, {
+  const [mutationEdit] = useMutation(EDIT_LOAN, {
     refetchQueries: [
       {
         query: LoansQuery,
@@ -223,7 +223,7 @@ const LoanDetails = ({ className, ...rest }) => {
                             }
                           }}
                           value={
-                            input.studentId.value == ""
+                            input.studentId.value === ""
                               ? { value: "", label: "" }
                               : {
                                   value: "" + input.studentId.value,
@@ -275,7 +275,7 @@ const LoanDetails = ({ className, ...rest }) => {
                             }
                           }}
                           value={
-                            input.periodId.value == ""
+                            input.periodId.value === ""
                               ? { value: "", label: "" }
                               : {
                                   value: "" + input.periodId.value,

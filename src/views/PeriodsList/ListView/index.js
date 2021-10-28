@@ -17,21 +17,15 @@
 import React, { useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
-import { PeriodsQuery } from "../../../graphql/queries/period";
-import {
-  PeriodCreate,
-  PeriodEdit,
-  PeriodDelete,
-} from "../../../graphql/mutations/period";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { PeriodsQuery } from "src/graphql/queries";
+import { REMOVE_PERIOD } from "src/graphql/mutations";
+import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import Modal from "../../../components/ModalIcon";
+import Modal from "src/components/ModalIcon";
 import {
-  Avatar,
   Box,
   Card,
   Container,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -41,7 +35,6 @@ import {
   Typography,
   makeStyles,
   CardHeader,
-  TextField,
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
@@ -79,7 +72,7 @@ const PeriodsList = (props) => {
   const { loading, error, data } = useQuery(PeriodsQuery, {
     variables: { input: { page: page, paginate: limit, search } },
   });
-  const [mutationDelete] = useMutation(PeriodDelete, {
+  const [mutationDelete] = useMutation(REMOVE_PERIOD, {
     refetchQueries: [
       {
         query: PeriodsQuery,

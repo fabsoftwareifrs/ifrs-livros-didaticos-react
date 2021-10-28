@@ -16,8 +16,8 @@
 
 import React from "react";
 import clsx from "clsx";
-import { useMutation, useQuery } from "@apollo/client";
-import { LoanCreate } from "../../../../graphql/mutations/loan";
+import { useMutation } from "@apollo/client";
+import { ADD_LOAN } from "src/graphql/mutations";
 import {
   Box,
   Button,
@@ -30,11 +30,11 @@ import {
   Container,
 } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
-import { LoansQuery } from "src/graphql/queries/loan";
-import { AvailableCopiesQuery } from "src/graphql/queries/copy";
+import { LoansQuery } from "src/graphql/queries/loans";
+import { AvailableCopiesQuery } from "src/graphql/queries";
 
 import useMyForm from "../../../../hooks/MyForm";
-import fields from "./fields";
+import { fields } from "./fields";
 import { Copies, Periods, Students } from "src/reusable";
 
 const useStyles = makeStyles(() => ({
@@ -51,7 +51,7 @@ const LoanDetails = ({ className, ...rest }) => {
     handleChange,
   } = useMyForm(fields);
 
-  const [mutationCreate] = useMutation(LoanCreate, {
+  const [mutationCreate] = useMutation(ADD_LOAN, {
     refetchQueries: [
       {
         query: LoansQuery,
