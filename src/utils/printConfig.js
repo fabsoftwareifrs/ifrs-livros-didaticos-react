@@ -14,7 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-export default {
+const options = {
   pageSize: "21.59cm 27.94cm",
   pageMargin: "1.35cm 0cm",
   ticketWidth: "10.795cm",
@@ -23,3 +23,5 @@ export default {
   barHeight: 50,
   barFontSize: 10,
 };
+
+export default options;

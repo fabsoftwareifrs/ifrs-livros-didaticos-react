@@ -19,20 +19,14 @@ import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
 import { CategoriesQuery } from "../../../graphql/queries/category";
 import { BooksQuery } from "../../../graphql/queries/book";
-import {
-  CategoryCreate,
-  CategoryDelete,
-  CategoryEdit,
-} from "../../../graphql/mutations/category";
+import { CategoryDelete } from "../../../graphql/mutations/category";
 import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Modal from "../../../components/ModalIcon";
 import {
-  Avatar,
   Box,
   Card,
   Container,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -42,7 +36,6 @@ import {
   Typography,
   makeStyles,
   CardHeader,
-  TextField,
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";

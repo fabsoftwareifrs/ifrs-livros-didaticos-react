@@ -15,13 +15,11 @@
  */
 
 import React, { useEffect } from "react";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../../../providers/Auth";
 import PropTypes from "prop-types";
 import {
-  Avatar,
   Box,
-  Button,
   Divider,
   Drawer,
   Hidden,
@@ -30,11 +28,6 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import {
-  AlertCircle as AlertCircleIcon,
-  BarChart as BarChartIcon,
-  Lock as LockIcon,
-  Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
   Book as BookIcon,
   Bookmark as BookMarkIcon,
@@ -126,7 +119,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     <Box height="100%" display="flex" flexDirection="column">
       <Box alignItems="center" display="flex" flexDirection="column" p={2}>
         <Typography className={classes.name} color="textPrimary" variant="h5">
-          {"Bem-vindo, " + auth.user.name}
+          {"Bem-vindo, " + auth.user?.name || ""}
         </Typography>
       </Box>
       <Divider />

@@ -30,6 +30,7 @@ import LoginView from "src/views/auth";
 import ListView from "src/views/StudentsList/ListView";
 import Books from "src/views/BooksList/ListView";
 import BooksCreate from "src/views/BooksList/ListView/CreateBooksDetails";
+import BooksImport from "src/views/BooksList/ListView/ImportBooksDetails";
 import BooksEdit from "src/views/BooksList/ListView/EditBookDetails";
 import BooksCategory from "src/views/BooksCategoryList/ListView";
 import Classes from "src/views/ClassesList/ListView";
@@ -46,6 +47,7 @@ import CoursesEdit from "src/views/CoursesList/ListView/EditCourseDetails";
 import Students from "src/views/StudentsList/ListView";
 import StudentsCreate from "src/views/StudentsList/ListView/CreateStudentsDetails";
 import StudentsEdit from "src/views/StudentsList/ListView/EditStudentsDetails";
+import StudentsImport from "src/views/StudentsList/ListView/ImportStudentsDetails";
 import Loans from "src/views/LoansList/ListView";
 import LoansCreate from "src/views/LoansList/ListView/CreateLoansDetails";
 import LoansEdit from "src/views/LoansList/ListView/EditLoansDetails";
@@ -82,6 +84,11 @@ const App = () => {
               exact
               path="/app/books/create"
               component={() => <Dashboard Children={BooksCreate} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/books/import"
+              component={() => <Dashboard Children={BooksImport} />}
             />
             <PrivateRoute
               exact
@@ -157,6 +164,11 @@ const App = () => {
               exact
               path="/app/students/create"
               component={() => <Dashboard Children={StudentsCreate} />}
+            />
+            <PrivateRoute
+              exact
+              path="/app/students/import"
+              component={() => <Dashboard Children={StudentsImport} />}
             />
             <PrivateRoute
               exact

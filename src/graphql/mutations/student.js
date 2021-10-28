@@ -16,7 +16,7 @@
 
 import { gql } from "@apollo/client";
 
-const StudentDelete = gql`
+export const StudentDelete = gql`
   mutation studentDelete($id: ID!) {
     deleteStudent(id: $id) {
       id
@@ -24,19 +24,23 @@ const StudentDelete = gql`
   }
 `;
 
-const StudentEdit = gql`
+export const IMPORT_STUDENTS = gql`
+  mutation ImportStudents($input: StudentImportInput) {
+    importStudents(input: $input)
+  }
+`;
+
+export const StudentEdit = gql`
   mutation StudentEdit($id: ID, $input: StudentInput) {
     updateStudent(id: $id, input: $input) {
       id
     }
   }
 `;
-const StudentCreate = gql`
+export const StudentCreate = gql`
   mutation StudentCreate($input: StudentInput) {
     createStudent(input: $input) {
       id
     }
   }
 `;
-
-export { StudentDelete, StudentEdit, StudentCreate };

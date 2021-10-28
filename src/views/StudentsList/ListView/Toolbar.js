@@ -16,7 +16,6 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Modal from "../../../components/Modal";
 import clsx from "clsx";
 import {
   Box,
@@ -44,14 +43,23 @@ const useStyles = makeStyles((theme) => ({
 const Toolbar = ({ className, search, ...rest }) => {
   const classes = useStyles();
   const handlePress = (e) => {
-    if (e.which == 13) {
+    if (e.which === 13) {
       search(e.target.value);
     }
   };
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Box display="flex" justifyContent="flex-end">
-        <Link to="/app/students/create">
+        <Link to="/app/students/import">
+          <Button
+            color="primary"
+            variant="contained"
+            className={classes.importButton}
+          >
+            Importar estudantes
+          </Button>
+        </Link>
+        <Link to="/app/students/create" className="ml-2">
           <Button color="primary" variant="contained">
             Adicionar Estudante
           </Button>

@@ -18,16 +18,14 @@ import React, { useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
 import { StudentsQuery } from "../../../graphql/queries/student";
-import { StudentDelete, StudentEdit } from "../../../graphql/mutations/student";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { StudentDelete } from "../../../graphql/mutations/student";
+import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Modal from "../../../components/ModalIcon";
 import {
-  Avatar,
   Box,
   Card,
   Container,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -37,7 +35,6 @@ import {
   Typography,
   makeStyles,
   CardHeader,
-  TextField,
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
@@ -74,6 +71,8 @@ const StudentsList = (props) => {
   const [search, setSearch] = useState("");
   const { loading, error, data } = useQuery(StudentsQuery, {
     variables: { input: { page: page, paginate: limit, search } },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "cache-and-network",
   });
   const [mutationDelete] = useMutation(StudentDelete, {
     refetchQueries: [

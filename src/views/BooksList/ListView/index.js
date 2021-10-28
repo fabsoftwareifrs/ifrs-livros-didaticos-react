@@ -18,20 +18,14 @@ import React, { useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
 import { BooksQuery } from "../../../graphql/queries/book";
-import {
-  BooksCreate,
-  BooksDelete,
-  BooksEdit,
-} from "../../../graphql/mutations/book";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { BooksDelete } from "../../../graphql/mutations/book";
+import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Modal from "../../../components/ModalIcon";
 import {
-  Avatar,
   Box,
   Card,
   Container,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -41,7 +35,6 @@ import {
   Typography,
   makeStyles,
   CardHeader,
-  TextField,
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
@@ -78,6 +71,8 @@ const BooksList = (props) => {
   const [search, setSearch] = useState("");
   const { loading, error, data } = useQuery(BooksQuery, {
     variables: { input: { page: page, paginate: limit, search } },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "cache-and-network",
   });
   const [mutationDelete] = useMutation(BooksDelete, {
     refetchQueries: [

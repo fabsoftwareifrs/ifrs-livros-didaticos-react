@@ -14,12 +14,13 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import clsx from "clsx";
-import { useMutation, useQuery } from "@apollo/client";
-import { CategoryEdit } from "../../../../graphql/mutations/category";
+import { useMutation } from "@apollo/client";
+import { IMPORT_STUDENTS } from "../../../../graphql/mutations/student";
 import useMyForm from "../../../../hooks/MyForm";
 import fields from "./fields";
+import { Link, useHistory } from "react-router-dom";
 import {
   Box,
   Button,
@@ -28,64 +29,43 @@ import {
   CardHeader,
   Divider,
   Grid,
-  TextField,
   makeStyles,
   Container,
 } from "@material-ui/core";
-import { CategoryQuery, CategoriesQuery } from "src/graphql/queries/category";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { UploadInput } from "src/reusable";
 
 const useStyles = makeStyles(() => ({
   root: {},
 }));
 
-const CategoryDetails = ({ className, ...rest }) => {
+const ImportStudent = ({ className, ...rest }) => {
   const classes = useStyles();
-  var history = useHistory();
+  var { push } = useHistory();
+
   const {
     fields: input,
     errors,
     handleSubmit,
     handleChange,
-    setValues,
   } = useMyForm(fields);
-  var { id } = useParams();
-  const { loading, data } = useQuery(CategoryQuery, {
-    variables: { id: id },
-  });
-  var values = {
-    name: "",
-  };
-  if (!loading) {
-    values = data.category;
-  }
-  const onCompleted = useCallback(
-    (response) => {
-      setValues(values);
+  const [mutationCreate] = useMutation(IMPORT_STUDENTS, {
+    onCompleted: () => {
+      push("/app/students");
     },
-    [setValues]
-  );
-  useEffect(() => {
-    onCompleted();
-  }, [values]);
-
-  const [mutationEdit] = useMutation(CategoryEdit, {
-    refetchQueries: [
-      {
-        query: CategoriesQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
+    onError: (error) => {
+      console.log(error.message);
+    },
   });
-  const editCategory = async (data) => {
-    const { id, ...rest } = data;
-    await mutationEdit({ variables: { id: data.id, input: { ...rest } } });
-    history.push("/app/category");
+
+  const importStudent = async (data) => {
+    const { file } = data;
+    const d = await mutationCreate({ variables: { input: { file: file[0] } } });
+    console.log(d);
   };
 
   return (
     <form
-      onSubmit={handleSubmit(editCategory)}
+      onSubmit={handleSubmit(importStudent)}
       className={clsx(classes.root, className)}
       {...rest}
     >
@@ -93,35 +73,25 @@ const CategoryDetails = ({ className, ...rest }) => {
         <Box mt={3}>
           <Card>
             <CardHeader
-              subheader="Você pode editar as informações da categoria."
-              title="Categoria de Livro"
+              subheader="Você pode realizar a importação de estudantes."
+              title="Estudante"
             />
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
-                  <input type="hidden" name="id" value={id} />
-                  <TextField
-                    error={!!errors.name}
-                    fullWidth
-                    helperText={
-                      !!errors.name
-                        ? errors.name
-                        : "Informe o nome da categoria do livro"
-                    }
-                    label={input.name.label}
-                    name="name"
-                    type={input.name.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.name.value}
-                    variant="outlined"
+                  <UploadInput
+                    name="file"
+                    field={input.file}
+                    error={errors.file}
+                    onChange={handleChange}
                   />
                 </Grid>
               </Grid>
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/category">
+              <Link to="/app/students">
                 <Button
                   style={{
                     marginRight: 10,
@@ -134,7 +104,7 @@ const CategoryDetails = ({ className, ...rest }) => {
                 </Button>
               </Link>
               <Button color="primary" variant="contained" type="submit">
-                Editar
+                Importar
               </Button>
             </Box>
           </Card>
@@ -144,4 +114,4 @@ const CategoryDetails = ({ className, ...rest }) => {
   );
 };
 
-export default CategoryDetails;
+export default ImportStudent;

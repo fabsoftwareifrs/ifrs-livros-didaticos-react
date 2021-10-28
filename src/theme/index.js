@@ -14,12 +14,12 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { createMuiTheme, colors } from "@material-ui/core";
+import { createTheme, colors } from "@material-ui/core";
 import shadows from "./shadows";
 import typography from "./typography";
 import { ptBR } from "@material-ui/core/locale";
 
-const theme = createMuiTheme(
+const theme = createTheme(
   {
     palette: {
       background: {

@@ -14,10 +14,9 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useState } from "react";
+import React from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { CategoryCreate } from "../../../../graphql/mutations/category";
 import { Link, useHistory } from "react-router-dom";
 import { CategoriesQuery } from "src/graphql/queries/category";
@@ -47,9 +46,6 @@ const CategoryDetails = ({ className, ...rest }) => {
     errors,
     handleSubmit,
     handleChange,
-    setTouched,
-    reset,
-    setValues,
   } = useMyForm(fields);
 
   const [mutationCreate] = useMutation(CategoryCreate, {

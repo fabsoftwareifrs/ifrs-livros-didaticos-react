@@ -14,7 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-export default {
+const options = {
   h1: {
     fontWeight: 500,
     fontSize: 35,
@@ -49,3 +49,5 @@ export default {
     fontWeight: 500,
   },
 };
+
+export default options;
