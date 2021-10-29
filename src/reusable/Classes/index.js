@@ -6,10 +6,12 @@ import { CLASSES_BY_COURSE_ID } from "src/graphql/queries/classrooms";
 import { TextField } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
+const initialState = { value: "", label: "" };
+
 export const Classes = ({ field, error, onChange, courseId, data }) => {
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState([]);
-  const [value, setValue] = useState({ value: "", label: "" });
+  const [value, setValue] = useState(initialState);
 
   const onCompleted = useCallback(
     (response) => {
@@ -31,10 +33,10 @@ export const Classes = ({ field, error, onChange, courseId, data }) => {
   });
 
   useEffect(() => {
-    setValue({
-      value: `${field.value}`,
-      label: state.find((s) => s.value === `${field.value}`)?.label || "",
-    });
+    const found =
+      state.find((s) => s.value === `${field.value}`) || initialState;
+
+    setValue(found);
   }, [state, field.value]);
 
   useEffect(() => {
