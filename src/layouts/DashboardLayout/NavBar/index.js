@@ -72,7 +72,7 @@ const items = [
     title: "Cursos",
   },
   {
-    href: "/app/classes",
+    href: "/app/classrooms",
     icon: SquareIcon,
     title: "Turma",
   },

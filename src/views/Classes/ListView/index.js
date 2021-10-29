@@ -70,12 +70,16 @@ const ClassesList = (props) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { loading, error, data } = useQuery(ClassesQuery, {
+  const { loading, error, data, refetch } = useQuery(ClassesQuery, {
     variables: { input: { page: page, paginate: limit, search } },
     fetchPolicy: "cache-and-network",
   });
 
-  const [mutationDelete] = useMutation(REMOVE_CLASSROOM);
+  const [mutationDelete] = useMutation(REMOVE_CLASSROOM, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
 
   if (error) return <p>Error :(</p>;
 
@@ -160,7 +164,9 @@ const ClassesList = (props) => {
                                     </Modal>
 
                                     <Link
-                                      to={"/app/classes/edit/" + objClasses.id}
+                                      to={
+                                        "/app/classrooms/edit/" + objClasses.id
+                                      }
                                       style={{ color: "#263238" }}
                                     >
                                       <EditIcon className={classes.icon} />

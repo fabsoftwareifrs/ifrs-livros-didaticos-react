@@ -121,17 +121,17 @@ const App = () => {
             />
             <PrivateRoute
               exact
-              path="/app/classes"
+              path="/app/classrooms"
               component={() => <Dashboard Children={Classes} />}
             />
             <PrivateRoute
               exact
-              path="/app/classes/create"
+              path="/app/classrooms/create"
               component={() => <Dashboard Children={ClassesCreate} />}
             />
             <PrivateRoute
               exact
-              path="/app/classes/edit/:id"
+              path="/app/classrooms/edit/:id"
               component={() => <Dashboard Children={ClassesEdit} />}
             />
             <PrivateRoute
