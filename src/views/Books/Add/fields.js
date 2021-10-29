@@ -14,11 +14,12 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-export const fields = {
+const fields = {
   name: {
     label: "Título",
     type: "text",
     value: "",
+    placeholder: "Informe o título do livro",
     rules: {
       required: "Este campo é obrigatório",
       minLength: {
@@ -31,6 +32,7 @@ export const fields = {
     label: "Autor",
     type: "text",
     value: "",
+    placeholder: "Informe o autor do livro",
     rules: {
       required: "Este campo é obrigatório",
       minLength: {
@@ -43,6 +45,7 @@ export const fields = {
     label: "Volume",
     type: "text",
     value: "",
+    placeholder: "Informe o volume do livro",
     rules: {
       required: "Este campo é obrigatório",
     },
@@ -51,6 +54,7 @@ export const fields = {
     label: "Categoria",
     type: "number",
     value: "",
+    placeholder: "Informe a categoria do livro",
     rules: {
       required: "Este campo é obrigatório",
     },
@@ -58,6 +62,9 @@ export const fields = {
   quantity: {
     label: "Exemplares",
     type: "number",
-    value: "",
+    value: 0,
+    placeholder: "Informe a quantidade de exemplares do livro",
   },
 };
+
+export default fields;

@@ -16,7 +16,7 @@
 
 import { useState, useCallback, useMemo, createRef } from "react";
 
-const useMyForm = (initialState, data = []) => {
+const useMyForm = (initialState, data = {}) => {
   const [errors, setErrors] = useState({});
   const [fields, setFields] = useState(
     Object.entries(initialState).reduce((prev, [key, field]) => {
@@ -69,10 +69,10 @@ const useMyForm = (initialState, data = []) => {
     }));
   };
 
-  const handleChange = ({ name, value }) => {
+  const handleChange = ({ name, value, type }) => {
     const field = fields[name];
-
-    const valueFormatted = field.mask ? field.mask(value) : value;
+    const valueTyped = type === "number" ? +value : value;
+    const valueFormatted = field.mask ? field.mask(valueTyped) : valueTyped;
     const error = validateField(field, valueFormatted);
     setErrors((prev) => ({ ...prev, [name]: error }));
     setFields((prev) => ({

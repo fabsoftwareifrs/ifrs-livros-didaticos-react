@@ -15,103 +15,40 @@
  */
 
 import React from "react";
-import clsx from "clsx";
+import { useHistory } from "react-router";
 import { useMutation } from "@apollo/client";
-import { ADD_CATEGORY } from "../../../graphql/mutations";
-import { Link, useHistory } from "react-router-dom";
-import useMyForm from "../../../hooks/MyForm";
-import fields from "./fields";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  TextField,
-  makeStyles,
-  Container,
-} from "@material-ui/core";
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-const CategoryDetails = ({ className, ...rest }) => {
-  const classes = useStyles();
-  var history = useHistory();
-  const {
-    fields: input,
-    errors,
-    handleSubmit,
-    handleChange,
-  } = useMyForm(fields);
+import { ADD_CATEGORY } from "src/graphql/mutations";
+import Form from "./Form";
 
-  const [mutationCreate] = useMutation(ADD_CATEGORY);
+const Add = ({ className, ...rest }) => {
+  const { push } = useHistory();
 
-  const createCategory = async (data) => {
-    await mutationCreate({ variables: { input: data } });
-    history.push("/app/category");
+  const [add, { loading }] = useMutation(ADD_CATEGORY, {
+    onCompleted: () => {
+      push("/app/category");
+    },
+    onError: (err) => {
+      console.log(err.message);
+    },
+  });
+
+  const onSubmit = async (input) => {
+    await add({ variables: { input } });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(createCategory)}
-      className={clsx(classes.root, className)}
+    <Form
+      loading={loading}
+      onSubmit={onSubmit}
+      header={{
+        subheader: "Você pode cadastrar as informações de categoria de livro.",
+        title: "Categoria de Livro",
+      }}
+      className={className}
       {...rest}
-    >
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Card>
-            <CardHeader
-              subheader="Você pode cadastrar as informações de categoria de livro."
-              title="Categoria de Livro"
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.name}
-                    fullWidth
-                    helperText={
-                      !!errors.name
-                        ? errors.name
-                        : "Informe o nome da categoria do livro"
-                    }
-                    label={input.name.label}
-                    name="name"
-                    type={input.name.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.name.value}
-                    variant="outlined"
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-            <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/category">
-                <Button
-                  style={{
-                    marginRight: 10,
-                    backgroundColor: "#8B0000",
-                    color: "#fff",
-                  }}
-                  variant="contained"
-                >
-                  Cancelar
-                </Button>
-              </Link>
-              <Button color="primary" variant="contained" type="submit">
-                Cadastrar
-              </Button>
-            </Box>
-          </Card>
-        </Box>
-      </Container>
-    </form>
+    />
   );
 };
 
-export default CategoryDetails;
+export default Add;

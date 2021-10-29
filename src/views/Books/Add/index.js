@@ -15,177 +15,40 @@
  */
 
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router";
 import { useMutation } from "@apollo/client";
-import clsx from "clsx";
 
 import { ADD_BOOK } from "src/graphql/mutations";
-import { ADD_COPY } from "src/graphql/mutations";
+import Form from "./Form";
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  TextField,
-  makeStyles,
-  Container,
-} from "@material-ui/core";
-import { Categories } from "src/reusable";
-import useMyForm from "src/hooks/MyForm";
+const Add = ({ className, ...rest }) => {
+  const { push } = useHistory();
 
-import { fields } from "./fields";
+  const [add, { loading }] = useMutation(ADD_BOOK, {
+    onCompleted: () => {
+      push("/app/books");
+    },
+    onError: (err) => {
+      console.log(err.message);
+    },
+  });
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-
-const BookDetails = ({ className, ...rest }) => {
-  var history = useHistory();
-  const classes = useStyles();
-  const {
-    fields: input,
-    errors,
-    handleSubmit,
-    handleChange,
-  } = useMyForm(fields);
-
-  const [mutationCreate] = useMutation(ADD_BOOK);
-  const [mutationCreateCopy] = useMutation(ADD_COPY);
-
-  const createBook = async (data) => {
-    var { quantity } = data;
-    quantity = parseInt(quantity);
-    delete data.quantity;
-
-    let book = await mutationCreate({ variables: { input: data } });
-    for (let i = 0; i < quantity; i++) {
-      await mutationCreateCopy({
-        variables: {
-          input: {
-            status: "AVAILABLE",
-            bookId: parseInt(book.data.createBook.id),
-          },
-        },
-      });
-    }
-    history.push("/app/books");
+  const onSubmit = async (input) => {
+    await add({ variables: { input } });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(createBook)}
-      className={clsx(classes.root, className)}
+    <Form
+      loading={loading}
+      onSubmit={onSubmit}
+      header={{
+        subheader: "Você pode cadastrar as informações de um livro.",
+        title: "Livro",
+      }}
+      className={className}
       {...rest}
-    >
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Card>
-            <CardHeader
-              subheader="Você pode cadastrar as informações de um livro."
-              title="Livro"
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.name}
-                    fullWidth
-                    helperText={
-                      !!errors.name ? errors.name : "Informe o título do livro"
-                    }
-                    label={input.name.label}
-                    name="name"
-                    type={input.name.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.name.value}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.author}
-                    fullWidth
-                    helperText={
-                      !!errors.author
-                        ? errors.author
-                        : "Informe o autor do livro"
-                    }
-                    label={input.author.label}
-                    name="author"
-                    type={input.author.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.author.value}
-                    variant="outlined"
-                  />
-                </Grid>
-
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.volume}
-                    fullWidth
-                    helperText={
-                      !!errors.volume
-                        ? errors.volume
-                        : "Informe o volume do livro"
-                    }
-                    label={input.volume.label}
-                    name="volume"
-                    type={input.volume.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.volume.value}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <Categories
-                    onChange={handleChange}
-                    field={input.categoryId}
-                    error={errors.categoryId}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    fullWidth
-                    helperText="Informe a quantidade de exemplares do livro"
-                    label={input.quantity.label}
-                    name="quantity"
-                    type={input.quantity.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.quantity.value}
-                    variant="outlined"
-                    inputProps={{ min: 0 }}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-            <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/books">
-                <Button
-                  style={{
-                    marginRight: 10,
-                    backgroundColor: "#8B0000",
-                    color: "#fff",
-                  }}
-                  variant="contained"
-                >
-                  Cancelar
-                </Button>
-              </Link>
-              <Button color="primary" variant="contained" type="submit">
-                Cadastrar
-              </Button>
-            </Box>
-          </Card>
-        </Box>
-      </Container>
-    </form>
+    />
   );
 };
 
-export default BookDetails;
+export default Add;

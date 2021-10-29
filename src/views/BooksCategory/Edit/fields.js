@@ -15,14 +15,11 @@
  */
 
 const fields = {
-  id: {
-    type: "hidden",
-    value: "",
-  },
   name: {
     label: "Categoria",
     type: "text",
     value: "",
+    placeholder: "Informe o nome da categoria do livro",
     rules: {
       required: "Este campo é obrigatório",
       minLength: {

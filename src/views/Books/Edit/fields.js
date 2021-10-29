@@ -14,11 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-export const fields = {
-  id: {
-    type: "hidden",
-    value: "",
-  },
+const fields = {
   name: {
     label: "Título",
     type: "text",
@@ -60,3 +56,5 @@ export const fields = {
     },
   },
 };
+
+export default fields;
