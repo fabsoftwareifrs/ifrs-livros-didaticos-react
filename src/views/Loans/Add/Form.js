@@ -76,7 +76,6 @@ const Form = ({
                     onChange={handleChange}
                     field={input.copyId}
                     error={errors.copyId}
-                    idCopyInclude={data.copyId}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>

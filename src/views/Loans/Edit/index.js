@@ -14,30 +14,61 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React from "react";
-import { useQuery } from "@apollo/client";
-import { LoanQuery } from "src/graphql/queries/loans";
-import { useParams, useHistory } from "react-router-dom";
+import React, { useState } from "react";
 
+import { useMutation, useQuery } from "@apollo/client";
+import { EDIT_LOAN } from "src/graphql/mutations";
+import { LoanQuery } from "src/graphql/queries";
+
+import { useParams, useHistory } from "react-router-dom";
 import Form from "./Form";
 
-const LoanDetails = ({ className, ...rest }) => {
-  var { id } = useParams();
-  var { push } = useHistory();
+const Edit = ({ className, ...rest }) => {
+  const { id } = useParams();
+  const { push } = useHistory();
+  const [state, setState] = useState({});
+  const [loading, isLoading] = useState(true);
 
-  const { data, loading } = useQuery(LoanQuery, {
+  useQuery(LoanQuery, {
     variables: { id: +id },
-    onCompleted: () => {},
-    onError: (err) => {
-      console.log(err.message);
-      push("/loans");
+    fetchPolicy: "cache-and-network",
+    onCompleted: ({ loan }) => {
+      setState({
+        studentId: +loan.student.id,
+        periodId: +loan.period.id,
+        copyId: +loan.copy.id,
+      });
+      isLoading(false);
     },
   });
 
-  console.log(data);
+  const [edit, { loading: loadingedit }] = useMutation(EDIT_LOAN, {
+    onCompleted: () => {
+      push("/app/loans");
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+  const onSubmit = async (input) => {
+    await edit({ variables: { id: +id, input } });
+  };
+
+  if (loading) return <p>Aguarde...</p>;
+
   return (
-    <>{!loading && <Form className={className} data={data.loan} {...rest} />}</>
+    <Form
+      header={{
+        subheader: "Você pode alterar as informações de um empréstimo.",
+        title: "Categoria de Livro",
+      }}
+      loading={loadingedit}
+      onSubmit={onSubmit}
+      data={state}
+      className={className}
+      {...rest}
+    />
   );
 };
 
-export default LoanDetails;
+export default Edit;
