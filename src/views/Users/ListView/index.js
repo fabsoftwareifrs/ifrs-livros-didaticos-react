@@ -63,11 +63,15 @@ const UsersList = (props) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { loading, error, data } = useQuery(UsersQuery, {
+  const { loading, error, data, refetch } = useQuery(UsersQuery, {
     variables: { input: { page: page, paginate: limit, search } },
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_USER);
+  const [mutationDelete] = useMutation(REMOVE_USER, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
 
   if (error) return <p>Error :(</p>;
 

@@ -14,182 +14,58 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useCallback, useEffect } from "react";
-import clsx from "clsx";
+import React, { useState } from "react";
+
 import { useMutation, useQuery } from "@apollo/client";
-import useMyForm from "src/hooks/MyForm";
-import { fields } from "./fields";
 import { EDIT_USER } from "src/graphql/mutations";
 import { UserQuery } from "src/graphql/queries";
-import { Link, useHistory, useParams } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  TextField,
-  makeStyles,
-  Container,
-} from "@material-ui/core";
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
+import { useParams, useHistory } from "react-router-dom";
+import Form from "./Form";
 
-const UserDetails = ({ className, ...rest }) => {
-  const classes = useStyles();
-  var history = useHistory();
-  const {
-    fields: input,
-    errors,
-    handleSubmit,
-    handleChange,
-    setValues,
-  } = useMyForm(fields);
-  var { id } = useParams();
-  const { loading, data } = useQuery(UserQuery, {
-    variables: { id: id },
+const Edit = ({ className, ...rest }) => {
+  const { id } = useParams();
+  const { push } = useHistory();
+  const [state, setState] = useState({});
+  const [loading, isLoading] = useState(true);
+
+  useQuery(UserQuery, {
+    variables: { id: +id },
     fetchPolicy: "cache-and-network",
-  });
-  var values = {
-    name: "",
-    code: "",
-    author: "",
-    volume: "",
-    quantity: 1,
-  };
-  if (!loading) {
-    values = data.user;
-  }
-  const onCompleted = useCallback(
-    (response) => {
-      setValues(values);
+    onCompleted: ({ user }) => {
+      console.log(user);
+      setState(user);
+      isLoading(false);
     },
-    [setValues]
-  );
-  useEffect(() => {
-    onCompleted();
-  }, [values]);
+  });
 
-  const [mutationEdit] = useMutation(EDIT_USER);
-  const editUser = async (data) => {
-    data.accessLevel = parseInt(data.accessLevel);
-    const { id, ...rest } = data;
-    await mutationEdit({ variables: { id: data.id, input: { ...rest } } });
-    history.push("/app/users");
+  const [edit, { loading: loadingedit }] = useMutation(EDIT_USER, {
+    onCompleted: () => {
+      push("/app/users");
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+  const onSubmit = async (input) => {
+    await edit({ variables: { id: +id, input } });
   };
+
+  if (loading) return <p>Aguarde...</p>;
 
   return (
-    <form
-      onSubmit={handleSubmit(editUser)}
-      className={clsx(classes.root, className)}
+    <Form
+      header={{
+        subheader: "Você pode alterar as informações de categoria de livro.",
+        title: "Categoria de Livro",
+      }}
+      loading={loadingedit}
+      onSubmit={onSubmit}
+      data={state}
+      className={className}
       {...rest}
-    >
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Card>
-            <CardHeader
-              subheader="Você pode editar as informações de um usuário."
-              title="Usuário"
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <input type="hidden" name="id" value={id} />
-                  <TextField
-                    error={!!errors.name}
-                    fullWidth
-                    helperText={
-                      !!errors.name ? errors.name : "Informe o nome do usuário"
-                    }
-                    label={input.name.label}
-                    name="name"
-                    type={input.name.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.name.value}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.login}
-                    fullWidth
-                    helperText={
-                      !!errors.login
-                        ? errors.login
-                        : "Informe o login do usuário"
-                    }
-                    label={input.login.label}
-                    name="login"
-                    type={input.login.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.login.value}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.password}
-                    fullWidth
-                    helperText={
-                      !!errors.password
-                        ? errors.password
-                        : "Informe a senha do usuário"
-                    }
-                    label={input.password.label}
-                    name="password"
-                    type={input.password.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.password.value}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.accessLevel}
-                    fullWidth
-                    helperText={
-                      !!errors.accessLevel
-                        ? errors.accessLevel
-                        : "Informe o nivel de acesso do usuário"
-                    }
-                    label={input.accessLevel.label}
-                    name="accessLevel"
-                    type={input.accessLevel.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.accessLevel.value}
-                    variant="outlined"
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-            <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/users">
-                <Button
-                  style={{
-                    marginRight: 10,
-                    backgroundColor: "#8B0000",
-                    color: "#fff",
-                  }}
-                  variant="contained"
-                >
-                  Cancelar
-                </Button>
-              </Link>
-              <Button color="primary" variant="contained" type="submit">
-                Editar
-              </Button>
-            </Box>
-          </Card>
-        </Box>
-      </Container>
-    </form>
+    />
   );
 };
 
-export default UserDetails;
+export default Edit;
