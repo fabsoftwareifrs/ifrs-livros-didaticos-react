@@ -74,14 +74,7 @@ const StudentsList = (props) => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_STUDENT, {
-    refetchQueries: [
-      {
-        query: StudentsQuery,
-        variables: { input: { page: page, paginate: limit, search } },
-      },
-    ],
-  });
+  const [mutationDelete] = useMutation(REMOVE_STUDENT);
 
   if (error) return <p>Error :(</p>;
 

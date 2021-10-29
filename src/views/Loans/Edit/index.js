@@ -32,7 +32,7 @@ import {
   makeStyles,
   Container,
 } from "@material-ui/core";
-import { LoanQuery, LoansQuery } from "src/graphql/queries/loans";
+import { LoanQuery } from "src/graphql/queries/loans";
 import { Link, useParams, useHistory } from "react-router-dom";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { AllStudentsQuery } from "src/graphql/queries/students";
@@ -59,8 +59,7 @@ const LoanDetails = ({ className, ...rest }) => {
   var copyId = "";
   const { loading, data } = useQuery(LoanQuery, {
     variables: { id: id },
-    fetchPolicy: "no-cache",
-    nextFetchPolicy: "no-cache",
+    fetchPolicy: "cache-and-network",
   });
 
   var values = {
@@ -87,41 +86,26 @@ const LoanDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(EDIT_LOAN, {
-    refetchQueries: [
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: 1, paginate: 10, search: "" },
-          late: false,
-        },
-      },
-      {
-        query: LoansQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" }, late: true },
-      },
-      {
-        query: AvailableCopiesQuery,
-      },
-    ],
-  });
+  const [mutationEdit] = useMutation(EDIT_LOAN);
   const editLoan = async (data) => {
     const { id, ...rest } = data;
     await mutationEdit({ variables: { id: id, input: { ...rest } } });
     push("/app/loans");
   };
-  const students = useQuery(AllStudentsQuery);
-  const copies = useQuery(AvailableCopiesQuery);
+  const students = useQuery(AllStudentsQuery, {
+    fetchPolicy: "cache-and-network",
+  });
+  const copies = useQuery(AvailableCopiesQuery, {
+    fetchPolicy: "cache-and-network",
+  });
   const selectedCopy = useQuery(CopyQuery, {
     variables: { id: input.copyId.value },
-    fetchPolicy: "no-cache",
-    nextFetchPolicy: "no-cache",
+    fetchPolicy: "cache-and-network",
     skip: loading,
   });
   const firstSelectedCopy = useQuery(CopyQuery, {
     variables: { id: copyId },
-    fetchPolicy: "no-cache",
-    nextFetchPolicy: "no-cache",
+    fetchPolicy: "cache-and-network",
     skip: loading,
   });
   if (!copies.loading && !firstSelectedCopy.loading && !loading) {
@@ -130,7 +114,9 @@ const LoanDetails = ({ className, ...rest }) => {
     );
     availableCopies.push(firstSelectedCopy.data.copy);
   }
-  const periods = useQuery(AllPeriodsQuery);
+  const periods = useQuery(AllPeriodsQuery, {
+    fetchPolicy: "cache-and-network",
+  });
   return (
     <>
       {loading ? (

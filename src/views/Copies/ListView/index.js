@@ -86,15 +86,9 @@ const CopyList = (props) => {
 
   const { loading, error, data } = useQuery(CopiesByBookQuery, {
     variables: { bookId: id, search },
+    fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_COPY, {
-    refetchQueries: [
-      {
-        query: CopiesByBookQuery,
-        variables: { bookId: id, search },
-      },
-    ],
-  });
+  const [mutationDelete] = useMutation(REMOVE_COPY);
 
   const translate = (word) => {
     if (word === "MISPLACED") {

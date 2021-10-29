@@ -32,7 +32,6 @@ import {
   Container,
 } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
-import { PeriodsQuery } from "src/graphql/queries";
 import useMyForm from "src/hooks/MyForm";
 
 import { fields } from "./fields";
@@ -51,14 +50,7 @@ const PeriodDetails = ({ className, ...rest }) => {
     handleChange,
   } = useMyForm(fields);
 
-  const [mutationCreate] = useMutation(ADD_PERIOD, {
-    refetchQueries: [
-      {
-        query: PeriodsQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [mutationCreate] = useMutation(ADD_PERIOD);
 
   const createPeriod = async (data) => {
     await mutationCreate({ variables: { input: data } });

@@ -18,7 +18,6 @@ import React from "react";
 import clsx from "clsx";
 import { useMutation } from "@apollo/client";
 import { ADD_USER } from "src/graphql/mutations";
-import { UsersQuery } from "src/graphql/queries";
 import useMyForm from "src/hooks/MyForm";
 import { fields } from "./fields";
 import { Link, useHistory } from "react-router-dom";
@@ -48,14 +47,7 @@ const UserDetails = ({ className, ...rest }) => {
     handleSubmit,
     handleChange,
   } = useMyForm(fields);
-  const [mutationCreate] = useMutation(ADD_USER, {
-    refetchQueries: [
-      {
-        query: UsersQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [mutationCreate] = useMutation(ADD_USER);
   const createUser = (data) => {
     data.accessLevel = parseInt(data.accessLevel);
     mutationCreate({ variables: { input: data } });

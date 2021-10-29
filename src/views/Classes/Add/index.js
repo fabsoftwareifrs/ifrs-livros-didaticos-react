@@ -17,7 +17,6 @@
 import React from "react";
 import clsx from "clsx";
 import { useMutation } from "@apollo/client";
-import { ClassesQuery } from "src/graphql/queries";
 import { ADD_CLASSROOM } from "src/graphql/mutations";
 import { Link, useHistory } from "react-router-dom";
 import useMyForm from "src/hooks/MyForm";
@@ -54,14 +53,7 @@ const ClassDetails = ({ className, create, set, ...rest }) => {
     handleChange,
   } = useMyForm(fields);
 
-  const [mutationCreate] = useMutation(ADD_CLASSROOM, {
-    refetchQueries: [
-      {
-        query: ClassesQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [mutationCreate] = useMutation(ADD_CLASSROOM);
 
   const createClass = async (data) => {
     await mutationCreate({ variables: { input: data } });

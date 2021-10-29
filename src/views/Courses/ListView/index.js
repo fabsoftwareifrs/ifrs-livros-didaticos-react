@@ -71,15 +71,9 @@ const CourseList = (props) => {
   const [search, setSearch] = useState("");
   const { loading, error, data } = useQuery(CoursesQuery, {
     variables: { input: { page: page, paginate: limit, search } },
+    fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_COURSE, {
-    refetchQueries: [
-      {
-        query: CoursesQuery,
-        variables: { input: { page: page, paginate: limit, search } },
-      },
-    ],
-  });
+  const [mutationDelete] = useMutation(REMOVE_COURSE);
 
   if (error) return <p>Error :(</p>;
 

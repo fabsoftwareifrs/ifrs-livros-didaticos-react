@@ -19,7 +19,7 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import clsx from "clsx";
 
-import { PeriodQuery, PeriodsQuery } from "src/graphql/queries";
+import { PeriodQuery } from "src/graphql/queries";
 import { EDIT_PERIOD } from "src/graphql/mutations";
 import { fields } from "./fields";
 
@@ -55,8 +55,9 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
 
   var { id } = useParams();
 
-  const { loading, error, data } = useQuery(PeriodQuery, {
+  const { loading, data } = useQuery(PeriodQuery, {
     variables: { id: id },
+    fetchPolicy: "cache-and-network",
   });
 
   var values = {
@@ -84,14 +85,7 @@ const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(EDIT_PERIOD, {
-    refetchQueries: [
-      {
-        query: PeriodsQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [mutationEdit] = useMutation(EDIT_PERIOD);
 
   const editPeriod = async (data) => {
     const { id, ...rest } = data;

@@ -18,7 +18,6 @@ import React, { useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
 import { LoansQuery } from "src/graphql/queries/loans";
-import { AvailableCopiesQuery } from "src/graphql/queries";
 import {
   REMOVE_LOAN,
   TERMINATE_LOAN,
@@ -87,66 +86,13 @@ const LoanList = (props) => {
 
   const { loading, error, data } = useQuery(LoansQuery, {
     variables: { input: { page: page, paginate: limit, search }, late: false },
+    fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_LOAN, {
-    refetchQueries: [
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search },
-          late: false,
-        },
-      },
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search },
-          late: true,
-        },
-      },
-      {
-        query: AvailableCopiesQuery,
-      },
-    ],
-  });
+  const [mutationDelete] = useMutation(REMOVE_LOAN);
 
-  const [mutationTerminate] = useMutation(TERMINATE_LOAN, {
-    refetchQueries: [
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search },
-          late: false,
-        },
-      },
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search },
-          late: true,
-        },
-      },
-    ],
-  });
+  const [mutationTerminate] = useMutation(TERMINATE_LOAN);
 
-  const [mutationCancelTerminate] = useMutation(CANCEL_TERMINATE_LOAN, {
-    refetchQueries: [
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search },
-          late: false,
-        },
-      },
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search },
-          late: true,
-        },
-      },
-    ],
-  });
+  const [mutationCancelTerminate] = useMutation(CANCEL_TERMINATE_LOAN);
 
   const [mutationWarnMail] = useMutation(WarnMail);
 

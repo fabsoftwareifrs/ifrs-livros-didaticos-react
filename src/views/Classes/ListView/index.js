@@ -72,16 +72,10 @@ const ClassesList = (props) => {
   const [search, setSearch] = useState("");
   const { loading, error, data } = useQuery(ClassesQuery, {
     variables: { input: { page: page, paginate: limit, search } },
+    fetchPolicy: "cache-and-network",
   });
 
-  const [mutationDelete] = useMutation(REMOVE_CLASSROOM, {
-    refetchQueries: [
-      {
-        query: ClassesQuery,
-        variables: { input: { page: page, paginate: limit, search } },
-      },
-    ],
-  });
+  const [mutationDelete] = useMutation(REMOVE_CLASSROOM);
 
   if (error) return <p>Error :(</p>;
 

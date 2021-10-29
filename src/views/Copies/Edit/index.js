@@ -33,7 +33,7 @@ import {
   makeStyles,
   Container,
 } from "@material-ui/core";
-import { CopyQuery, CopiesByBookQuery } from "src/graphql/queries/copies";
+import { CopyQuery } from "src/graphql/queries/copies";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 import { fields } from "./fields";
@@ -55,6 +55,7 @@ const CopyDetails = ({ className, ...rest }) => {
   var { id } = useParams();
   const { loading, data } = useQuery(CopyQuery, {
     variables: { id: id, search: "" },
+    fetchPolicy: "cache-and-network",
   });
   var values = {
     status: { label: "", value: "" },
@@ -88,14 +89,7 @@ const CopyDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(EDIT_COPY, {
-    refetchQueries: [
-      {
-        query: CopiesByBookQuery,
-        variables: { bookId: bookId },
-      },
-    ],
-  });
+  const [mutationEdit] = useMutation(EDIT_COPY);
   const editCopy = async (data) => {
     data.status = data.status.value;
     const { id, ...rest } = data;

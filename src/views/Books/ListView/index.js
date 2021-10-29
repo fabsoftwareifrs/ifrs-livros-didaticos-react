@@ -75,14 +75,7 @@ const BooksList = (props) => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_BOOK, {
-    refetchQueries: [
-      {
-        query: BooksQuery,
-        variables: { input: { page: page, paginate: limit, search } },
-      },
-    ],
-  });
+  const [mutationDelete] = useMutation(REMOVE_BOOK);
 
   if (error) return <p>Error :(</p>;
 

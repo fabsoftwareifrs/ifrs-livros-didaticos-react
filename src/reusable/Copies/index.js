@@ -10,12 +10,12 @@ export const Copies = ({ field, error, onChange, data }) => {
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState([]);
   const [value, setValue] = useState({ value: "", label: "" });
-  console.log("Value: ", field.value);
   const onCompleted = useCallback(
     (response) => {
-      const options = response.availableCopies?.map(({ id, code }) => ({
+      const options = response.availableCopies?.map(({ id, code, book }) => ({
         value: id,
         label: code,
+        book,
       }));
       setState(options);
       setLoading(false);
@@ -30,7 +30,6 @@ export const Copies = ({ field, error, onChange, data }) => {
   });
 
   useEffect(() => {
-    console.log("oi", state, field.value);
     setValue({
       value: `${field.value}`,
       label: state.find((s) => s.value === `${field.value}`)?.label || "",
@@ -68,6 +67,7 @@ export const Copies = ({ field, error, onChange, data }) => {
       }}
       disabled={loading}
       value={value}
+      groupBy={(option) => option.book.name}
       getOptionLabel={(option) => option.label}
       getOptionSelected={(option, value) => option.id === value.id}
       renderInput={(params) => (

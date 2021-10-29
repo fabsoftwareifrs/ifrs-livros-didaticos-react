@@ -17,7 +17,6 @@
 import React from "react";
 import clsx from "clsx";
 import { useMutation } from "@apollo/client";
-import { CategoriesQuery } from "src/graphql/queries";
 import { ADD_CATEGORY } from "../../../graphql/mutations";
 import { Link, useHistory } from "react-router-dom";
 import useMyForm from "../../../hooks/MyForm";
@@ -48,14 +47,7 @@ const CategoryDetails = ({ className, ...rest }) => {
     handleChange,
   } = useMyForm(fields);
 
-  const [mutationCreate] = useMutation(ADD_CATEGORY, {
-    refetchQueries: [
-      {
-        query: CategoriesQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [mutationCreate] = useMutation(ADD_CATEGORY);
 
   const createCategory = async (data) => {
     await mutationCreate({ variables: { input: data } });

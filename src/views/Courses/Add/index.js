@@ -19,7 +19,6 @@ import clsx from "clsx";
 import { useMutation } from "@apollo/client";
 import { ADD_COURSE } from "src/graphql/mutations";
 import { Link, useHistory } from "react-router-dom";
-import { CoursesQuery } from "src/graphql/queries";
 import useMyForm from "src/hooks/MyForm";
 import { fields } from "./fields";
 import {
@@ -51,14 +50,7 @@ const CourseDetails = ({ className, ...rest }) => {
     setTouched,
   } = useMyForm(fields);
 
-  const [add, { loading }] = useMutation(ADD_COURSE, {
-    refetchQueries: [
-      {
-        query: CoursesQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [add, { loading }] = useMutation(ADD_COURSE);
 
   const createCourse = async (data) => {
     await add({ variables: { input: data } });

@@ -28,7 +28,6 @@ import {
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ModalIcon from "../../../components/ModalIcon";
 import { LateMail } from "../../../graphql/mutations/mail";
-import { AvailableCopiesQuery } from "src/graphql/queries";
 import {
   Box,
   Card,
@@ -87,69 +86,13 @@ const LoanList = (props) => {
 
   const { loading, error, data } = useQuery(LoansQuery, {
     variables: { input: { page: page, paginate: limit, search }, late: true },
+    fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_LOAN, {
-    refetchQueries: [
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search: "" },
-          late: true,
-        },
-      },
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search: "" },
-          late: false,
-        },
-      },
-      {
-        query: AvailableCopiesQuery,
-      },
-    ],
-  });
+  const [mutationDelete] = useMutation(REMOVE_LOAN);
 
-  const [mutationTerminate] = useMutation(TERMINATE_LOAN, {
-    refetchQueries: [
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search: "" },
-          late: true,
-        },
-      },
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search: "" },
-          late: false,
-        },
-      },
-      {
-        query: AvailableCopiesQuery,
-      },
-    ],
-  });
+  const [mutationTerminate] = useMutation(TERMINATE_LOAN);
 
-  const [mutationCancelTerminate] = useMutation(CANCEL_TERMINATE_LOAN, {
-    refetchQueries: [
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search: "" },
-          late: true,
-        },
-      },
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: page, paginate: limit, search: "" },
-          late: false,
-        },
-      },
-    ],
-  });
+  const [mutationCancelTerminate] = useMutation(CANCEL_TERMINATE_LOAN);
   const [mutationLateMail] = useMutation(LateMail);
 
   if (error) return <p>Error :(</p>;
