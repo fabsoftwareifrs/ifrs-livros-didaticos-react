@@ -54,7 +54,6 @@ const LoanDetails = ({ className, data, ...rest }) => {
     setValues,
   } = useMyForm(fields);
 
-  console.log(input, data);
   const [edit, { loading: loadingEdit }] = useMutation(EDIT_LOAN, {
     onCompleted: () => {
       push("/app/loans");
@@ -65,7 +64,6 @@ const LoanDetails = ({ className, data, ...rest }) => {
   });
 
   const onSubmit = async (input) => {
-    console.log(input);
     await edit({ variables: { id: +id, input } });
   };
 
