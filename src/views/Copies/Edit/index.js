@@ -14,171 +14,57 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useCallback, useEffect } from "react";
-import clsx from "clsx";
+import React, { useState } from "react";
+
 import { useMutation, useQuery } from "@apollo/client";
 import { EDIT_COPY } from "src/graphql/mutations";
-import useMyForm from "src/hooks/MyForm";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { CopyQuery } from "src/graphql/queries";
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  TextField,
-  makeStyles,
-  Container,
-} from "@material-ui/core";
-import { CopyQuery } from "src/graphql/queries/copies";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
+import Form from "./Form";
 
-import { fields } from "./fields";
+const Edit = ({ className, ...rest }) => {
+  const { id } = useParams();
+  const { push } = useHistory();
+  const [state, setState] = useState({});
+  const [loading, isLoading] = useState(true);
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-
-const CopyDetails = ({ className, ...rest }) => {
-  const classes = useStyles();
-  var history = useHistory();
-  const {
-    fields: input,
-    errors,
-    handleSubmit,
-    handleChange,
-    setValues,
-  } = useMyForm(fields);
-  var { id } = useParams();
-  const { loading, data } = useQuery(CopyQuery, {
-    variables: { id: id, search: "" },
+  useQuery(CopyQuery, {
+    variables: { id: +id },
     fetchPolicy: "cache-and-network",
-  });
-  var values = {
-    status: { label: "", value: "" },
-  };
-  var bookId = "";
-  const translate = (word) => {
-    if (word === "MISPLACED") {
-      return "EXTRAVIADO";
-    }
-    if (word === "LOANED") {
-      return "EMPRESTADO";
-    }
-    if (word === "AVAILABLE") {
-      return "DISPONIVEL";
-    }
-  };
-  if (!loading) {
-    values = {
-      id: data.copy.id,
-      status: { value: data.copy.status, label: translate(data.copy.status) },
-    };
-    bookId = parseInt(data.copy.book.id);
-  }
-  const onCompleted = useCallback(
-    (response) => {
-      setValues(values);
+    onCompleted: ({ copy }) => {
+      setState({ ...copy, bookId: +copy.book.id });
+      isLoading(false);
     },
-    [setValues]
-  );
-  useEffect(() => {
-    onCompleted();
-  }, [loading]);
+  });
 
-  const [mutationEdit] = useMutation(EDIT_COPY);
-  const editCopy = async (data) => {
-    data.status = data.status.value;
-    const { id, ...rest } = data;
-    await mutationEdit({ variables: { id: data.id, input: { ...rest } } });
-    history.push("/app/copies/" + bookId);
+  const [edit, { loading: loadingedit }] = useMutation(EDIT_COPY, {
+    onCompleted: () => {
+      push(`/app/copies/${state.bookId}`);
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+  const onSubmit = async (input) => {
+    await edit({ variables: { id: +id, input } });
   };
 
-  const options = [
-    { value: "MISPLACED", label: "EXTRAVIADO" },
-    { value: "AVAILABLE", label: "DISPONIVEL" },
-    { value: "LOANED", label: "EMPRESTADO" },
-  ];
+  if (loading) return <p>Aguarde...</p>;
 
   return (
-    <form
-      onSubmit={handleSubmit(editCopy)}
-      className={clsx(classes.root, className)}
+    <Form
+      header={{
+        subheader: "Você pode alterar as informações de categoria de livro.",
+        title: "Categoria de Livro",
+      }}
+      loading={loadingedit}
+      onSubmit={onSubmit}
+      data={state}
+      className={className}
       {...rest}
-    >
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Card>
-            <CardHeader
-              subheader="Você pode editar o status do exemplar."
-              title="Exemplar"
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <input type="hidden" name="id" value={id} />
-                  {loading ? (
-                    ""
-                  ) : (
-                    <Autocomplete
-                      name="status"
-                      options={options}
-                      onChange={(event, value) => {
-                        handleChange({ name: "status", value: value });
-                      }}
-                      value={input.status.value}
-                      getOptionSelected={(option, value) =>
-                        option.id === value.id
-                      }
-                      getOptionLabel={(option) => option.label}
-                      getOptionDisabled={(option) => option === options[2]}
-                      disabled={data.copy.status === "LOANED" ? true : false}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label={input.status.label}
-                          variant="outlined"
-                          fullWidth
-                          error={!!errors.status}
-                          helperText={
-                            !!errors.status
-                              ? errors.copyId
-                              : "Informe o status do exemplar"
-                          }
-                        />
-                      )}
-                    />
-                  )}
-                </Grid>
-              </Grid>
-            </CardContent>
-            <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to={"/app/copies/" + bookId}>
-                <Button
-                  style={{
-                    marginRight: 10,
-                    backgroundColor: "#8B0000",
-                    color: "#fff",
-                  }}
-                  variant="contained"
-                >
-                  Cancelar
-                </Button>
-              </Link>
-              <Button color="primary" variant="contained" type="submit">
-                Editar
-              </Button>
-            </Box>
-          </Card>
-        </Box>
-      </Container>
-    </form>
+    />
   );
 };
 
-export default CopyDetails;
+export default Edit;

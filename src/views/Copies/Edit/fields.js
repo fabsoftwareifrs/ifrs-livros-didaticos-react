@@ -15,16 +15,15 @@
  */
 
 export const fields = {
-  id: {
-    type: "hidden",
-    value: "",
-  },
   status: {
     label: "Status",
-    type: "number",
+    type: "text",
     value: "",
+    placeholder: "Informe a situação do exemplar",
     rules: {
       required: "Este campo é obrigatório",
     },
   },
 };
+
+export default fields;

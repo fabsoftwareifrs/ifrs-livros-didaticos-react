@@ -114,7 +114,7 @@ const Form = ({
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/category">
+              <Link to="/app/books">
                 <Button
                   style={{
                     marginRight: 10,

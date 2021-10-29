@@ -31,7 +31,8 @@ import {
   makeStyles,
   Container,
 } from "@material-ui/core";
-import { Field, Categories } from "src/reusable";
+
+import { Status } from "src/reusable/Status";
 
 import fields from "./fields";
 
@@ -72,41 +73,17 @@ const Form = ({
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
-                  <Field
-                    name="name"
-                    field={input.name}
-                    error={errors.name}
-                    onChange={({ target }) => handleChange(target)}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <Field
-                    name="author"
-                    field={input.author}
-                    error={errors.author}
-                    onChange={({ target }) => handleChange(target)}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <Field
-                    name="volume"
-                    field={input.volume}
-                    error={errors.volume}
-                    onChange={({ target }) => handleChange(target)}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <Categories
+                  <Status
                     onChange={handleChange}
-                    field={input.categoryId}
-                    error={errors.categoryId}
+                    field={input.status}
+                    error={errors.status}
                   />
                 </Grid>
               </Grid>
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/books">
+              <Link to={`/app/copies/${data.bookId}`}>
                 <Button
                   style={{
                     marginRight: 10,
