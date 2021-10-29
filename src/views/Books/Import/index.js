@@ -15,105 +15,42 @@
  */
 
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+
 import { useMutation } from "@apollo/client";
-import clsx from "clsx";
-
 import { IMPORT_BOOKS } from "src/graphql/mutations";
-import useMyForm from "src/hooks/MyForm";
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  makeStyles,
-  Container,
-} from "@material-ui/core";
-import { UploadInput } from "src/reusable";
+import { useParams, useHistory } from "react-router-dom";
+import Form from "./Form";
 
-import { fields } from "./fields";
+const Import = ({ className, ...rest }) => {
+  const { id } = useParams();
+  const { push } = useHistory();
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-
-const BookImport = ({ className, ...rest }) => {
-  const classes = useStyles();
-  var { push } = useHistory();
-
-  const {
-    fields: input,
-    errors,
-    handleSubmit,
-    handleChange,
-  } = useMyForm(fields);
-  const [mutationCreate] = useMutation(IMPORT_BOOKS, {
+  const [importBooks, { loading: loadingedit }] = useMutation(IMPORT_BOOKS, {
     onCompleted: () => {
       push("/app/books");
     },
-    onError: (error) => {
-      console.log(error.message);
+    onError: (err) => {
+      console.log(err);
     },
   });
-
-  const importBooks = async (data) => {
-    const { file } = data;
-    await mutationCreate({ variables: { input: { file: file[0] } } });
+  const onSubmit = async (input) => {
+    const { file } = input;
+    await importBooks({ variables: { id: +id, input: { file: file[0] } } });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(importBooks)}
-      className={clsx(classes.root, className)}
+    <Form
+      header={{
+        subheader: "Você pode importar os livros.",
+        title: "Livro",
+      }}
+      loading={loadingedit}
+      onSubmit={onSubmit}
+      className={className}
       {...rest}
-    >
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Card>
-            <CardHeader
-              subheader="Você pode fazer a importação de livros."
-              title="Livros"
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <UploadInput
-                    name="file"
-                    field={input.file}
-                    error={errors.file}
-                    onChange={handleChange}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-            <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/books">
-                <Button
-                  style={{
-                    marginRight: 10,
-                    backgroundColor: "#8B0000",
-                    color: "#fff",
-                  }}
-                  variant="contained"
-                >
-                  Cancelar
-                </Button>
-              </Link>
-              <Button color="primary" variant="contained" type="submit">
-                Importar
-              </Button>
-            </Box>
-          </Card>
-        </Box>
-      </Container>
-    </form>
+    />
   );
 };
 
-export default BookImport;
+export default Import;

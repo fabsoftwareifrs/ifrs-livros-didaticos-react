@@ -15,103 +15,45 @@
  */
 
 import React from "react";
-import clsx from "clsx";
+
 import { useMutation } from "@apollo/client";
 import { IMPORT_STUDENTS } from "src/graphql/mutations";
-import useMyForm from "src/hooks/MyForm";
-import { fields } from "./fields";
-import { Link, useHistory } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  makeStyles,
-  Container,
-} from "@material-ui/core";
-import { UploadInput } from "src/reusable";
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
+import { useParams, useHistory } from "react-router-dom";
+import Form from "./Form";
 
-const ImportStudent = ({ className, ...rest }) => {
-  const classes = useStyles();
-  var { push } = useHistory();
+const Import = ({ className, ...rest }) => {
+  const { id } = useParams();
+  const { push } = useHistory();
 
-  const {
-    fields: input,
-    errors,
-    handleSubmit,
-    handleChange,
-  } = useMyForm(fields);
-  const [mutationCreate] = useMutation(IMPORT_STUDENTS, {
-    onCompleted: () => {
-      push("/app/students");
-    },
-    onError: (error) => {
-      console.log(error.message);
-    },
-  });
-
-  const importStudent = async (data) => {
-    const { file } = data;
-    const d = await mutationCreate({ variables: { input: { file: file[0] } } });
-    console.log(d);
+  const [importStudents, { loading: loadingedit }] = useMutation(
+    IMPORT_STUDENTS,
+    {
+      onCompleted: () => {
+        push("/app/students");
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+  const onSubmit = async (input) => {
+    const { file } = input;
+    await importStudents({ variables: { id: +id, input: { file: file[0] } } });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(importStudent)}
-      className={clsx(classes.root, className)}
+    <Form
+      header={{
+        subheader: "Você pode importar os estudantes.",
+        title: "Estudante",
+      }}
+      loading={loadingedit}
+      onSubmit={onSubmit}
+      className={className}
       {...rest}
-    >
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Card>
-            <CardHeader
-              subheader="Você pode realizar a importação de estudantes."
-              title="Estudante"
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <UploadInput
-                    name="file"
-                    field={input.file}
-                    error={errors.file}
-                    onChange={handleChange}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-            <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/students">
-                <Button
-                  style={{
-                    marginRight: 10,
-                    backgroundColor: "#8B0000",
-                    color: "#fff",
-                  }}
-                  variant="contained"
-                >
-                  Cancelar
-                </Button>
-              </Link>
-              <Button color="primary" variant="contained" type="submit">
-                Importar
-              </Button>
-            </Box>
-          </Card>
-        </Box>
-      </Container>
-    </form>
+    />
   );
 };
 
-export default ImportStudent;
+export default Import;

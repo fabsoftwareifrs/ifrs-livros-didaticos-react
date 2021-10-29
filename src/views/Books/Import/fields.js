@@ -14,7 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-export const fields = {
+const fields = {
   file: {
     label: "Arquivo",
     type: "file",
@@ -24,3 +24,5 @@ export const fields = {
     },
   },
 };
+
+export default fields;
