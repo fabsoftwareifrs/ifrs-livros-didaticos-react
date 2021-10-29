@@ -146,17 +146,17 @@ const App = () => {
             />
             <PrivateRoute
               exact
-              path="/app/course"
+              path="/app/courses"
               component={() => <Dashboard Children={Courses} />}
             />
             <PrivateRoute
               exact
-              path="/app/course/create"
+              path="/app/courses/create"
               component={() => <Dashboard Children={CoursesCreate} />}
             />
             <PrivateRoute
               exact
-              path="/app/course/edit/:id"
+              path="/app/courses/edit/:id"
               component={() => <Dashboard Children={CoursesEdit} />}
             />
             <PrivateRoute

@@ -69,11 +69,15 @@ const CourseList = (props) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { loading, error, data } = useQuery(CoursesQuery, {
+  const { loading, error, data, refetch } = useQuery(CoursesQuery, {
     variables: { input: { page: page, paginate: limit, search } },
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_COURSE);
+  const [mutationDelete] = useMutation(REMOVE_COURSE, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
 
   if (error) return <p>Error :(</p>;
 
@@ -152,7 +156,7 @@ const CourseList = (props) => {
 
                                     <Link
                                       style={{ color: "#263238" }}
-                                      to={"/app/course/edit/" + course.id}
+                                      to={"/app/courses/edit/" + course.id}
                                     >
                                       <EditIcon className={classes.icon} />
                                     </Link>

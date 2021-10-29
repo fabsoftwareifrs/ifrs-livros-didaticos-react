@@ -15,103 +15,40 @@
  */
 
 import React from "react";
-import clsx from "clsx";
+import { useHistory } from "react-router";
 import { useMutation } from "@apollo/client";
+
 import { ADD_COURSE } from "src/graphql/mutations";
-import { Link, useHistory } from "react-router-dom";
-import useMyForm from "src/hooks/MyForm";
-import { fields } from "./fields";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  makeStyles,
-  Container,
-} from "@material-ui/core";
+import Form from "./Form";
 
-import { Field } from "src/reusable";
-
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-
-const CourseDetails = ({ className, ...rest }) => {
-  const classes = useStyles();
+const Add = ({ className, ...rest }) => {
   const { push } = useHistory();
-  const {
-    fields: input,
-    errors,
-    handleSubmit,
-    handleChange,
-    setTouched,
-  } = useMyForm(fields);
 
-  const [add, { loading }] = useMutation(ADD_COURSE);
+  const [add, { loading }] = useMutation(ADD_COURSE, {
+    onCompleted: () => {
+      push("/app/courses");
+    },
+    onError: (err) => {
+      console.log(err.message);
+    },
+  });
 
-  const createCourse = async (data) => {
-    await add({ variables: { input: data } });
-    push("/app/course");
+  const onSubmit = async (input) => {
+    await add({ variables: { input } });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(createCourse)}
-      className={clsx(classes.root, className)}
+    <Form
+      loading={loading}
+      onSubmit={onSubmit}
+      header={{
+        subheader: "Você pode cadastrar as informações de um curso.",
+        title: "Curso",
+      }}
+      className={className}
       {...rest}
-    >
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Card>
-            <CardHeader
-              subheader="Você pode cadastrar as informações de curso."
-              title="Curso"
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <Field
-                    name="name"
-                    field={input.name}
-                    error={errors.name}
-                    onFocus={({ target }) => setTouched(target)}
-                    onChange={({ target }) => handleChange(target)}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-            <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/course">
-                <Button
-                  style={{
-                    marginRight: 10,
-                    backgroundColor: "#8B0000",
-                    color: "#fff",
-                  }}
-                  variant="contained"
-                >
-                  Cancelar
-                </Button>
-              </Link>
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                disabled={loading}
-              >
-                Cadastrar
-              </Button>
-            </Box>
-          </Card>
-        </Box>
-      </Container>
-    </form>
+    />
   );
 };
 
-export default CourseDetails;
+export default Add;

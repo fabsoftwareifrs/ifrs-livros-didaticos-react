@@ -50,7 +50,7 @@ const Toolbar = ({ className, create, search, ...rest }) => {
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Box display="flex" justifyContent="flex-end">
-        <Link to="/app/course/create">
+        <Link to="/app/courses/create">
           <Button color="primary" variant="contained">
             Adicionar Curso
           </Button>
