@@ -20,7 +20,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import useMyForm from "src/hooks/MyForm";
 import { fields } from "./fields";
 import { EDIT_STUDENT } from "src/graphql/mutations";
-import { StudentsQuery, StudentQuery } from "src/graphql/queries";
+import { StudentQuery } from "src/graphql/queries";
 
 import { Link, useHistory, useParams } from "react-router-dom";
 import {
@@ -58,6 +58,7 @@ const StudentDetails = ({ className, ...rest }) => {
 
   const { loading, data } = useQuery(StudentQuery, {
     variables: { id: id },
+    fetchPolicy: "cache-and-network",
   });
 
   var values = {
@@ -89,14 +90,7 @@ const StudentDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(EDIT_STUDENT, {
-    refetchQueries: [
-      {
-        query: StudentsQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [mutationEdit] = useMutation(EDIT_STUDENT);
 
   const editStudent = async (data) => {
     const { id, ...rest } = data;

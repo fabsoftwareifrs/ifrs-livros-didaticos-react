@@ -19,7 +19,7 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import clsx from "clsx";
 
-import { BookQuery, BooksQuery } from "src/graphql/queries";
+import { BookQuery } from "src/graphql/queries";
 import { EDIT_BOOK } from "src/graphql/mutations";
 import useMyForm from "src/hooks/MyForm";
 
@@ -57,6 +57,7 @@ const BookDetails = ({ className, ...rest }) => {
   var { id } = useParams();
   const { loading, data } = useQuery(BookQuery, {
     variables: { id: id },
+    fetchPolicy: "cache-and-network",
   });
   var values = {
     name: "",
@@ -77,14 +78,7 @@ const BookDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(EDIT_BOOK, {
-    refetchQueries: [
-      {
-        query: BooksQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [mutationEdit] = useMutation(EDIT_BOOK);
   const editBook = async (data) => {
     const { id, ...rest } = data;
     await mutationEdit({ variables: { id: data.id, input: { ...rest } } });

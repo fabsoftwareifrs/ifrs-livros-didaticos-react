@@ -30,8 +30,6 @@ import {
   Container,
 } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
-import { LoansQuery } from "src/graphql/queries/loans";
-import { AvailableCopiesQuery } from "src/graphql/queries";
 
 import useMyForm from "src/hooks/MyForm";
 import { fields } from "./fields";
@@ -51,24 +49,7 @@ const LoanDetails = ({ className, ...rest }) => {
     handleChange,
   } = useMyForm(fields);
 
-  const [mutationCreate] = useMutation(ADD_LOAN, {
-    refetchQueries: [
-      {
-        query: LoansQuery,
-        variables: {
-          input: { page: 1, paginate: 10, search: "" },
-          late: false,
-        },
-      },
-      {
-        query: LoansQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" }, late: true },
-      },
-      {
-        query: AvailableCopiesQuery,
-      },
-    ],
-  });
+  const [mutationCreate] = useMutation(ADD_LOAN);
   const createLoan = async (data) => {
     await mutationCreate({ variables: { input: data } });
     history.push("/app/loans");

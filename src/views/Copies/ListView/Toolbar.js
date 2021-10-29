@@ -17,7 +17,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { CopiesByBookQuery } from "../../../graphql/queries";
 import { ADD_COPY } from "../../../graphql/mutations";
 import { useMutation } from "@apollo/client";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -49,14 +48,7 @@ const useStyles = makeStyles((theme) => ({
 const Toolbar = ({ className, id, search, componentRef, ...rest }) => {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(0);
-  const [mutationCreate] = useMutation(ADD_COPY, {
-    refetchQueries: [
-      {
-        query: CopiesByBookQuery,
-        variables: { bookId: id, search: "" },
-      },
-    ],
-  });
+  const [mutationCreate] = useMutation(ADD_COPY);
   const handlePress = (e) => {
     if (e.which === 13) {
       search(e.target.value);

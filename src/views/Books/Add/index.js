@@ -19,7 +19,6 @@ import { Link, useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import clsx from "clsx";
 
-import { BooksQuery } from "src/graphql/queries";
 import { ADD_BOOK } from "src/graphql/mutations";
 import { ADD_COPY } from "src/graphql/mutations";
 
@@ -54,14 +53,7 @@ const BookDetails = ({ className, ...rest }) => {
     handleChange,
   } = useMyForm(fields);
 
-  const [mutationCreate] = useMutation(ADD_BOOK, {
-    refetchQueries: [
-      {
-        query: BooksQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [mutationCreate] = useMutation(ADD_BOOK);
   const [mutationCreateCopy] = useMutation(ADD_COPY);
 
   const createBook = async (data) => {

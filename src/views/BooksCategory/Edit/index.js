@@ -32,7 +32,7 @@ import {
   makeStyles,
   Container,
 } from "@material-ui/core";
-import { CategoryQuery, CategoriesQuery } from "src/graphql/queries/categories";
+import { CategoryQuery } from "src/graphql/queries/categories";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
@@ -52,6 +52,7 @@ const CategoryDetails = ({ className, ...rest }) => {
   var { id } = useParams();
   const { loading, data } = useQuery(CategoryQuery, {
     variables: { id: id },
+    fetchPolicy: "cache-and-network",
   });
   var values = {
     name: "",
@@ -69,14 +70,7 @@ const CategoryDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [values]);
 
-  const [mutationEdit] = useMutation(EDIT_CATEGORY, {
-    refetchQueries: [
-      {
-        query: CategoriesQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [mutationEdit] = useMutation(EDIT_CATEGORY);
   const editCategory = async (data) => {
     const { id, ...rest } = data;
     await mutationEdit({ variables: { id: data.id, input: { ...rest } } });

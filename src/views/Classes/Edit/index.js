@@ -19,7 +19,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { Link, useHistory, useParams } from "react-router-dom";
 import clsx from "clsx";
 
-import { ClassQuery, ClassesQuery } from "src/graphql/queries";
+import { ClassQuery } from "src/graphql/queries";
 import { EDIT_CLASSROOM } from "src/graphql/mutations";
 import useMyForm from "src/hooks/MyForm";
 
@@ -60,6 +60,7 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
 
   const { loading, data } = useQuery(ClassQuery, {
     variables: { id: id },
+    fetchPolicy: "cache-and-network",
   });
 
   var values = {
@@ -85,14 +86,7 @@ const ClassDetails = ({ className, details, edit, set, ...rest }) => {
     onCompleted();
   }, [loading]);
 
-  const [mutationEdit] = useMutation(EDIT_CLASSROOM, {
-    refetchQueries: [
-      {
-        query: ClassesQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [mutationEdit] = useMutation(EDIT_CLASSROOM);
 
   const editClass = async (data) => {
     const { id, ...rest } = data;

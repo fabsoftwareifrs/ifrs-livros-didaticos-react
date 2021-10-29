@@ -33,7 +33,7 @@ import {
 } from "@material-ui/core";
 import { Field } from "src/reusable";
 
-import { CourseQuery, CoursesQuery } from "src/graphql/queries/courses";
+import { CourseQuery } from "src/graphql/queries/courses";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
@@ -55,6 +55,7 @@ const CourseDetails = ({ className, ...rest }) => {
 
   const { loading, data } = useQuery(CourseQuery, {
     variables: { id: id },
+    fetchPolicy: "cache-and-network",
   });
   var values = {
     name: "",
@@ -72,14 +73,7 @@ const CourseDetails = ({ className, ...rest }) => {
     onCompleted();
   }, [values]);
 
-  const [edit] = useMutation(EDIT_COURSE, {
-    refetchQueries: [
-      {
-        query: CoursesQuery,
-        variables: { input: { page: 1, paginate: 10, search: "" } },
-      },
-    ],
-  });
+  const [edit] = useMutation(EDIT_COURSE);
   const editCourse = async (data) => {
     const { ...rest } = data;
     await edit({ variables: { id: +id, input: { ...rest } } });
