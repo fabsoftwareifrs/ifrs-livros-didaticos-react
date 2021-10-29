@@ -14,185 +14,57 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useCallback, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import React, { useState } from "react";
+
 import { useMutation, useQuery } from "@apollo/client";
-import clsx from "clsx";
-
-import { PeriodQuery } from "src/graphql/queries";
 import { EDIT_PERIOD } from "src/graphql/mutations";
-import { fields } from "./fields";
+import { PeriodQuery } from "src/graphql/queries";
 
-import useMyForm from "src/hooks/MyForm";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  TextField,
-  makeStyles,
-  Container,
-} from "@material-ui/core";
+import { useParams, useHistory } from "react-router-dom";
+import Form from "./Form";
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
+const Edit = ({ className, ...rest }) => {
+  const { id } = useParams();
+  const { push } = useHistory();
+  const [state, setState] = useState({});
+  const [loading, isLoading] = useState(true);
 
-const PeriodDetails = ({ className, details, edit, set, ...rest }) => {
-  const classes = useStyles();
-  var history = useHistory();
-
-  const {
-    fields: input,
-    errors,
-    handleSubmit,
-    handleChange,
-    setValues,
-  } = useMyForm(fields);
-
-  var { id } = useParams();
-
-  const { loading, data } = useQuery(PeriodQuery, {
-    variables: { id: id },
+  useQuery(PeriodQuery, {
+    variables: { id: +id },
     fetchPolicy: "cache-and-network",
+    onCompleted: ({ period }) => {
+      setState(period);
+      isLoading(false);
+    },
   });
 
-  var values = {
-    name: "",
-    start: "",
-    end: "",
-  };
-
-  if (!loading) {
-    values = {
-      id: data.period.id,
-      name: data.period.name,
-      start: data.period.start,
-      end: data.period.end,
-    };
-  }
-
-  const onCompleted = useCallback(
-    (response) => {
-      setValues(values);
+  const [edit, { loading: loadingedit }] = useMutation(EDIT_PERIOD, {
+    onCompleted: () => {
+      push("/app/periods");
     },
-    [setValues]
-  );
-  useEffect(() => {
-    onCompleted();
-  }, [loading]);
-
-  const [mutationEdit] = useMutation(EDIT_PERIOD);
-
-  const editPeriod = async (data) => {
-    const { id, ...rest } = data;
-    await mutationEdit({ variables: { id: id, input: { ...rest } } });
-    history.push("/app/periods");
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+  const onSubmit = async (input) => {
+    await edit({ variables: { id: +id, input } });
   };
+
+  if (loading) return <p>Aguarde...</p>;
 
   return (
-    <form
-      onSubmit={handleSubmit(editPeriod)}
-      className={clsx(classes.root, className)}
+    <Form
+      header={{
+        subheader: "Você pode alterar as informações de categoria de livro.",
+        title: "Categoria de Livro",
+      }}
+      loading={loadingedit}
+      onSubmit={onSubmit}
+      data={state}
+      className={className}
       {...rest}
-    >
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Card>
-            <CardHeader
-              subheader="Você pode cadastrar as informações de um período."
-              title="Períodos"
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.name}
-                    fullWidth
-                    helperText={
-                      !!errors.name
-                        ? errors.name
-                        : "Informe o nome do período letivo"
-                    }
-                    label={input.name.label}
-                    name="name"
-                    type={input.name.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.name.value}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.start}
-                    fullWidth
-                    helperText={
-                      !!errors.start
-                        ? errors.start
-                        : "Informe a data de início do período letivo"
-                    }
-                    label={input.start.label}
-                    name="start"
-                    type={input.start.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.start.value}
-                    variant="outlined"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.end}
-                    fullWidth
-                    helperText={
-                      !!errors.end
-                        ? errors.end
-                        : "Informe a data final do período letivo"
-                    }
-                    label={input.end.label}
-                    name="end"
-                    type={input.end.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.end.value}
-                    variant="outlined"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-            <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/periods">
-                <Button
-                  style={{
-                    marginRight: 10,
-                    backgroundColor: "#8B0000",
-                    color: "#fff",
-                  }}
-                  variant="contained"
-                >
-                  Cancelar
-                </Button>
-              </Link>
-              <Button color="primary" variant="contained" type="submit">
-                Cadastrar
-              </Button>
-            </Box>
-          </Card>
-        </Box>
-      </Container>
-    </form>
+    />
   );
 };
 
-export default PeriodDetails;
+export default Edit;

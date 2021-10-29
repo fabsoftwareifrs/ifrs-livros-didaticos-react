@@ -15,148 +15,40 @@
  */
 
 import React from "react";
+import { useHistory } from "react-router";
 import { useMutation } from "@apollo/client";
-import clsx from "clsx";
 
 import { ADD_PERIOD } from "src/graphql/mutations";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  TextField,
-  makeStyles,
-  Container,
-} from "@material-ui/core";
-import { Link, useHistory } from "react-router-dom";
-import useMyForm from "src/hooks/MyForm";
+import Form from "./Form";
 
-import { fields } from "./fields";
+const Add = ({ className, ...rest }) => {
+  const { push } = useHistory();
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
+  const [add, { loading }] = useMutation(ADD_PERIOD, {
+    onCompleted: () => {
+      push("/app/periods");
+    },
+    onError: (err) => {
+      console.log(err.message);
+    },
+  });
 
-const PeriodDetails = ({ className, ...rest }) => {
-  var history = useHistory();
-  const classes = useStyles();
-  const {
-    fields: input,
-    errors,
-    handleSubmit,
-    handleChange,
-  } = useMyForm(fields);
-
-  const [mutationCreate] = useMutation(ADD_PERIOD);
-
-  const createPeriod = async (data) => {
-    await mutationCreate({ variables: { input: data } });
-    history.push("/app/periods");
+  const onSubmit = async (input) => {
+    await add({ variables: { input } });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(createPeriod)}
-      className={clsx(classes.root, className)}
+    <Form
+      loading={loading}
+      onSubmit={onSubmit}
+      header={{
+        subheader: "Você pode cadastrar as informações de um período.",
+        title: "Período",
+      }}
+      className={className}
       {...rest}
-    >
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Card>
-            <CardHeader
-              subheader="Você pode cadastrar as informações de um período."
-              title="Períodos"
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.name}
-                    fullWidth
-                    helperText={
-                      !!errors.name
-                        ? errors.name
-                        : "Informe o nome do período letivo"
-                    }
-                    label={input.name.label}
-                    name="name"
-                    type={input.name.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.name.value}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.start}
-                    fullWidth
-                    helperText={
-                      !!errors.start
-                        ? errors.start
-                        : "Informe a data de início do período letivo"
-                    }
-                    label={input.start.label}
-                    name="start"
-                    type={input.start.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.start.value}
-                    variant="outlined"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={!!errors.end}
-                    fullWidth
-                    helperText={
-                      !!errors.end
-                        ? errors.end
-                        : "Informe a data final do período letivo"
-                    }
-                    label={input.end.label}
-                    name="end"
-                    type={input.end.type}
-                    onChange={({ target }) => handleChange(target)}
-                    value={input.end.value}
-                    variant="outlined"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-            <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/periods">
-                <Button
-                  style={{
-                    marginRight: 10,
-                    backgroundColor: "#8B0000",
-                    color: "#fff",
-                  }}
-                  variant="contained"
-                >
-                  Cancelar
-                </Button>
-              </Link>
-              <Button color="primary" variant="contained" type="submit">
-                Cadastrar
-              </Button>
-            </Box>
-          </Card>
-        </Box>
-      </Container>
-    </form>
+    />
   );
 };
 
-export default PeriodDetails;
+export default Add;

@@ -15,10 +15,6 @@
  */
 
 export const fields = {
-  id: {
-    type: "hidden",
-    value: "",
-  },
   name: {
     label: "Período",
     type: "text",
@@ -44,3 +40,5 @@ export const fields = {
     },
   },
 };
+
+export default fields;

@@ -69,11 +69,15 @@ const PeriodsList = (props) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { loading, error, data } = useQuery(PeriodsQuery, {
+  const { loading, error, data, refetch } = useQuery(PeriodsQuery, {
     variables: { input: { page: page, paginate: limit, search } },
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_PERIOD);
+  const [mutationDelete] = useMutation(REMOVE_PERIOD, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
 
   if (error) return <p>Error :(</p>;
 
