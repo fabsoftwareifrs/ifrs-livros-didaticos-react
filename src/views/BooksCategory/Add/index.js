@@ -26,7 +26,7 @@ const Add = ({ className, ...rest }) => {
 
   const [add, { loading }] = useMutation(ADD_CATEGORY, {
     onCompleted: () => {
-      push("/app/category");
+      push("/app/categories");
     },
     onError: (err) => {
       console.log(err.message);

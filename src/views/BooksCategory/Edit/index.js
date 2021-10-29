@@ -40,7 +40,7 @@ const Edit = ({ className, ...rest }) => {
 
   const [edit, { loading: loadingedit }] = useMutation(EDIT_CATEGORY, {
     onCompleted: () => {
-      push("/app/category");
+      push("/app/categories");
     },
     onError: (err) => {
       console.log(err);

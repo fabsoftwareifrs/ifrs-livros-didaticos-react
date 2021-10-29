@@ -106,17 +106,17 @@ const App = () => {
             />
             <PrivateRoute
               exact
-              path="/app/category"
+              path="/app/categories"
               component={() => <Dashboard Children={BooksCategory} />}
             />
             <PrivateRoute
               exact
-              path="/app/category/create"
+              path="/app/categories/create"
               component={() => <Dashboard Children={BooksCategoryCreate} />}
             />
             <PrivateRoute
               exact
-              path="/app/category/edit/:id"
+              path="/app/categories/edit/:id"
               component={() => <Dashboard Children={BooksCategoryEdit} />}
             />
             <PrivateRoute

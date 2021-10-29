@@ -42,7 +42,7 @@ import NavItem from "./NavItem";
 
 const items = [
   {
-    href: "/app/category",
+    href: "/app/categories",
     icon: BookMarkIcon,
     title: "Categorias de Livros",
   },
@@ -67,7 +67,7 @@ const items = [
     title: "Períodos",
   },
   {
-    href: "/app/course",
+    href: "/app/courses",
     icon: PenIcon,
     title: "Cursos",
   },

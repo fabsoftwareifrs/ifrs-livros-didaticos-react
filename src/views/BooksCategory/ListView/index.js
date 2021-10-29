@@ -166,7 +166,7 @@ const CategoryList = (props) => {
 
                                     <Link
                                       style={{ color: "#263238" }}
-                                      to={"/app/category/edit/" + category.id}
+                                      to={"/app/categories/edit/" + category.id}
                                     >
                                       <EditIcon className={classes.icon} />
                                     </Link>
