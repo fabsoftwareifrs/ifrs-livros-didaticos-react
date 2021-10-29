@@ -15,11 +15,6 @@
  */
 
 export const fields = {
-  id: {
-    type: "hidden",
-    value: "",
-  },
-
   studentId: {
     label: "Estudante",
     type: "number",

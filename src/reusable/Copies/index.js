@@ -6,11 +6,11 @@ import { AvailableCopiesQuery } from "src/graphql/queries";
 import { TextField } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-export const Copies = ({ field, error, onChange, data }) => {
+export const Copies = ({ field, error, onChange, data, idCopyInclude }) => {
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState([]);
   const [value, setValue] = useState({ value: "", label: "" });
-  console.log("Value: ", field.value);
+
   const onCompleted = useCallback(
     (response) => {
       const options = response.availableCopies?.map(({ id, code }) => ({
@@ -24,13 +24,13 @@ export const Copies = ({ field, error, onChange, data }) => {
   );
 
   useQuery(AvailableCopiesQuery, {
+    variables: { idCopyInclude: +idCopyInclude },
     skip: !!data,
     fetchPolicy: "cache-and-network",
     onCompleted,
   });
 
   useEffect(() => {
-    console.log("oi", state, field.value);
     setValue({
       value: `${field.value}`,
       label: state.find((s) => s.value === `${field.value}`)?.label || "",

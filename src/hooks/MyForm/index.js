@@ -16,15 +16,17 @@
 
 import { useState, useCallback, useMemo, createRef } from "react";
 
-const useMyForm = (initialState) => {
+const useMyForm = (initialState, data = []) => {
   const [errors, setErrors] = useState({});
   const [fields, setFields] = useState(
     Object.entries(initialState).reduce((prev, [key, field]) => {
+      const value = field.mask ? field.mask(data[key] || "") : data[key];
       return {
         ...prev,
         [key]: {
           ...field,
           name: key,
+          value: field.type !== "file" ? value || field.value : field.value,
           touched: false,
           ref: createRef(),
         },
@@ -134,21 +136,26 @@ const useMyForm = (initialState) => {
     [isVisible, initialState, setFields]
   );
 
-  const setValues = (values) => {
-    setFields(
-      Object.entries(fields).reduce((previous, [key, field]) => {
-        const value = field.mask ? field.mask(values[key]) : values[key];
+  const setValues = useCallback(
+    (values) => {
+      setFields(
+        Object.entries(initialState).reduce((previous, [key, field]) => {
+          const value = field.mask
+            ? field.mask(values[key] || "")
+            : values[key];
 
-        return {
-          ...previous,
-          [key]: {
-            ...field,
-            value: field.type !== "file" ? value || field.value : field.value,
-          },
-        };
-      }, {})
-    );
-  };
+          return {
+            ...previous,
+            [key]: {
+              ...field,
+              value: field.type !== "file" ? value || field.value : field.value,
+            },
+          };
+        }, {})
+      );
+    },
+    [initialState]
+  );
 
   const validate = useCallback(() => {
     let erros = {};
