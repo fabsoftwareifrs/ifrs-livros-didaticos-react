@@ -20,16 +20,28 @@ import { useMutation } from "@apollo/client";
 
 import { ADD_CATEGORY } from "src/graphql/mutations";
 import Form from "./Form";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 
 const Add = ({ className, ...rest }) => {
   const { push } = useHistory();
+  const { dispatch } = useMessageBox();
 
   const [add, { loading }] = useMutation(ADD_CATEGORY, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Categoria cadastrada com sucesso!",
+        })
+      );
       push("/app/categories");
     },
     onError: (err) => {
-      console.log(err.message);
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: err.message,
+        })
+      );
     },
   });
 

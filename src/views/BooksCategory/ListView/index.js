@@ -40,6 +40,7 @@ import {
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
 import { Link } from "react-router-dom";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -66,6 +67,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CategoryList = (props) => {
+  const { dispatch } = useMessageBox();
+
   const classes = useStyles();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -75,10 +78,20 @@ const CategoryList = (props) => {
     REMOVE_CATEGORY,
     {
       onCompleted: () => {
+        dispatch(
+          openMessageBox({
+            message: "Registro removido com sucesso.",
+          })
+        );
         refetch();
       },
       onError: (err) => {
-        console.log(err.message);
+        dispatch(
+          openMessageBox({
+            type: "error",
+            message: "Erro ao remover registro.",
+          })
+        );
       },
     }
   );

@@ -45,7 +45,6 @@ import {
 } from "@material-ui/core";
 import {
   Trash2 as TrashIcon,
-  Edit as EditIcon,
   Check as CheckIcon,
   X as XIcon,
 } from "react-feather";
