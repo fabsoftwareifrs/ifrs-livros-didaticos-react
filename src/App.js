@@ -58,7 +58,6 @@ import Lates from "src/views/Lates/ListView";
 
 import Loans from "src/views/Loans/ListView";
 import LoansCreate from "src/views/Loans/Add";
-import LoansEdit from "src/views/Loans/Edit";
 
 import Periods from "src/views/Periods/ListView";
 import PeriodCreate from "src/views/Periods/Add";
@@ -179,11 +178,6 @@ const App = () => {
                 exact
                 path="/app/loans/create"
                 component={() => <Dashboard Children={LoansCreate} />}
-              />
-              <PrivateRoute
-                exact
-                path="/app/loans/edit/:id"
-                component={() => <Dashboard Children={LoansEdit} />}
               />
               <PrivateRoute
                 exact

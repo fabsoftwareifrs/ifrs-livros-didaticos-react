@@ -255,7 +255,7 @@ const LoanList = (props) => {
                                   <TableCell>{loan.student.name}</TableCell>
                                   <TableCell>
                                     <Link
-                                      to={"/app/copies/" + loan.copy.book.id}
+                                      to={`/app/books/${loan.copy.book.id}/copies`}
                                     >
                                       {loan.copy.book.name}
                                     </Link>
@@ -319,13 +319,6 @@ const LoanList = (props) => {
                                         Deletar
                                       </Button>
                                     </ModalIcon>
-
-                                    <Link
-                                      to={"/app/loans/edit/" + loan.id}
-                                      style={{ color: "#263238" }}
-                                    >
-                                      <EditIcon className={classes.icon} />
-                                    </Link>
                                   </TableCell>
                                 </TableRow>
                               ))}

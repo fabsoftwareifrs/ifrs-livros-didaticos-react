@@ -24,23 +24,6 @@ export const REMOVE_LOAN = gql`
   }
 `;
 
-export const EDIT_LOAN = gql`
-  mutation LoanEdit($id: ID!, $input: LoanInput) {
-    updateLoan(id: $id, input: $input) {
-      id
-      student {
-        id
-      }
-      copy {
-        id
-      }
-      period {
-        id
-      }
-    }
-  }
-`;
-
 export const ADD_LOAN = gql`
   mutation LoanCreate($input: LoanInput) {
     createLoan(input: $input) {
