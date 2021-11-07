@@ -70,12 +70,16 @@ const BooksList = (props) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { loading, error, data } = useQuery(BooksQuery, {
+  const { loading, error, data, refetch } = useQuery(BooksQuery, {
     variables: { input: { page: page, paginate: limit, search } },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_BOOK);
+  const [mutationDelete] = useMutation(REMOVE_BOOK, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
 
   if (error) return <p>Error :(</p>;
 
