@@ -47,6 +47,11 @@ const items = [
     title: "Categorias de Livros",
   },
   {
+    href: "/app/statuses",
+    icon: BookMarkIcon,
+    title: "Estados dos exemplares",
+  },
+  {
     href: "/app/books",
     icon: BookIcon,
     title: "Livros",

@@ -17,7 +17,7 @@
 import React, { useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
-import { LoansQuery } from "src/graphql/queries/loans";
+import { GET_ALL_LOANS_BY_PERIOD_ID } from "src/graphql/queries/loans";
 import {
   REMOVE_LOAN,
   TERMINATE_LOAN,
@@ -50,6 +50,7 @@ import {
   X as XIcon,
 } from "react-feather";
 import { Link } from "react-router-dom";
+import { usePeriod } from "src/providers/Period";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,11 +84,18 @@ const LoanList = (props) => {
   const [search, setSearch] = useState("");
   const [selectedLoanIds, setSelectedLoanIds] = useState([]);
   const end = new Date();
+  const [period] = usePeriod();
 
-  const { loading, error, data } = useQuery(LoansQuery, {
-    variables: { input: { page: page, paginate: limit, search }, late: false },
-    fetchPolicy: "cache-and-network",
-  });
+  const { loading, error, data, refetch } = useQuery(
+    GET_ALL_LOANS_BY_PERIOD_ID,
+    {
+      variables: {
+        periodId: period.value,
+        pagination: { page: page, paginate: limit, search },
+      },
+      fetchPolicy: "cache-and-network",
+    }
+  );
   const [mutationDelete] = useMutation(REMOVE_LOAN);
 
   const [mutationTerminate] = useMutation(TERMINATE_LOAN);
@@ -138,8 +146,9 @@ const LoanList = (props) => {
   const handlePageChange = (event, newPage) => {
     setPage(newPage + 1);
   };
-  const deleteLoan = (id) => {
-    mutationDelete({ variables: { id } });
+  const deleteLoan = async (id) => {
+    await mutationDelete({ variables: { id } });
+    await refetch();
   };
 
   const sendWarnMail = async () => {
@@ -159,12 +168,14 @@ const LoanList = (props) => {
     }
   };
 
-  const terminateLoan = (id) => {
-    mutationTerminate({ variables: { id: id, input: { end } } });
+  const terminateLoan = async (id) => {
+    await mutationTerminate({ variables: { id: id, input: { end } } });
+    await refetch();
   };
 
-  const cancelTerminateLoan = (id) => {
-    mutationCancelTerminate({ variables: { id } });
+  const cancelTerminateLoan = async (id) => {
+    await mutationCancelTerminate({ variables: { id } });
+    await refetch();
   };
   return (
     <Page className={classes.root} title="Empréstimos">
@@ -180,7 +191,7 @@ const LoanList = (props) => {
             />
             <Box mt={3}>
               <Card>
-                {data.paginateLoans.docs.length ? (
+                {data.getAllLoansByPeriodId.docs.length ? (
                   <>
                     <PerfectScrollbar>
                       <Box minWidth={300}>
@@ -191,20 +202,27 @@ const LoanList = (props) => {
                                 <Checkbox
                                   checked={
                                     selectedLoanIds.length ===
-                                    data.paginateLoans.docs.slice(0, limit)
-                                      .length
+                                    data.getAllLoansByPeriodId.docs.slice(
+                                      0,
+                                      limit
+                                    ).length
                                   }
                                   color="primary"
                                   indeterminate={
                                     selectedLoanIds.length > 0 &&
                                     selectedLoanIds.length <
-                                      data.paginateLoans.docs.slice(0, limit)
-                                        .length
+                                      data.getAllLoansByPeriodId.docs.slice(
+                                        0,
+                                        limit
+                                      ).length
                                   }
                                   onChange={(e) =>
                                     handleSelectAll(
                                       e,
-                                      data.paginateLoans.docs.slice(0, limit)
+                                      data.getAllLoansByPeriodId.docs.slice(
+                                        0,
+                                        limit
+                                      )
                                     )
                                   }
                                 />
@@ -219,7 +237,7 @@ const LoanList = (props) => {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {data.paginateLoans.docs
+                            {data.getAllLoansByPeriodId.docs
                               .slice(0, limit)
                               .map((loan) => (
                                 <TableRow hover key={loan.id}>
@@ -319,7 +337,7 @@ const LoanList = (props) => {
                     </PerfectScrollbar>
                     <TablePagination
                       component="div"
-                      count={data.paginateLoans.total}
+                      count={data.getAllLoansByPeriodId.total}
                       onPageChange={handlePageChange}
                       onRowsPerPageChange={handleLimitChange}
                       page={page - 1}

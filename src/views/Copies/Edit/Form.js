@@ -75,15 +75,15 @@ const Form = ({
                 <Grid item md={6} xs={12}>
                   <Status
                     onChange={handleChange}
-                    field={input.status}
-                    error={errors.status}
+                    field={input.statusId}
+                    error={errors.statusId}
                   />
                 </Grid>
               </Grid>
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to={`/app/copies/${data.bookId}`}>
+              <Link to={`/app/books/${data.bookId}/copies`}>
                 <Button
                   style={{
                     marginRight: 10,

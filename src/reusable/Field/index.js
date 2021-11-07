@@ -1,7 +1,10 @@
 import React from "react";
-import { TextField } from "@material-ui/core";
+import { Checkbox, TextField } from "@material-ui/core";
 
 export const Field = ({ name, field, error, icon, ...rest }) => {
+  if (field.type === "checkbox")
+    return <Checkbox name={name} checked={field.value} {...rest} />;
+
   return (
     <TextField
       error={!!error}

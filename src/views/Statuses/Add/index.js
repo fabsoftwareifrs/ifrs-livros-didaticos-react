@@ -18,18 +18,15 @@ import React from "react";
 import { useHistory } from "react-router";
 import { useMutation } from "@apollo/client";
 
-import { ADD_LOAN } from "src/graphql/mutations";
+import { ADD_STATUS } from "src/graphql/mutations";
 import Form from "./Form";
-import { usePeriod } from "src/providers/Period";
 
 const Add = ({ className, ...rest }) => {
   const { push } = useHistory();
 
-  const [period] = usePeriod();
-
-  const [add, { loading }] = useMutation(ADD_LOAN, {
+  const [add, { loading }] = useMutation(ADD_STATUS, {
     onCompleted: () => {
-      push("/app/loans");
+      push("/app/statuses");
     },
     onError: (err) => {
       console.log(err.message);
@@ -37,7 +34,7 @@ const Add = ({ className, ...rest }) => {
   });
 
   const onSubmit = async (input) => {
-    await add({ variables: { input: { ...input, periodId: period.value } } });
+    await add({ variables: { input } });
   };
 
   return (
@@ -45,8 +42,9 @@ const Add = ({ className, ...rest }) => {
       loading={loading}
       onSubmit={onSubmit}
       header={{
-        subheader: "Você pode cadastrar as informações de um empréstimo.",
-        title: "Empréstimo",
+        subheader:
+          "Você pode cadastrar as informações de estado de exemplares.",
+        title: "Estados de exemplar",
       }}
       className={className}
       {...rest}

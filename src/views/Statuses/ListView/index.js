@@ -15,14 +15,14 @@
  */
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Page from "src/components/Page";
-import Toolbar from "./Toolbar";
-import { BooksQuery } from "src/graphql/queries";
-import { REMOVE_BOOK } from "src/graphql/mutations";
+
+import { StatusesQuery } from "src/graphql/queries";
+import { REMOVE_STATUS } from "src/graphql/mutations";
 import { useMutation, useQuery } from "@apollo/client";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import Page from "src/components/Page";
 import Modal from "src/components/ModalIcon";
+import Toolbar from "./Toolbar";
 import {
   Box,
   Card,
@@ -39,7 +39,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
-
+import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -65,19 +65,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BooksList = (props) => {
+const StatusList = (props) => {
   const classes = useStyles();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { loading, error, data } = useQuery(BooksQuery, {
+
+  const [removeStatus, { loading: loadingRemove }] = useMutation(
+    REMOVE_STATUS,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+      onError: (err) => {
+        console.log(err.message);
+      },
+    }
+  );
+
+  const { data, loading, refetch } = useQuery(StatusesQuery, {
     variables: { input: { page: page, paginate: limit, search } },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_BOOK);
-
-  if (error) return <p>Error :(</p>;
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
@@ -86,12 +96,12 @@ const BooksList = (props) => {
   const handlePageChange = (event, newPage) => {
     setPage(newPage + 1);
   };
-  const deleteBook = (id) => {
-    mutationDelete({ variables: { id } });
+  const remove = async (id) => {
+    await removeStatus({ variables: { id } });
   };
 
   return (
-    <Page className={classes.root} title="Livros">
+    <Page className={classes.root} title="Estados dos exemplares">
       <Container maxWidth={false}>
         {loading ? (
           ""
@@ -100,49 +110,43 @@ const BooksList = (props) => {
             <Toolbar search={setSearch} />
             <Box mt={3}>
               <Card>
-                {data.paginateBooks.docs.length ? (
+                {data.paginateStatuses.docs.length ? (
                   <>
                     <PerfectScrollbar>
                       <Box minWidth={300}>
                         <Table>
                           <TableHead>
                             <TableRow>
-                              <TableCell>Nome</TableCell>
-                              <TableCell>Autor</TableCell>
-                              <TableCell>Volume</TableCell>
-                              <TableCell>Categoria</TableCell>
-                              <TableCell></TableCell>
+                              <TableCell>Estado</TableCell>
+                              <TableCell>Disponível</TableCell>
+
                               <TableCell></TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {data.paginateBooks.docs
+                            {data.paginateStatuses.docs
                               .slice(0, limit)
-                              .map((book) => (
-                                <TableRow hover key={book.id}>
+                              .map((status) => (
+                                <TableRow hover key={status.id}>
                                   <TableCell>
                                     <Box alignItems="center" display="flex">
                                       <Typography
                                         color="textPrimary"
                                         variant="body1"
                                       >
-                                        {book.name}
+                                        {status.name}
                                       </Typography>
                                     </Box>
                                   </TableCell>
-                                  <TableCell>{book.author}</TableCell>
-                                  <TableCell>{book.volume}</TableCell>
-                                  <TableCell>{book.category.name}</TableCell>
                                   <TableCell>
-                                    <Link to={`/app/books/${book.id}/copies`}>
-                                      <Button
-                                        color="primary"
-                                        variant="contained"
-                                        size="small"
+                                    <Box alignItems="center" display="flex">
+                                      <Typography
+                                        color="textPrimary"
+                                        variant="body1"
                                       >
-                                        Exemplares
-                                      </Button>
-                                    </Link>
+                                        {status.isAvailable ? "Sim" : "Não"}
+                                      </Typography>
+                                    </Box>
                                   </TableCell>
                                   <TableCell className={classes.endCell}>
                                     <Modal
@@ -151,11 +155,11 @@ const BooksList = (props) => {
                                     >
                                       <CardHeader
                                         subheader={
-                                          'Tem certeza que deseja deletar o livro "' +
-                                          book.name +
+                                          'Tem certeza que deseja deletar o estado "' +
+                                          status.name +
                                           '"'
                                         }
-                                        title="Deletar livro"
+                                        title="Deletar estado"
                                       />
                                       <Button
                                         variant="contained"
@@ -164,14 +168,16 @@ const BooksList = (props) => {
                                           backgroundColor: "#8B0000",
                                           color: "#fff",
                                         }}
-                                        onClick={() => deleteBook(book.id)}
+                                        onClick={() => remove(status.id)}
+                                        disabled={loadingRemove}
                                       >
                                         Deletar
                                       </Button>
                                     </Modal>
+
                                     <Link
-                                      to={"/app/books/edit/" + book.id}
                                       style={{ color: "#263238" }}
+                                      to={"/app/statuses/edit/" + status.id}
                                     >
                                       <EditIcon className={classes.icon} />
                                     </Link>
@@ -184,7 +190,7 @@ const BooksList = (props) => {
                     </PerfectScrollbar>
                     <TablePagination
                       component="div"
-                      count={data.paginateBooks.total}
+                      count={data.paginateStatuses.total}
                       onPageChange={handlePageChange}
                       onRowsPerPageChange={handleLimitChange}
                       page={page - 1}
@@ -207,4 +213,4 @@ const BooksList = (props) => {
   );
 };
 
-export default BooksList;
+export default StatusList;

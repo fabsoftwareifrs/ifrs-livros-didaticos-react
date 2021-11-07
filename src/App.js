@@ -27,6 +27,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import UnPrivateRoute from "./routes/UnPrivateRoute";
 
 import AuthProvider from "./providers/Auth";
+import PeriodProvider from "./providers/Period";
 
 import Dashboard from "./layouts/DashboardLayout";
 import Main from "./layouts/MainLayout";
@@ -63,6 +64,10 @@ import Periods from "src/views/Periods/ListView";
 import PeriodCreate from "src/views/Periods/Add";
 import PeriodEdit from "src/views/Periods/Edit";
 
+import Statuses from "src/views/Statuses/ListView";
+import StatusesCreate from "src/views/Statuses/Add";
+import StatusesEdit from "src/views/Statuses/Edit";
+
 import Students from "src/views/Students/ListView";
 import StudentsCreate from "src/views/Students/Add";
 import StudentsEdit from "src/views/Students/Edit";
@@ -78,158 +83,175 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <AuthProvider>
-          <Switch>
-            <UnPrivateRoute
-              exact
-              path="/"
-              component={() => <Main Children={LoginView} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/books"
-              component={() => <Dashboard Children={Books} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/books/create"
-              component={() => <Dashboard Children={BooksCreate} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/books/edit/:id"
-              component={() => <Dashboard Children={BooksEdit} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/books/import"
-              component={() => <Dashboard Children={BooksImport} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/categories"
-              component={() => <Dashboard Children={BooksCategory} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/categories/create"
-              component={() => <Dashboard Children={BooksCategoryCreate} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/categories/edit/:id"
-              component={() => <Dashboard Children={BooksCategoryEdit} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/classrooms"
-              component={() => <Dashboard Children={Classes} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/classrooms/create"
-              component={() => <Dashboard Children={ClassesCreate} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/classrooms/edit/:id"
-              component={() => <Dashboard Children={ClassesEdit} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/copies/:id"
-              component={() => <Dashboard Children={Copies} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/copies/edit/:id"
-              component={() => <Dashboard Children={CopiesEdit} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/courses"
-              component={() => <Dashboard Children={Courses} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/courses/create"
-              component={() => <Dashboard Children={CoursesCreate} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/courses/edit/:id"
-              component={() => <Dashboard Children={CoursesEdit} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/lates"
-              component={() => <Dashboard Children={Lates} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/loans"
-              component={() => <Dashboard Children={Loans} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/loans/create"
-              component={() => <Dashboard Children={LoansCreate} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/loans/edit/:id"
-              component={() => <Dashboard Children={LoansEdit} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/periods"
-              component={() => <Dashboard Children={Periods} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/periods/create"
-              component={() => <Dashboard Children={PeriodCreate} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/periods/edit/:id"
-              component={() => <Dashboard Children={PeriodEdit} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/students"
-              component={() => <Dashboard Children={Students} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/students/create"
-              component={() => <Dashboard Children={StudentsCreate} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/students/edit/:id"
-              component={() => <Dashboard Children={StudentsEdit} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/students/import"
-              component={() => <Dashboard Children={StudentsImport} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/users"
-              component={() => <Dashboard Children={Users} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/users/create"
-              component={() => <Dashboard Children={UsersCreate} />}
-            />
-            <PrivateRoute
-              exact
-              path="/app/users/edit/:id"
-              component={() => <Dashboard Children={UsersEdit} />}
-            />
-          </Switch>
+          <PeriodProvider>
+            <Switch>
+              <UnPrivateRoute
+                exact
+                path="/"
+                component={() => <Main Children={LoginView} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/books"
+                component={() => <Dashboard Children={Books} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/books/create"
+                component={() => <Dashboard Children={BooksCreate} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/books/edit/:id"
+                component={() => <Dashboard Children={BooksEdit} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/books/import"
+                component={() => <Dashboard Children={BooksImport} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/categories"
+                component={() => <Dashboard Children={BooksCategory} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/categories/create"
+                component={() => <Dashboard Children={BooksCategoryCreate} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/categories/edit/:id"
+                component={() => <Dashboard Children={BooksCategoryEdit} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/classrooms"
+                component={() => <Dashboard Children={Classes} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/classrooms/create"
+                component={() => <Dashboard Children={ClassesCreate} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/classrooms/edit/:id"
+                component={() => <Dashboard Children={ClassesEdit} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/books/:id/copies"
+                component={() => <Dashboard Children={Copies} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/copies/edit/:id"
+                component={() => <Dashboard Children={CopiesEdit} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/courses"
+                component={() => <Dashboard Children={Courses} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/courses/create"
+                component={() => <Dashboard Children={CoursesCreate} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/courses/edit/:id"
+                component={() => <Dashboard Children={CoursesEdit} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/lates"
+                component={() => <Dashboard Children={Lates} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/loans"
+                component={() => <Dashboard Children={Loans} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/loans/create"
+                component={() => <Dashboard Children={LoansCreate} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/loans/edit/:id"
+                component={() => <Dashboard Children={LoansEdit} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/periods"
+                component={() => <Dashboard Children={Periods} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/periods/create"
+                component={() => <Dashboard Children={PeriodCreate} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/periods/edit/:id"
+                component={() => <Dashboard Children={PeriodEdit} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/statuses"
+                component={() => <Dashboard Children={Statuses} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/statuses/create"
+                component={() => <Dashboard Children={StatusesCreate} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/statuses/edit/:id"
+                component={() => <Dashboard Children={StatusesEdit} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/students"
+                component={() => <Dashboard Children={Students} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/students/create"
+                component={() => <Dashboard Children={StudentsCreate} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/students/edit/:id"
+                component={() => <Dashboard Children={StudentsEdit} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/students/import"
+                component={() => <Dashboard Children={StudentsImport} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/users"
+                component={() => <Dashboard Children={Users} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/users/create"
+                component={() => <Dashboard Children={UsersCreate} />}
+              />
+              <PrivateRoute
+                exact
+                path="/app/users/edit/:id"
+                component={() => <Dashboard Children={UsersEdit} />}
+              />
+            </Switch>
+          </PeriodProvider>
         </AuthProvider>
       </ThemeProvider>
     </Router>

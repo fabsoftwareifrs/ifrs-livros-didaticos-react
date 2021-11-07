@@ -47,6 +47,9 @@ const errorLink = (dispatch) =>
   onError(({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ message }) => {
+        if (message.match(/not authenticated/)) {
+          dispatch(logout());
+        }
         if (message.match(/jwt expired/)) {
           dispatch(logout());
         }

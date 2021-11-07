@@ -27,11 +27,12 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  FormControlLabel,
   Grid,
   makeStyles,
   Container,
 } from "@material-ui/core";
-import { Copies, Students } from "src/reusable";
+import { Field } from "src/reusable";
 
 import fields from "./fields";
 
@@ -72,24 +73,39 @@ const Form = ({
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
-                  <Copies
-                    onChange={handleChange}
-                    field={input.copyId}
-                    error={errors.copyId}
+                  <Field
+                    name="name"
+                    field={input.name}
+                    error={errors.name}
+                    onChange={({ target }) => handleChange(target)}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  <Students
-                    onChange={handleChange}
-                    field={input.studentId}
-                    error={errors.studentId}
+                  <Field
+                    name="description"
+                    field={input.description}
+                    error={errors.description}
+                    onChange={({ target }) => handleChange(target)}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Field
+                        name="isAvailable"
+                        field={input.isAvailable}
+                        error={errors.isAvailable}
+                        onChange={({ target }) => handleChange(target)}
+                      />
+                    }
+                    label={input.isAvailable.label}
                   />
                 </Grid>
               </Grid>
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>
-              <Link to="/app/loans">
+              <Link to="/app/statuses">
                 <Button
                   style={{
                     marginRight: 10,

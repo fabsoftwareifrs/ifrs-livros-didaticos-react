@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Toolbar = ({ className, id, search, componentRef, ...rest }) => {
+const Toolbar = ({ className, id, search, componentRef, extra, ...rest }) => {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(0);
   const [mutationCreate] = useMutation(ADD_COPY);
@@ -58,9 +58,10 @@ const Toolbar = ({ className, id, search, componentRef, ...rest }) => {
     e.preventDefault();
     for (let i = 0; i < quantity; i++) {
       await mutationCreate({
-        variables: { input: { status: "AVAILABLE", bookId: id } },
+        variables: { input: { bookId: id } },
       });
     }
+    await extra.refetch();
   };
   const handleChange = (e) => {
     setQuantity(e.target.value);

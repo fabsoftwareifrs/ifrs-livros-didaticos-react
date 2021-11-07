@@ -15,11 +15,19 @@
  */
 
 export const fields = {
-  status: {
+  statusId: {
     label: "Status",
-    type: "text",
+    type: "number",
     value: "",
     placeholder: "Informe a situação do exemplar",
+    rules: {
+      required: "Este campo é obrigatório",
+    },
+  },
+  bookId: {
+    label: "Livro",
+    type: "number",
+    value: "",
     rules: {
       required: "Este campo é obrigatório",
     },

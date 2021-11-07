@@ -84,23 +84,15 @@ const CopyList = (props) => {
   id = parseInt(id);
   const [search, setSearch] = useState("");
 
-  const { loading, error, data } = useQuery(CopiesByBookQuery, {
+  const { loading, error, data, refetch } = useQuery(CopiesByBookQuery, {
     variables: { bookId: id, search },
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_COPY);
-
-  const translate = (word) => {
-    if (word === "MISPLACED") {
-      return "EXTRAVIADO";
-    }
-    if (word === "LOANED") {
-      return "EMPRESTADO";
-    }
-    if (word === "AVAILABLE") {
-      return "DISPONIVEL";
-    }
-  };
+  const [mutationDelete] = useMutation(REMOVE_COPY, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
 
   if (error) return <p>Error :(</p>;
 
@@ -110,7 +102,12 @@ const CopyList = (props) => {
   return (
     <Page className={classes.root} title="Exemplares">
       <Container maxWidth={false}>
-        <Toolbar componentRef={componentRef} search={setSearch} id={id} />
+        <Toolbar
+          componentRef={componentRef}
+          search={setSearch}
+          id={id}
+          extra={{ refetch }}
+        />
         <Box mt={3}>
           {loading ? (
             ""
@@ -136,8 +133,9 @@ const CopyList = (props) => {
                     <TableHead>
                       <TableRow>
                         <TableCell>Código</TableCell>
-                        <TableCell>Status</TableCell>
+                        <TableCell>Estado</TableCell>
                         <TableCell>Livro</TableCell>
+                        <TableCell>Situação</TableCell>
                         <TableCell></TableCell>
                       </TableRow>
                     </TableHead>
@@ -154,7 +152,7 @@ const CopyList = (props) => {
                           <TableCell>
                             <Box alignItems="center" display="flex">
                               <Typography color="textPrimary" variant="body1">
-                                {translate(copy.status)}
+                                {copy.Status.name}
                               </Typography>
                             </Box>
                           </TableCell>
@@ -162,6 +160,17 @@ const CopyList = (props) => {
                             <Box alignItems="center" display="flex">
                               <Typography color="textPrimary" variant="body1">
                                 {copy.book.name}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Box alignItems="center" display="flex">
+                              <Typography color="textPrimary" variant="body1">
+                                {!copy.Status.isAvailable
+                                  ? "Indisponível"
+                                  : copy.isLoaned
+                                  ? "Emprestado"
+                                  : "Disponível"}
                               </Typography>
                             </Box>
                           </TableCell>

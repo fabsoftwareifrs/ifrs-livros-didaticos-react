@@ -6,6 +6,7 @@ import { AvailableCopiesQuery } from "src/graphql/queries";
 import { TextField } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
+// Esse componente renderiza apenas com cópias disponíveis
 export const Copies = ({ field, error, onChange, data, idCopyInclude }) => {
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState([]);

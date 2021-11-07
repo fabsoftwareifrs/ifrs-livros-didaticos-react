@@ -69,9 +69,10 @@ const useMyForm = (initialState, data = {}) => {
     }));
   };
 
-  const handleChange = ({ name, value, type }) => {
+  const handleChange = ({ name, value, type, ...rest }) => {
     const field = fields[name];
-    const valueTyped = type === "number" ? +value : value;
+    const valueTyped =
+      type === "number" ? +value : type === "checkbox" ? rest.checked : value;
     const valueFormatted = field.mask ? field.mask(valueTyped) : valueTyped;
     const error = validateField(field, valueFormatted);
     setErrors((prev) => ({ ...prev, [name]: error }));

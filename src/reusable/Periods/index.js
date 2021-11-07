@@ -72,10 +72,10 @@ export const Periods = ({ field, error, onChange, data }) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          label={field.label}
+          label="Período Letivo"
           variant="outlined"
           error={!!error}
-          helperText={!!error ? error : "Informe o período"}
+          // helperText={!!error ? error : "Informe o período"}
         />
       )}
     />

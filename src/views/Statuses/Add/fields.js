@@ -15,21 +15,30 @@
  */
 
 const fields = {
-  studentId: {
-    label: "Estudante",
-    type: "number",
+  name: {
+    label: "Estado",
+    type: "text",
     value: "",
+    placeholder: "Informe o nome do estado do exemplar",
     rules: {
       required: "Este campo é obrigatório",
+      minLength: {
+        value: 3,
+        message: "Mínimo de 3 caracteres",
+      },
     },
   },
-  copyId: {
-    label: "Exemplar",
-    type: "number",
+  description: {
+    label: "Descrição",
+    type: "text",
     value: "",
-    rules: {
-      required: "Este campo é obrigatório",
-    },
+    placeholder: "Informe a descrição do estado do exemplar",
+    rules: {},
+  },
+  isAvailable: {
+    label: "O exemplar estará disponível para empréstimo.",
+    type: "checkbox",
+    value: false,
   },
 };
 

@@ -29,6 +29,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import InputIcon from "@material-ui/icons/Input";
 import Logo from "src/components/Logo";
 import { logout as AuthLogout, useAuth } from "../../providers/Auth";
+//import { Periods } from "src/reusable";
+import { usePeriod, openModal } from "src/providers/Period";
 const useStyles = makeStyles(() => ({
   root: {},
   avatar: {
@@ -40,9 +42,15 @@ const useStyles = makeStyles(() => ({
 const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
   const classes = useStyles();
   const { dispatch } = useAuth();
-  function LogOut() {
-    dispatch(AuthLogout());
-  }
+  const [period, dispatchPeriod] = usePeriod();
+
+  // const { push } = useHistory();
+
+  // const onChange = ({ value }) => {
+  //   dispatchPeriod(setPeriod(value));
+  //   push("/app/books");
+  // };
+
   return (
     <AppBar className={clsx(classes.root, className)} elevation={0} {...rest}>
       <Toolbar>
@@ -51,7 +59,11 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
         </RouterLink>
         <Box flexGrow={1} />
         <Hidden mdDown>
-          <IconButton onClick={LogOut} color="inherit">
+          <button onClick={() => dispatchPeriod(openModal())}>
+            {period?.label || "Selecione um período"}
+          </button>
+
+          <IconButton onClick={() => dispatch(AuthLogout())} color="inherit">
             <InputIcon />
           </IconButton>
         </Hidden>

@@ -87,15 +87,6 @@ const Form = ({
                   />
                 </Grid>
               </Grid>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <Periods
-                    onChange={handleChange}
-                    field={input.periodId}
-                    error={errors.periodId}
-                  />
-                </Grid>
-              </Grid>
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>

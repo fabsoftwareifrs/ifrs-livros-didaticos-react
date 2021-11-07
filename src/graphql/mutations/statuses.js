@@ -14,23 +14,34 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-const fields = {
-  studentId: {
-    label: "Estudante",
-    type: "number",
-    value: "",
-    rules: {
-      required: "Este campo é obrigatório",
-    },
-  },
-  copyId: {
-    label: "Exemplar",
-    type: "number",
-    value: "",
-    rules: {
-      required: "Este campo é obrigatório",
-    },
-  },
-};
+import { gql } from "@apollo/client";
 
-export default fields;
+export const ADD_STATUS = gql`
+  mutation createStatus($input: StatusInput) {
+    createStatus(input: $input) {
+      id
+      name
+      description
+      isAvailable
+    }
+  }
+`;
+
+export const EDIT_STATUS = gql`
+  mutation updateStatus($id: ID!, $input: StatusInput) {
+    updateStatus(id: $id, input: $input) {
+      id
+      name
+      description
+      isAvailable
+    }
+  }
+`;
+
+export const REMOVE_STATUS = gql`
+  mutation deleteStatus($id: ID!) {
+    deleteStatus(id: $id) {
+      id
+    }
+  }
+`;

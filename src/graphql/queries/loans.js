@@ -16,9 +16,9 @@
 
 import { gql } from "@apollo/client";
 
-const LoansQuery = gql`
-  query LoansQuery($input: PaginateInput!, $late: Boolean!) {
-    paginateLoans(input: $input, late: $late) {
+export const GET_ALL_LOANS_BY_PERIOD_ID = gql`
+  query getAllLoansByPeriodId($periodId: Int!, $pagination: PaginateInput!) {
+    getAllLoansByPeriodId(periodId: $periodId, pagination: $pagination) {
       docs {
         id
         late
@@ -33,7 +33,10 @@ const LoansQuery = gql`
         copy {
           id
           code
-          status
+          Status {
+            id
+            name
+          }
           book {
             id
             name
@@ -50,7 +53,45 @@ const LoansQuery = gql`
     }
   }
 `;
-const LoanQuery = gql`
+
+export const LoansQuery = gql`
+  query LoansQuery($input: PaginateInput!, $late: Boolean!) {
+    paginateLoans(input: $input, late: $late) {
+      docs {
+        id
+        late
+        delivered
+        end
+        student {
+          id
+          name
+          email
+          matriculation
+        }
+        copy {
+          id
+          code
+          Status {
+            id
+            name
+          }
+          book {
+            id
+            name
+          }
+        }
+        period {
+          id
+          name
+          start
+          end
+        }
+      }
+      total
+    }
+  }
+`;
+export const LoanQuery = gql`
   query LoanQuery($id: ID!) {
     loan(id: $id) {
       id
@@ -65,7 +106,10 @@ const LoanQuery = gql`
       copy {
         id
         code
-        status
+        Status {
+          id
+          name
+        }
       }
       period {
         id
@@ -76,5 +120,3 @@ const LoanQuery = gql`
     }
   }
 `;
-
-export { LoanQuery, LoansQuery };

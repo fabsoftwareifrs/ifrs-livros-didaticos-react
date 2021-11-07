@@ -25,7 +25,11 @@ export const CopiesQuery = gql`
         id
         name
       }
-      status
+      Status {
+        id
+        name
+        isAvailable
+      }
     }
   }
 `;
@@ -48,11 +52,16 @@ export const CopiesByBookQuery = gql`
     copiesByBookId(bookId: $bookId, search: $search) {
       id
       code
+      isLoaned
       book {
         id
         name
       }
-      status
+      Status {
+        id
+        name
+        isAvailable
+      }
     }
   }
 `;
@@ -66,7 +75,11 @@ export const CopyQuery = gql`
         id
         name
       }
-      status
+      Status {
+        id
+        name
+        isAvailable
+      }
     }
   }
 `;

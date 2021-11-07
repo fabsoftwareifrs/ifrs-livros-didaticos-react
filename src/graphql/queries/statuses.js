@@ -14,23 +14,40 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-const fields = {
-  studentId: {
-    label: "Estudante",
-    type: "number",
-    value: "",
-    rules: {
-      required: "Este campo é obrigatório",
-    },
-  },
-  copyId: {
-    label: "Exemplar",
-    type: "number",
-    value: "",
-    rules: {
-      required: "Este campo é obrigatório",
-    },
-  },
-};
+import { gql } from "@apollo/client";
 
-export default fields;
+export const StatusesQuery = gql`
+  query paginateStatuses($input: PaginateInput!) {
+    paginateStatuses(input: $input) {
+      docs {
+        id
+        name
+        description
+        isAvailable
+      }
+      total
+    }
+  }
+`;
+
+export const GET_ALL_STATUSES = gql`
+  query getAllStatuses {
+    getAllStatuses {
+      id
+      name
+      description
+      isAvailable
+    }
+  }
+`;
+
+export const GET_STATUS_BY_ID = gql`
+  query getStatusById($id: ID!) {
+    getStatusById(id: $id) {
+      id
+      name
+      description
+      isAvailable
+    }
+  }
+`;

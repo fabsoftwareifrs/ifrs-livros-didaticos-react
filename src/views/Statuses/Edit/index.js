@@ -17,8 +17,8 @@
 import React, { useState } from "react";
 
 import { useMutation, useQuery } from "@apollo/client";
-import { EDIT_COPY } from "src/graphql/mutations";
-import { CopyQuery } from "src/graphql/queries";
+import { EDIT_STATUS } from "src/graphql/mutations";
+import { GET_STATUS_BY_ID } from "src/graphql/queries";
 
 import { useParams, useHistory } from "react-router-dom";
 import Form from "./Form";
@@ -29,18 +29,18 @@ const Edit = ({ className, ...rest }) => {
   const [state, setState] = useState({});
   const [loading, isLoading] = useState(true);
 
-  useQuery(CopyQuery, {
+  useQuery(GET_STATUS_BY_ID, {
     variables: { id: +id },
     fetchPolicy: "cache-and-network",
-    onCompleted: ({ copy }) => {
-      setState({ ...copy, bookId: +copy.book.id, statusId: +copy.Status.id });
+    onCompleted: ({ getStatusById }) => {
+      setState(getStatusById);
       isLoading(false);
     },
   });
-
-  const [edit, { loading: loadingedit }] = useMutation(EDIT_COPY, {
+  console.log(state);
+  const [edit, { loading: loadingedit }] = useMutation(EDIT_STATUS, {
     onCompleted: () => {
-      push(`/app/books/${state.bookId}/copies`);
+      push("/app/statuses");
     },
     onError: (err) => {
       console.log(err);
@@ -55,8 +55,8 @@ const Edit = ({ className, ...rest }) => {
   return (
     <Form
       header={{
-        subheader: "Você pode alterar as informações de categoria de livro.",
-        title: "Categoria de Livro",
+        subheader: "Você pode alterar as informações de estado dos exemplares.",
+        title: "estados de exemplares",
       }}
       loading={loadingedit}
       onSubmit={onSubmit}
