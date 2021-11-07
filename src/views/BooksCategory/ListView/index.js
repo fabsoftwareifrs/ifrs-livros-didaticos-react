@@ -118,7 +118,7 @@ const CategoryList = (props) => {
                           <TableHead>
                             <TableRow>
                               <TableCell>Categoria</TableCell>
-
+                              <TableCell>Código externo</TableCell>
                               <TableCell></TableCell>
                             </TableRow>
                           </TableHead>
@@ -137,6 +137,7 @@ const CategoryList = (props) => {
                                       </Typography>
                                     </Box>
                                   </TableCell>
+                                  <TableCell>{category.externalCode}</TableCell>
                                   <TableCell className={classes.endCell}>
                                     <Modal
                                       className={classes.icon}

@@ -101,6 +101,19 @@ const Form = ({
                     label={input.isAvailable.label}
                   />
                 </Grid>
+                <Grid item md={6} xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Field
+                        name="isDefault"
+                        field={input.isDefault}
+                        error={errors.isDefault}
+                        onChange={({ target }) => handleChange(target)}
+                      />
+                    }
+                    label={input.isDefault.label}
+                  />
+                </Grid>
               </Grid>
             </CardContent>
             <Divider />

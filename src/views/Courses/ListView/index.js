@@ -110,6 +110,7 @@ const CourseList = (props) => {
                           <TableHead>
                             <TableRow>
                               <TableCell>Curso</TableCell>
+                              <TableCell>Código externo</TableCell>
                               <TableCell></TableCell>
                             </TableRow>
                           </TableHead>
@@ -128,6 +129,7 @@ const CourseList = (props) => {
                                       </Typography>
                                     </Box>
                                   </TableCell>
+                                  <TableCell>{course.externalCode}</TableCell>
                                   <TableCell className={classes.endCell}>
                                     <Modal
                                       className={classes.icon}

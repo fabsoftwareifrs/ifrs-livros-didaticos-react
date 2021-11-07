@@ -22,6 +22,7 @@ export const CategoriesQuery = gql`
       docs {
         id
         name
+        externalCode
       }
       total
     }
@@ -33,6 +34,7 @@ export const AllCategoriesQuery = gql`
     categories {
       id
       name
+      externalCode
     }
   }
 `;
@@ -42,6 +44,7 @@ export const CategoryQuery = gql`
     category(id: $id) {
       id
       name
+      externalCode
     }
   }
 `;

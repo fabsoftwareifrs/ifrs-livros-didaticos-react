@@ -79,6 +79,14 @@ const Form = ({
                     onChange={({ target }) => handleChange(target)}
                   />
                 </Grid>
+                <Grid item md={6} xs={12}>
+                  <Field
+                    name="externalCode"
+                    field={input.externalCode}
+                    error={errors.externalCode}
+                    onChange={({ target }) => handleChange(target)}
+                  />
+                </Grid>
               </Grid>
             </CardContent>
             <Divider />

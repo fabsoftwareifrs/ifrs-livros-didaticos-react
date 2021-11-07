@@ -40,6 +40,11 @@ const fields = {
     type: "checkbox",
     value: false,
   },
+  isDefault: {
+    label: "Esse estado é o padrão?",
+    type: "checkbox",
+    value: false,
+  },
 };
 
 export default fields;

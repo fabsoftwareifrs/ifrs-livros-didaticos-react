@@ -24,6 +24,7 @@ export const StatusesQuery = gql`
         name
         description
         isAvailable
+        isDefault
       }
       total
     }
@@ -37,6 +38,7 @@ export const GET_ALL_STATUSES = gql`
       name
       description
       isAvailable
+      isDefault
     }
   }
 `;
@@ -48,6 +50,7 @@ export const GET_STATUS_BY_ID = gql`
       name
       description
       isAvailable
+      isDefault
     }
   }
 `;

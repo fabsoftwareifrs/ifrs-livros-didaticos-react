@@ -119,7 +119,7 @@ const StatusList = (props) => {
                             <TableRow>
                               <TableCell>Estado</TableCell>
                               <TableCell>Disponível</TableCell>
-
+                              <TableCell>Padrão</TableCell>
                               <TableCell></TableCell>
                             </TableRow>
                           </TableHead>
@@ -139,14 +139,10 @@ const StatusList = (props) => {
                                     </Box>
                                   </TableCell>
                                   <TableCell>
-                                    <Box alignItems="center" display="flex">
-                                      <Typography
-                                        color="textPrimary"
-                                        variant="body1"
-                                      >
-                                        {status.isAvailable ? "Sim" : "Não"}
-                                      </Typography>
-                                    </Box>
+                                    {status.isAvailable ? "Sim" : "Não"}
+                                  </TableCell>
+                                  <TableCell>
+                                    {status.isDefault ? "Sim" : "Não"}
                                   </TableCell>
                                   <TableCell className={classes.endCell}>
                                     <Modal

@@ -22,6 +22,7 @@ export const ClassesQuery = gql`
       docs {
         id
         name
+        externalCode
         course {
           id
           name
@@ -37,6 +38,7 @@ export const AllClassesQuery = gql`
     classes {
       id
       name
+      externalCode
       course {
         id
         name
@@ -50,6 +52,7 @@ export const ClassQuery = gql`
     classRoom(id: $id) {
       id
       name
+      externalCode
       course {
         id
         name
@@ -63,6 +66,7 @@ export const CLASSES_BY_COURSE_ID = gql`
     classesByCourseId(courseId: $courseId) {
       id
       name
+      externalCode
       course {
         id
         name

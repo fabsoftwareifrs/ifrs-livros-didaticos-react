@@ -230,8 +230,7 @@ const LoanList = (props) => {
                               <TableCell>Estudante</TableCell>
                               <TableCell>Livro</TableCell>
                               <TableCell>Exemplar</TableCell>
-                              <TableCell>Período</TableCell>
-                              <TableCell>Entrege?</TableCell>
+                              <TableCell>Entregue?</TableCell>
 
                               <TableCell></TableCell>
                             </TableRow>
@@ -262,7 +261,6 @@ const LoanList = (props) => {
                                     </Link>
                                   </TableCell>
                                   <TableCell>{loan.copy.code}</TableCell>
-                                  <TableCell>{loan.period.name}</TableCell>
                                   <TableCell>
                                     <ModalIcon
                                       className={classes.icon}

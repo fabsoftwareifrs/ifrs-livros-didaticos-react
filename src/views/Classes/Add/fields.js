@@ -35,6 +35,13 @@ export const fields = {
       required: "Este campo é obrigatório",
     },
   },
+  externalCode: {
+    label: "Código externo",
+    type: "text",
+    value: "",
+    placeholder: "Informe um identificador para esse registro",
+    rules: {},
+  },
 };
 
 export default fields;

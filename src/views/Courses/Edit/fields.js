@@ -28,6 +28,13 @@ const fields = {
       },
     },
   },
+  externalCode: {
+    label: "Código externo",
+    type: "text",
+    value: "",
+    placeholder: "Informe um identificador para esse registro",
+    rules: {},
+  },
 };
 
 export default fields;

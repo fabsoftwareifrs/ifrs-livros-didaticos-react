@@ -114,6 +114,7 @@ const ClassesList = (props) => {
                             <TableRow>
                               <TableCell>Nome</TableCell>
                               <TableCell>Curso</TableCell>
+                              <TableCell>Código externo</TableCell>
                               <TableCell></TableCell>
                             </TableRow>
                           </TableHead>
@@ -134,6 +135,9 @@ const ClassesList = (props) => {
                                   </TableCell>
                                   <TableCell>
                                     {objClasses.course.name}
+                                  </TableCell>
+                                  <TableCell>
+                                    {objClasses.externalCode}
                                   </TableCell>
                                   <TableCell className={classes.endCell}>
                                     <Modal

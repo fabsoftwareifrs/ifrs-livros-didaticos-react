@@ -22,6 +22,7 @@ export const CoursesQuery = gql`
       docs {
         id
         name
+        externalCode
       }
       total
     }
@@ -33,6 +34,7 @@ export const AllCoursesQuery = gql`
     courses {
       id
       name
+      externalCode
     }
   }
 `;
@@ -42,6 +44,7 @@ export const CourseQuery = gql`
     course(id: $id) {
       id
       name
+      externalCode
     }
   }
 `;
