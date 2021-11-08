@@ -50,6 +50,7 @@ import {
 } from "react-feather";
 import { Link } from "react-router-dom";
 import { usePeriod } from "src/providers/Period";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,8 +66,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   endCell: {
-    display: "flex",
-    justifyContent: "flex-end",
+    textAlign: "right",
   },
   notContentText: {
     padding: "5% 2%",
@@ -95,13 +95,81 @@ const LoanList = (props) => {
       fetchPolicy: "cache-and-network",
     }
   );
-  const [mutationDelete] = useMutation(REMOVE_LOAN);
+  const { dispatch } = useMessageBox();
+  const [mutationDelete] = useMutation(REMOVE_LOAN, {
+    onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Registro removido com sucesso.",
+        })
+      );
+      refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao remover registro.",
+        })
+      );
+    },
+  });
 
-  const [mutationTerminate] = useMutation(TERMINATE_LOAN);
+  const [mutationTerminate] = useMutation(TERMINATE_LOAN, {
+    onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Emprestimo marcado como entregue com sucesso.",
+        })
+      );
+      refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao marcar como entregue.",
+        })
+      );
+    },
+  });
 
-  const [mutationCancelTerminate] = useMutation(CANCEL_TERMINATE_LOAN);
-
-  const [mutationWarnMail] = useMutation(WarnMail);
+  const [mutationCancelTerminate] = useMutation(CANCEL_TERMINATE_LOAN, {
+    onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Emprestimo marcado como não entregue com sucesso.",
+        })
+      );
+      refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao marcar como não entregue.",
+        })
+      );
+    },
+  });
+  const [mutationWarnMail] = useMutation(WarnMail, {
+    onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "E-mail enviado com sucesso.",
+        })
+      );
+      refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao enviar e-mail.",
+        })
+      );
+    },
+  });
 
   if (error) return <p>Error :(</p>;
   const handleSelectAll = (event, loans) => {
@@ -153,17 +221,17 @@ const LoanList = (props) => {
   const sendWarnMail = async () => {
     let loans = [];
     if (selectedLoanIds.length === 0) {
-      alert("Nenhum usuáro selecionado!");
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Nenhum usuário selecionado.",
+        })
+      );
     } else {
       selectedLoanIds.map(async function (loanId) {
         loans.push(parseInt(loanId));
       });
-      let response = await mutationWarnMail({ variables: { loans } });
-      if (response.data.warnMail.response[0] === "success") {
-        alert("Enviado com sucesso!");
-      } else {
-        console.log(response.data.warnMail.response);
-      }
+      await mutationWarnMail({ variables: { loans } });
     }
   };
 

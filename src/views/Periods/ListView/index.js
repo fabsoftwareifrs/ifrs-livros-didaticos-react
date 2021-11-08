@@ -39,6 +39,7 @@ import {
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
 import { Link } from "react-router-dom";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -53,8 +54,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   endCell: {
-    display: "flex",
-    justifyContent: "flex-end",
+    textAlign: "right",
   },
   notContentText: {
     padding: "5% 2%",
@@ -73,9 +73,23 @@ const PeriodsList = (props) => {
     variables: { input: { page: page, paginate: limit, search } },
     fetchPolicy: "cache-and-network",
   });
+  const { dispatch } = useMessageBox();
   const [mutationDelete] = useMutation(REMOVE_PERIOD, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Registro removido com sucesso.",
+        })
+      );
       refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao remover registro.",
+        })
+      );
     },
   });
 

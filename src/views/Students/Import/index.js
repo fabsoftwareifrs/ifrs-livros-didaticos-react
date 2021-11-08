@@ -18,22 +18,33 @@ import React from "react";
 
 import { useMutation } from "@apollo/client";
 import { IMPORT_STUDENTS } from "src/graphql/mutations";
-
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { useParams, useHistory } from "react-router-dom";
 import Form from "./Form";
 
 const Import = ({ className, ...rest }) => {
   const { id } = useParams();
   const { push } = useHistory();
+  const { dispatch } = useMessageBox();
 
   const [importStudents, { loading: loadingedit }] = useMutation(
     IMPORT_STUDENTS,
     {
       onCompleted: () => {
+        dispatch(
+          openMessageBox({
+            message: "Estudantes importados com sucesso!",
+          })
+        );
         push("/app/students");
       },
       onError: (err) => {
-        console.log(err);
+        dispatch(
+          openMessageBox({
+            type: "error",
+            message: err.message,
+          })
+        );
       },
     }
   );

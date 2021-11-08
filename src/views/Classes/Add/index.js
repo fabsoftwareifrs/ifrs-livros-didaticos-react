@@ -20,16 +20,28 @@ import { useMutation } from "@apollo/client";
 
 import { ADD_CLASSROOM } from "src/graphql/mutations";
 import Form from "./Form";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 
 const Add = ({ className, ...rest }) => {
+  const { dispatch } = useMessageBox();
   const { push } = useHistory();
 
   const [add, { loading }] = useMutation(ADD_CLASSROOM, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Turma cadastrada com sucesso!",
+        })
+      );
       push("/app/classrooms");
     },
     onError: (err) => {
-      console.log(err.message);
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: err.message,
+        })
+      );
     },
   });
 

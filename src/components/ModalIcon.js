@@ -19,6 +19,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -63,8 +64,17 @@ export default function TransitionsModal(props) {
         }}
       >
         <Fade in={open}>
-          <div onClick={handleClose} className={classes.paper}>
+          <div className={classes.paper}>
             {props.children}
+            <Button
+              variant="contained"
+              style={{
+                margin: 10,
+              }}
+              onClick={handleClose}
+            >
+              Cancelar
+            </Button>
           </div>
         </Fade>
       </Modal>

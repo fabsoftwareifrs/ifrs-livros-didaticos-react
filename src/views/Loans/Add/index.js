@@ -17,22 +17,33 @@
 import React from "react";
 import { useHistory } from "react-router";
 import { useMutation } from "@apollo/client";
-
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { ADD_LOAN } from "src/graphql/mutations";
 import Form from "./Form";
 import { usePeriod } from "src/providers/Period";
 
 const Add = ({ className, ...rest }) => {
+  const { dispatch } = useMessageBox();
   const { push } = useHistory();
 
   const [period] = usePeriod();
 
   const [add, { loading }] = useMutation(ADD_LOAN, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Emprestimo cadastrado com sucesso!",
+        })
+      );
       push("/app/loans");
     },
     onError: (err) => {
-      console.log(err.message);
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: err.message,
+        })
+      );
     },
   });
 

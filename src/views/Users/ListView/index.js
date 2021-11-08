@@ -39,6 +39,7 @@ import {
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
 import { Link } from "react-router-dom";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -53,13 +54,13 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   endCell: {
-    display: "flex",
-    justifyContent: "flex-end",
+    textAlign: "right",
   },
 }));
 
 const UsersList = (props) => {
   const classes = useStyles();
+  const { dispatch } = useMessageBox();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -69,7 +70,20 @@ const UsersList = (props) => {
   });
   const [mutationDelete] = useMutation(REMOVE_USER, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Registro removido com sucesso.",
+        })
+      );
       refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao remover registro.",
+        })
+      );
     },
   });
 

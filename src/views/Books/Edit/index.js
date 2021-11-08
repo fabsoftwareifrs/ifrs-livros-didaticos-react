@@ -19,7 +19,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { EDIT_BOOK } from "src/graphql/mutations";
 import { BookQuery } from "src/graphql/queries";
-
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { useParams, useHistory } from "react-router-dom";
 import Form from "./Form";
 
@@ -28,6 +28,7 @@ const Edit = ({ className, ...rest }) => {
   const { push } = useHistory();
   const [state, setState] = useState({});
   const [loading, isLoading] = useState(true);
+  const { dispatch } = useMessageBox();
 
   useQuery(BookQuery, {
     variables: { id: +id },
@@ -40,10 +41,20 @@ const Edit = ({ className, ...rest }) => {
 
   const [edit, { loading: loadingedit }] = useMutation(EDIT_BOOK, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Livro alterado com sucesso!",
+        })
+      );
       push("/app/books");
     },
     onError: (err) => {
-      console.log(err);
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: err.message,
+        })
+      );
     },
   });
   const onSubmit = async (input) => {

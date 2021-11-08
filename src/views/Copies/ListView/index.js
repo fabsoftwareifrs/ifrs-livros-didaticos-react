@@ -42,6 +42,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,8 +58,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   endCell: {
-    display: "flex",
-    justifyContent: "flex-end",
+    textAlign: "right",
   },
   bars: {
     width: "100%",
@@ -83,20 +83,33 @@ const CopyList = (props) => {
   const componentRef = useRef();
   id = parseInt(id);
   const [search, setSearch] = useState("");
-
+  const { dispatch } = useMessageBox();
   const { loading, error, data, refetch } = useQuery(CopiesByBookQuery, {
     variables: { bookId: id, search },
     fetchPolicy: "cache-and-network",
   });
   const [mutationDelete] = useMutation(REMOVE_COPY, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Registro removido com sucesso.",
+        })
+      );
       refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao remover registro.",
+        })
+      );
     },
   });
 
   if (error) return <p>Error :(</p>;
 
-  const deleteCourse = (id) => {
+  const deleteCopy = (id) => {
     mutationDelete({ variables: { id } });
   };
   return (
@@ -191,7 +204,7 @@ const CopyList = (props) => {
                                   backgroundColor: "#8B0000",
                                   color: "#fff",
                                 }}
-                                onClick={() => deleteCourse(copy.id)}
+                                onClick={() => deleteCopy(copy.id)}
                               >
                                 Deletar
                               </Button>

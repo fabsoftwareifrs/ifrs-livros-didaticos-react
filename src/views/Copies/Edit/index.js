@@ -22,12 +22,14 @@ import { CopyQuery } from "src/graphql/queries";
 
 import { useParams, useHistory } from "react-router-dom";
 import Form from "./Form";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 
 const Edit = ({ className, ...rest }) => {
   const { id } = useParams();
   const { push } = useHistory();
   const [state, setState] = useState({});
   const [loading, isLoading] = useState(true);
+  const { dispatch } = useMessageBox();
 
   useQuery(CopyQuery, {
     variables: { id: +id },
@@ -40,10 +42,20 @@ const Edit = ({ className, ...rest }) => {
 
   const [edit, { loading: loadingedit }] = useMutation(EDIT_COPY, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Exemplar alterado com sucesso!",
+        })
+      );
       push(`/app/books/${state.bookId}/copies`);
     },
     onError: (err) => {
-      console.log(err);
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: err.message,
+        })
+      );
     },
   });
   const onSubmit = async (input) => {

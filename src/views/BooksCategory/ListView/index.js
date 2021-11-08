@@ -55,8 +55,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   endCell: {
-    display: "flex",
-    justifyContent: "flex-end",
+    textAlign: "right",
   },
   notContentText: {
     padding: "5% 2%",

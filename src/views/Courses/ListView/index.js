@@ -38,6 +38,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,8 +54,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   endCell: {
-    display: "flex",
-    justifyContent: "flex-end",
+    textAlign: "right",
   },
   notContentText: {
     padding: "5% 2%",
@@ -73,9 +73,23 @@ const CourseList = (props) => {
     variables: { input: { page: page, paginate: limit, search } },
     fetchPolicy: "cache-and-network",
   });
+  const { dispatch } = useMessageBox();
   const [mutationDelete] = useMutation(REMOVE_COURSE, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Registro removido com sucesso.",
+        })
+      );
       refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao remover registro.",
+        })
+      );
     },
   });
 
@@ -139,7 +153,7 @@ const CourseList = (props) => {
                                         subheader={
                                           'Tem certeza que deseja deletar o curso "' +
                                           course.name +
-                                          '"'
+                                          '" e suas turmas?'
                                         }
                                         title="Deletar categoria"
                                       />

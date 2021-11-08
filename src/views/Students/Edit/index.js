@@ -19,13 +19,14 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { EDIT_STUDENT } from "src/graphql/mutations";
 import { StudentQuery } from "src/graphql/queries";
-
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { useParams, useHistory } from "react-router-dom";
 import Form from "./Form";
 
 const Edit = ({ className, ...rest }) => {
   const { id } = useParams();
   const { push } = useHistory();
+  const { dispatch } = useMessageBox();
   const [state, setState] = useState({});
   const [loading, isLoading] = useState(true);
 
@@ -44,10 +45,20 @@ const Edit = ({ className, ...rest }) => {
 
   const [edit, { loading: loadingedit }] = useMutation(EDIT_STUDENT, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Estudante alterado com sucesso!",
+        })
+      );
       push("/app/students");
     },
     onError: (err) => {
-      console.log(err);
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: err.message,
+        })
+      );
     },
   });
   const onSubmit = async (input) => {

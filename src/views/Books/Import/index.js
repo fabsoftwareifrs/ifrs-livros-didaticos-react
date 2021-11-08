@@ -18,20 +18,31 @@ import React from "react";
 
 import { useMutation } from "@apollo/client";
 import { IMPORT_BOOKS } from "src/graphql/mutations";
-
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { useParams, useHistory } from "react-router-dom";
 import Form from "./Form";
 
 const Import = ({ className, ...rest }) => {
   const { id } = useParams();
   const { push } = useHistory();
+  const { dispatch } = useMessageBox();
 
   const [importBooks, { loading: loadingedit }] = useMutation(IMPORT_BOOKS, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Livros importados com sucesso!",
+        })
+      );
       push("/app/books");
     },
     onError: (err) => {
-      console.log(err);
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: err.message,
+        })
+      );
     },
   });
   const onSubmit = async (input) => {

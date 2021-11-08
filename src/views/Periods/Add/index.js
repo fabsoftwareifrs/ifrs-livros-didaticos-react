@@ -17,19 +17,30 @@
 import React from "react";
 import { useHistory } from "react-router";
 import { useMutation } from "@apollo/client";
-
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { ADD_PERIOD } from "src/graphql/mutations";
 import Form from "./Form";
 
 const Add = ({ className, ...rest }) => {
+  const { dispatch } = useMessageBox();
   const { push } = useHistory();
 
   const [add, { loading }] = useMutation(ADD_PERIOD, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Período cadastrado com sucesso!",
+        })
+      );
       push("/app/periods");
     },
     onError: (err) => {
-      console.log(err.message);
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: err.message,
+        })
+      );
     },
   });
 

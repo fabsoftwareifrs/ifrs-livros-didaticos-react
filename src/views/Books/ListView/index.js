@@ -39,6 +39,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,8 +55,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   endCell: {
-    display: "flex",
-    justifyContent: "flex-end",
+    textAlign: "right",
   },
   notContentText: {
     padding: "5% 2%",
@@ -75,9 +75,23 @@ const BooksList = (props) => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   });
+  const { dispatch } = useMessageBox();
   const [mutationDelete] = useMutation(REMOVE_BOOK, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Registro removido com sucesso.",
+        })
+      );
       refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao remover registro.",
+        })
+      );
     },
   });
 

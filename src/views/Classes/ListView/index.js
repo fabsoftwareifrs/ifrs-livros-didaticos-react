@@ -39,6 +39,7 @@ import {
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
 import { Link } from "react-router-dom";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,8 +55,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   endCell: {
-    display: "flex",
-    justifyContent: "flex-end",
+    textAlign: "right",
   },
   notContentText: {
     padding: "5% 2%",
@@ -70,6 +70,7 @@ const ClassesList = (props) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const { dispatch } = useMessageBox();
   const { loading, error, data, refetch } = useQuery(ClassesQuery, {
     variables: { input: { page: page, paginate: limit, search } },
     fetchPolicy: "cache-and-network",
@@ -77,7 +78,20 @@ const ClassesList = (props) => {
 
   const [mutationDelete] = useMutation(REMOVE_CLASSROOM, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Registro removido com sucesso.",
+        })
+      );
       refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao remover registro.",
+        })
+      );
     },
   });
 
@@ -125,12 +139,7 @@ const ClassesList = (props) => {
                                 <TableRow hover key={objClasses.id}>
                                   <TableCell>
                                     <Box alignItems="center" display="flex">
-                                      <Typography
-                                        color="textPrimary"
-                                        variant="body1"
-                                      >
-                                        {objClasses.name}
-                                      </Typography>
+                                      {objClasses.name}
                                     </Box>
                                   </TableCell>
                                   <TableCell>

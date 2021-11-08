@@ -17,19 +17,30 @@
 import React from "react";
 import { useHistory } from "react-router";
 import { useMutation } from "@apollo/client";
-
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { ADD_COURSE } from "src/graphql/mutations";
 import Form from "./Form";
 
 const Add = ({ className, ...rest }) => {
+  const { dispatch } = useMessageBox();
   const { push } = useHistory();
 
   const [add, { loading }] = useMutation(ADD_COURSE, {
     onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Curso cadastrado com sucesso!",
+        })
+      );
       push("/app/courses");
     },
     onError: (err) => {
-      console.log(err.message);
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: err.message,
+        })
+      );
     },
   });
 

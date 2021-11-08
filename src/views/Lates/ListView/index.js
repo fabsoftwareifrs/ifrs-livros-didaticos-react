@@ -28,6 +28,7 @@ import {
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ModalIcon from "../../../components/ModalIcon";
 import { LateMail } from "../../../graphql/mutations/mail";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import {
   Box,
   Card,
@@ -65,8 +66,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   endCell: {
-    display: "flex",
-    justifyContent: "flex-end",
+    textAlign: "right",
   },
   notContentText: {
     padding: "5% 2%",
@@ -84,16 +84,85 @@ const LoanList = (props) => {
   const [selectedLoanIds, setSelectedLoanIds] = useState([]);
   const end = new Date();
 
-  const { loading, error, data } = useQuery(LoansQuery, {
+  const { loading, error, data, refetch } = useQuery(LoansQuery, {
     variables: { input: { page: page, paginate: limit, search }, late: true },
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_LOAN);
+  const { dispatch } = useMessageBox();
+  const [mutationDelete] = useMutation(REMOVE_LOAN, {
+    onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Registro removido com sucesso.",
+        })
+      );
+      refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao remover registro.",
+        })
+      );
+    },
+  });
 
-  const [mutationTerminate] = useMutation(TERMINATE_LOAN);
+  const [mutationTerminate] = useMutation(TERMINATE_LOAN, {
+    onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Emprestimo marcado como entregue com sucesso.",
+        })
+      );
+      refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao marcar como entregue.",
+        })
+      );
+    },
+  });
 
-  const [mutationCancelTerminate] = useMutation(CANCEL_TERMINATE_LOAN);
-  const [mutationLateMail] = useMutation(LateMail);
+  const [mutationCancelTerminate] = useMutation(CANCEL_TERMINATE_LOAN, {
+    onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Emprestimo marcado como não entregue com sucesso.",
+        })
+      );
+      refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao marcar como não entregue.",
+        })
+      );
+    },
+  });
+  const [mutationLateMail] = useMutation(LateMail, {
+    onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "E-mail enviado com sucesso.",
+        })
+      );
+      refetch();
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao enviar e-mail.",
+        })
+      );
+    },
+  });
 
   if (error) return <p>Error :(</p>;
 
@@ -134,17 +203,17 @@ const LoanList = (props) => {
   const sendLateMail = async () => {
     let loans = [];
     if (selectedLoanIds.length === 0) {
-      alert("Nenhum usuáro selecionado!");
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Nenhum usuário selecionado.",
+        })
+      );
     } else {
       selectedLoanIds.map(async function (loanId) {
         loans.push(parseInt(loanId));
       });
-      let response = await mutationLateMail({ variables: { loans } });
-      if (response.data.lateMail.response[0] === "success") {
-        alert("Enviado com sucesso!");
-      } else {
-        console.log(response.data.lateMail.response);
-      }
+      await mutationLateMail({ variables: { loans } });
     }
   };
 
