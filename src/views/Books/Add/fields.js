@@ -50,6 +50,19 @@ const fields = {
       required: "Este campo é obrigatório",
     },
   },
+  year: {
+    label: "Ano",
+    type: "number",
+    value: null,
+    placeholder: "Informe o ano do Livro",
+  },
+  isbn: {
+    label: "ISBN",
+    type: "text",
+    value: "",
+    placeholder: "Informe o ISBN do livro",
+    rules: {},
+  },
   categoryId: {
     label: "Categoria",
     type: "number",

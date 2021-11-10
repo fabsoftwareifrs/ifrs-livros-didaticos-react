@@ -17,8 +17,16 @@
 import { gql } from "@apollo/client";
 
 export const GET_ALL_LOANS_BY_PERIOD_ID = gql`
-  query getAllLoansByPeriodId($periodId: Int!, $pagination: PaginateInput!) {
-    getAllLoansByPeriodId(periodId: $periodId, pagination: $pagination) {
+  query getAllLoansByPeriodId(
+    $periodId: Int!
+    $pagination: PaginateInput!
+    $late: Boolean
+  ) {
+    getAllLoansByPeriodId(
+      periodId: $periodId
+      pagination: $pagination
+      late: $late
+    ) {
       docs {
         id
         late

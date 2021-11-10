@@ -96,6 +96,22 @@ const Form = ({
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
+                  <Field
+                    name="year"
+                    field={input.year}
+                    error={errors.year}
+                    onChange={({ target }) => handleChange(target)}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <Field
+                    name="isbn"
+                    field={input.isbn}
+                    error={errors.isbn}
+                    onChange={({ target }) => handleChange(target)}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
                   <Categories
                     onChange={handleChange}
                     field={input.categoryId}

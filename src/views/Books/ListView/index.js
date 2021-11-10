@@ -128,6 +128,8 @@ const BooksList = (props) => {
                               <TableCell>Nome</TableCell>
                               <TableCell>Autor</TableCell>
                               <TableCell>Volume</TableCell>
+                              <TableCell>Ano</TableCell>
+                              <TableCell>ISBN</TableCell>
                               <TableCell>Categoria</TableCell>
                               <TableCell></TableCell>
                               <TableCell></TableCell>
@@ -150,6 +152,8 @@ const BooksList = (props) => {
                                   </TableCell>
                                   <TableCell>{book.author}</TableCell>
                                   <TableCell>{book.volume}</TableCell>
+                                  <TableCell>{book.year}</TableCell>
+                                  <TableCell>{book.isbn}</TableCell>
                                   <TableCell>{book.category.name}</TableCell>
                                   <TableCell>
                                     <Link to={`/app/books/${book.id}/copies`}>

@@ -24,6 +24,8 @@ export const BooksQuery = gql`
         name
         author
         volume
+        year
+        isbn
         category {
           id
           name
@@ -41,6 +43,8 @@ export const AllBooksQuery = gql`
       name
       author
       volume
+      year
+      isbn
       category {
         id
         name
@@ -56,6 +60,8 @@ export const BookQuery = gql`
       name
       author
       volume
+      year
+      isbn
       category {
         id
         name
