@@ -184,7 +184,8 @@ const useMyForm = (initialState, data = {}) => {
             Object.entries(fields).reduce(
               (previous, [key, field]) => ({
                 ...previous,
-                [key]: field.value,
+                [key]:
+                  field.type === "number" ? field.value || null : field.value,
               }),
               {}
             )

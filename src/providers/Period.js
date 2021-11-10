@@ -102,8 +102,6 @@ const PeriodProvider = ({ children }) => {
     }
   }, [state.value, state.showModal]);
 
-  console.log(auth);
-
   return (
     <Context.Provider value={[state, dispatch]}>
       {auth.isAuthenticated && state.showModal && (

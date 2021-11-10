@@ -53,7 +53,7 @@ const fields = {
   year: {
     label: "Ano",
     type: "number",
-    value: null,
+    value: "",
     placeholder: "Informe o ano do Livro",
   },
   isbn: {
