@@ -33,15 +33,19 @@ export const Replicator = ({ name, max, children, handleChange }) => {
     setIsDisabledAdd(state.length >= max);
     setIsDisabledRemove(state.length <= 1);
   }, [state.length, max]);
+
   return (
     <div>
       {state.map((value, idx) => (
         <div key={idx} style={{ display: "flex" }}>
           {React.Children.map(children, (child) =>
             React.cloneElement(child, {
-              style: { ...child.style, flex: "1" },
+              style: { ...child.style, flex: 1 },
               field: { ...child.field, value: state[idx][child.name] },
-              onChange: ({ target }) => onChange(target, idx),
+              onChange:
+                child.type.name === "Field"
+                  ? ({ target }) => onChange(target, idx)
+                  : (target) => onChange(target, idx),
             })
           )}
 
