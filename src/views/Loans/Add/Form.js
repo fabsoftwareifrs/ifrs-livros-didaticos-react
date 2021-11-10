@@ -74,8 +74,8 @@ const Form = ({
                 <Grid item md={6} xs={12}>
                   <Copies
                     onChange={handleChange}
-                    field={input.copyId}
-                    error={errors.copyId}
+                    field={input.copiesIds}
+                    error={errors.copiesIds}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>

@@ -23,9 +23,9 @@ const fields = {
       required: "Este campo é obrigatório",
     },
   },
-  copyId: {
+  copiesIds: {
     label: "Exemplar",
-    type: "number",
+    type: "text",
     value: "",
     rules: {
       required: "Este campo é obrigatório",

@@ -35,8 +35,16 @@ export const CopiesQuery = gql`
 `;
 
 export const AvailableCopiesQuery = gql`
-  query AvailableCopiesQuery($idCopyInclude: Int) {
-    availableCopies(idCopyInclude: $idCopyInclude) {
+  query AvailableCopiesQuery(
+    $idCopyInclude: Int
+    $search: String
+    $selecteds: [String]
+  ) {
+    availableCopies(
+      idCopyInclude: $idCopyInclude
+      search: $search
+      selecteds: $selecteds
+    ) {
       id
       code
       book {

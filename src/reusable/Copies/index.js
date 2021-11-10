@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { useQuery } from "@apollo/client";
 import { AvailableCopiesQuery } from "src/graphql/queries";
@@ -8,9 +8,9 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 
 // Esse componente renderiza apenas com cópias disponíveis
 export const Copies = ({ field, error, onChange, data, idCopyInclude }) => {
-  const [loading, setLoading] = useState(true);
   const [state, setState] = useState([]);
-  const [value, setValue] = useState({ value: "", label: "" });
+  const [search, setSearch] = useState("");
+  const [selecteds, setSelecteds] = useState([]);
   const onCompleted = useCallback(
     (response) => {
       const options = response.availableCopies?.map(({ id, code, book }) => ({
@@ -19,64 +19,57 @@ export const Copies = ({ field, error, onChange, data, idCopyInclude }) => {
         book,
       }));
       setState(options);
-      setLoading(false);
     },
     [setState]
   );
 
-  useQuery(AvailableCopiesQuery, {
-    variables: { idCopyInclude: +idCopyInclude },
+  const { loading, refetch } = useQuery(AvailableCopiesQuery, {
+    variables: {
+      idCopyInclude: +idCopyInclude,
+      search: search,
+      selecteds: selecteds,
+    },
     skip: !!data,
     fetchPolicy: "cache-and-network",
     onCompleted,
   });
 
-  useEffect(() => {
-    setValue({
-      value: `${field.value}`,
-      label: state.find((s) => s.value === `${field.value}`)?.label || "",
-    });
-  }, [state, field.value]);
-
-  useEffect(() => {
-    async function fetchData() {
-      if (data !== undefined) {
-        setLoading(true);
-        const options = data.map(({ id, name }) => ({
-          value: id,
-          label: name,
-        }));
-        setState(options);
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, [data]);
+  function refetchData() {
+    setState([]);
+    refetch();
+  }
 
   return (
     <Autocomplete
-      name="copyId"
+      name="copiesIds"
+      multiple
       options={state}
-      onChange={(_, value) => {
-        if (!value) {
-          onChange({ name: "copyId", value: "" });
-        } else {
-          onChange({
-            name: "copyId",
-            value: +value.value,
-          });
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === "Tab") {
+          e.preventDefault();
         }
       }}
-      disabled={loading}
-      value={value}
-      groupBy={(option) => option.book.name}
-      getOptionLabel={(option) => option.label}
-      getOptionSelected={(option, value) => option.id === value.id}
+      onChange={(_, value) => {
+        let values = [];
+        value.forEach(function (val) {
+          values.push(val.value);
+        });
+        onChange({ name: "copiesIds", value: values });
+        setSelecteds(values);
+        refetchData();
+      }}
+      loading={loading}
+      getOptionLabel={(option) => option.label + " (" + option.book.name + ")"}
       renderInput={(params) => (
         <TextField
           {...params}
           label={field.label}
           variant="outlined"
+          tabIndex="-1"
+          onChange={(e) => {
+            setSearch(e.target.value);
+            refetchData();
+          }}
           error={!!error}
           helperText={!!error ? error : "Informe o exemplar"}
         />
