@@ -5,6 +5,7 @@ export * from "./Copies";
 export * from "./Courses";
 export * from "./Field";
 export * from "./Periods";
+export * from "./Replicator";
 export * from "./Status";
 export * from "./Students";
 export * from "./UploadInput";

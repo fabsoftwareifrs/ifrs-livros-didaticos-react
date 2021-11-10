@@ -42,7 +42,7 @@ const MessageBoxProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleClose = () => dispatch(closeMessageBox());
-  console.log(state);
+
   return (
     <Context.Provider value={{ state, dispatch }}>
       {children}
