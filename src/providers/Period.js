@@ -30,6 +30,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import { useAuth } from "./Auth";
 //import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -89,6 +90,7 @@ const PeriodProvider = ({ children }) => {
   const classes = useStyles();
   const localState = JSON.parse(localStorage.getItem("period"));
   const [state, dispatch] = useReducer(reducer, localState || initialState);
+  const { auth } = useAuth();
 
   useEffect(() => {
     localStorage.setItem("period", JSON.stringify(state));
@@ -100,9 +102,11 @@ const PeriodProvider = ({ children }) => {
     }
   }, [state.value, state.showModal]);
 
+  console.log(auth);
+
   return (
     <Context.Provider value={[state, dispatch]}>
-      {state.showModal && (
+      {auth.isAuthenticated && state.showModal && (
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
@@ -121,7 +125,7 @@ const PeriodProvider = ({ children }) => {
           </Fade>
         </Modal>
       )}
-      {!state.showModal && children}
+      {(!state.showModal || !auth.isAuthenticated) && children}
     </Context.Provider>
   );
 };
