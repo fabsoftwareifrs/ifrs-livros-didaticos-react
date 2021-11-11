@@ -15,29 +15,26 @@
  */
 
 import React, { useState } from "react";
-import { useHistory } from "react-router";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { TERMINATE_LOAN } from "src/graphql/mutations";
 import { GET_LOAN_BY_CODE } from "src/graphql/queries";
 import Form from "./Form";
-//import { usePeriod } from "src/providers/Period";
 import { Field, Status } from "src/reusable";
+
+const initialState = {
+  code: "",
+  book: "",
+  student: "",
+  statusId: "",
+  start: "",
+};
 
 const End = ({ className, ...rest }) => {
   const { dispatch } = useMessageBox();
-  const { push } = useHistory();
 
   const [isVisible, setIsVisible] = useState(false);
-
-  //const [period] = usePeriod();
-
-  const [state, setState] = useState({
-    book: "",
-    student: "",
-    start: "",
-    end: "",
-  });
+  const [state, setState] = useState(initialState);
 
   const [getLoanByCode, { loading: loadingLoan }] = useLazyQuery(
     GET_LOAN_BY_CODE,
@@ -50,6 +47,7 @@ const End = ({ className, ...rest }) => {
           book: loan.copy.book.name,
           student: loan.student.name,
           statusId: +loan.copy.Status.id,
+          start: loan.start,
         });
         setIsVisible(true);
       },
@@ -77,7 +75,8 @@ const End = ({ className, ...rest }) => {
           message: "Livro devolvido com sucesso!",
         })
       );
-      push("/app/loans");
+      setIsVisible(false);
+      setState(initialState);
     },
     onError: (err) => {
       dispatch(
@@ -86,6 +85,8 @@ const End = ({ className, ...rest }) => {
           message: err.message,
         })
       );
+      setIsVisible(false);
+      setState(initialState);
     },
   });
 

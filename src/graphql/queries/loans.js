@@ -20,6 +20,7 @@ export const GET_LOAN_BY_CODE = gql`
   query getLoanByCode($code: String!) {
     getLoanByCode(code: $code) {
       id
+      start
       student {
         name
       }
