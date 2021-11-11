@@ -6,7 +6,7 @@ import { GET_ALL_STATUSES } from "src/graphql/queries";
 import { TextField } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-export const Status = ({ field, error, onChange, data }) => {
+export const Status = ({ field, error, onChange, data, ...rest }) => {
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState([]);
   const [value, setValue] = useState({ value: "", label: "" });
@@ -78,6 +78,7 @@ export const Status = ({ field, error, onChange, data }) => {
           helperText={!!error ? error : "Informe o estado do exemplar"}
         />
       )}
+      {...rest}
     />
   );
 };

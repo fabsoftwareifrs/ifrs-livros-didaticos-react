@@ -16,6 +16,27 @@
 
 import { gql } from "@apollo/client";
 
+export const GET_LOAN_BY_CODE = gql`
+  query getLoanByCode($code: String!) {
+    getLoanByCode(code: $code) {
+      id
+      student {
+        name
+      }
+      copy {
+        id
+        code
+        Status {
+          id
+        }
+        book {
+          name
+        }
+      }
+    }
+  }
+`;
+
 export const GET_ALL_LOANS_BY_PERIOD_ID = gql`
   query getAllLoansByPeriodId(
     $periodId: Int!

@@ -66,6 +66,15 @@ const Toolbar = ({ className, create, mail, search, selected, ...rest }) => {
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Box display="flex" justifyContent="flex-end">
+        <Link to="/app/loans/end">
+          <Button
+            color="secondary"
+            variant="contained"
+            style={{ marginRight: "10px" }}
+          >
+            Devolver livros
+          </Button>
+        </Link>
         <Link to="/app/loans/create">
           <Button color="primary" variant="contained">
             Adicionar Empréstimo
