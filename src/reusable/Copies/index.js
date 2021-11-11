@@ -60,6 +60,7 @@ export const Copies = ({ field, error, onChange, data, idCopyInclude }) => {
       }}
       loading={loading}
       getOptionLabel={(option) => option.label + " (" + option.book.name + ")"}
+      getOptionSelected={(option, value) => option.value === value.value}
       renderInput={(params) => (
         <TextField
           {...params}

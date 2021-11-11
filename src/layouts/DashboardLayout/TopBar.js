@@ -23,6 +23,7 @@ import {
   Hidden,
   IconButton,
   Toolbar,
+  Button,
   makeStyles,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -59,9 +60,13 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
         </RouterLink>
         <Box flexGrow={1} />
         <Hidden mdDown>
-          <button onClick={() => dispatchPeriod(openModal())}>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => dispatchPeriod(openModal())}
+          >
             {period?.label || "Selecione um período"}
-          </button>
+          </Button>
 
           <IconButton onClick={() => dispatch(AuthLogout())} color="inherit">
             <InputIcon />

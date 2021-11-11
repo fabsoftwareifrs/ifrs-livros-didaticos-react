@@ -31,6 +31,8 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { useAuth } from "./Auth";
+import { Button, CardHeader, TextField } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 //import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -123,7 +125,7 @@ const PeriodProvider = ({ children }) => {
           </Fade>
         </Modal>
       )}
-      {(!state.showModal || !auth.isAuthenticated) && children}
+      {children}
     </Context.Provider>
   );
 };
@@ -131,8 +133,8 @@ const PeriodProvider = ({ children }) => {
 const Period = () => {
   const [period, dispatch] = usePeriod();
   const [options, setOptions] = useState([]);
+  const [value, setValue] = useState(period);
   const [loading, isLoading] = useState(true);
-
   const onCompleted = useCallback(
     (response) => {
       const options = response.periods?.map(({ id, name }) => ({
@@ -158,20 +160,46 @@ const Period = () => {
   if (loading) return <p>Aguarde...</p>;
 
   return (
-    <div>
-      <select
-        value={period.value}
-        onChange={({ target }) => handleChange(+target.value)}
-      >
-        <option value="-1">Selecione</option>
-        {options.map(({ value, label }) => (
-          <option key={value} value={value}>
-            {label}
-          </option>
-        ))}
-      </select>
-      <button onClick={() => dispatch(closeModal())}>Fechar</button>
-    </div>
+    <>
+      <CardHeader
+        subheader={"Selecione o período que deseja utilizar como parâmetro."}
+        title="Selecionar Período"
+      />
+      <div>
+        <Autocomplete
+          options={options}
+          value={value}
+          onChange={(_, value) => setValue(value)}
+          style={{ margin: "0 16px" }}
+          getOptionLabel={(option) => option.label}
+          renderInput={(params) => <TextField {...params} label="Selecione" />}
+        />
+        <Button
+          variant="contained"
+          style={{
+            width: 100,
+            margin: 10,
+            backgroundColor: "#8B0000",
+            color: "#fff",
+          }}
+          onClick={() => dispatch(closeModal())}
+        >
+          Cancelar
+        </Button>
+        <Button
+          variant="contained"
+          style={{
+            width: 100,
+            margin: 10,
+            backgroundColor: "#17882c",
+            color: "#fff",
+          }}
+          onClick={() => handleChange(+value.value)}
+        >
+          Salvar
+        </Button>
+      </div>
+    </>
   );
 };
 
