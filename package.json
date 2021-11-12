@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": "^14.11.0"
+    "node": "^v17.0.1"
   },
   "scripts": {
     "dev": "react-scripts start",
