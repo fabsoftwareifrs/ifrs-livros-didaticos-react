@@ -41,7 +41,11 @@ import {
   Button,
   Checkbox,
 } from "@material-ui/core";
-import { Trash2 as TrashIcon } from "react-feather";
+import {
+  Trash2 as TrashIcon,
+  Check as CheckIcon,
+  X as XIcon,
+} from "react-feather";
 import { Link } from "react-router-dom";
 import { usePeriod } from "src/providers/Period";
 const useStyles = makeStyles((theme) => ({
@@ -246,6 +250,7 @@ const LoanList = (props) => {
                               <TableCell>Estudante</TableCell>
                               <TableCell>Livro</TableCell>
                               <TableCell>Exemplar</TableCell>
+                              <TableCell>Entregue</TableCell>
                               <TableCell></TableCell>
                             </TableRow>
                           </TableHead>
@@ -275,6 +280,13 @@ const LoanList = (props) => {
                                     </Link>
                                   </TableCell>
                                   <TableCell>{loan.copy.code}</TableCell>
+                                  <TableCell>
+                                    {loan.delivered ? (
+                                      <CheckIcon className={classes.icon} />
+                                    ) : (
+                                      <XIcon className={classes.icon} />
+                                    )}
+                                  </TableCell>
                                   <TableCell className={classes.endCell}>
                                     <ModalIcon
                                       className={classes.icon}
