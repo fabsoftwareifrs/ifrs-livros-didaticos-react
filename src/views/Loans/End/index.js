@@ -39,6 +39,7 @@ const End = ({ className, ...rest }) => {
   const [getLoanByCode, { loading: loadingLoan }] = useLazyQuery(
     GET_LOAN_BY_CODE,
     {
+      fetchPolicy: "network-only",
       onCompleted: (response) => {
         const loan = response.getLoanByCode;
         setState({
@@ -66,6 +67,7 @@ const End = ({ className, ...rest }) => {
 
   const onBlur = async ({ target }) => {
     if (target.value.trim() === "") return;
+    console.log("chegou aqui");
     await getLoanByCode({ variables: { code: target.value } });
   };
 
