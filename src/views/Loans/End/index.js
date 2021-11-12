@@ -52,13 +52,14 @@ const End = ({ className, ...rest }) => {
         setIsVisible(true);
       },
       onError: (err) => {
-        setIsVisible(false);
         dispatch(
           openMessageBox({
             type: "error",
             message: err.message,
           })
         );
+        setIsVisible(false);
+        setState(initialState);
       },
     }
   );
