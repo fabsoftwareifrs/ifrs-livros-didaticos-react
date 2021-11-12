@@ -19,11 +19,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
 import { GET_ALL_LOANS_BY_PERIOD_ID } from "src/graphql/queries/loans";
-import {
-  REMOVE_LOAN,
-  TERMINATE_LOAN,
-  CANCEL_TERMINATE_LOAN,
-} from "src/graphql/mutations";
+import { REMOVE_LOAN } from "src/graphql/mutations";
 
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ModalIcon from "src/components/ModalIcon";
@@ -45,12 +41,7 @@ import {
   Button,
   Checkbox,
 } from "@material-ui/core";
-import {
-  Trash2 as TrashIcon,
-  Edit as EditIcon,
-  Check as CheckIcon,
-  X as XIcon,
-} from "react-feather";
+import { Trash2 as TrashIcon } from "react-feather";
 import { Link } from "react-router-dom";
 import { usePeriod } from "src/providers/Period";
 const useStyles = makeStyles((theme) => ({
@@ -83,7 +74,6 @@ const LoanList = (props) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [selectedLoanIds, setSelectedLoanIds] = useState([]);
-  const end = new Date();
 
   const [period] = usePeriod();
 
@@ -119,43 +109,6 @@ const LoanList = (props) => {
     },
   });
 
-  const [mutationTerminate] = useMutation(TERMINATE_LOAN, {
-    onCompleted: () => {
-      dispatch(
-        openMessageBox({
-          message: "Emprestimo marcado como entregue com sucesso.",
-        })
-      );
-      refetch();
-    },
-    onError: (err) => {
-      dispatch(
-        openMessageBox({
-          type: "error",
-          message: "Erro ao marcar como entregue.",
-        })
-      );
-    },
-  });
-
-  const [mutationCancelTerminate] = useMutation(CANCEL_TERMINATE_LOAN, {
-    onCompleted: () => {
-      dispatch(
-        openMessageBox({
-          message: "Emprestimo marcado como não entregue com sucesso.",
-        })
-      );
-      refetch();
-    },
-    onError: (err) => {
-      dispatch(
-        openMessageBox({
-          type: "error",
-          message: "Erro ao marcar como não entregue.",
-        })
-      );
-    },
-  });
   const [mutationLateMail] = useMutation(LateMail, {
     onCompleted: () => {
       dispatch(
@@ -240,14 +193,6 @@ const LoanList = (props) => {
     setPage(newPage + 1);
   };
 
-  const terminateLoan = (id) => {
-    mutationTerminate({ variables: { id: id, input: { end } } });
-  };
-
-  const cancelTerminateLoan = (id) => {
-    mutationCancelTerminate({ variables: { id } });
-  };
-
   return (
     <Page className={classes.root} title="Empréstimos">
       <Container maxWidth={false}>
@@ -301,7 +246,6 @@ const LoanList = (props) => {
                               <TableCell>Estudante</TableCell>
                               <TableCell>Livro</TableCell>
                               <TableCell>Exemplar</TableCell>
-                              <TableCell>Entrege?</TableCell>
                               <TableCell></TableCell>
                             </TableRow>
                           </TableHead>
@@ -331,41 +275,6 @@ const LoanList = (props) => {
                                     </Link>
                                   </TableCell>
                                   <TableCell>{loan.copy.code}</TableCell>
-                                  <TableCell>
-                                    <ModalIcon
-                                      className={classes.icon}
-                                      icon={loan.delivered ? CheckIcon : XIcon}
-                                    >
-                                      <CardHeader title="Mudar status empréstimo" />
-                                      {loan.delivered ? (
-                                        <Button
-                                          variant="contained"
-                                          style={{
-                                            margin: 10,
-                                            backgroundColor: "#8B0000",
-                                            color: "#fff",
-                                          }}
-                                          onClick={() =>
-                                            cancelTerminateLoan(loan.id)
-                                          }
-                                        >
-                                          Marcar como não entregue
-                                        </Button>
-                                      ) : (
-                                        <Button
-                                          variant="contained"
-                                          style={{
-                                            margin: 10,
-                                            backgroundColor: "#17882c",
-                                            color: "#fff",
-                                          }}
-                                          onClick={() => terminateLoan(loan.id)}
-                                        >
-                                          Marcar como entregue
-                                        </Button>
-                                      )}
-                                    </ModalIcon>
-                                  </TableCell>
                                   <TableCell className={classes.endCell}>
                                     <ModalIcon
                                       className={classes.icon}
@@ -393,9 +302,7 @@ const LoanList = (props) => {
                                     <Link
                                       to={"/app/loans/edit/" + loan.id}
                                       style={{ color: "#263238" }}
-                                    >
-                                      <EditIcon className={classes.icon} />
-                                    </Link>
+                                    ></Link>
                                   </TableCell>
                                 </TableRow>
                               ))}
