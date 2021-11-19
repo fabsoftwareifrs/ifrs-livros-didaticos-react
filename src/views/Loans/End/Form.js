@@ -76,7 +76,7 @@ const Form = ({
             <CardContent>
               <Grid container spacing={3}>
                 {React.Children.map(children, (child) => {
-                  //console.log(child.type);
+                  console.log(child);
                   return (
                     <Grid item md={6} xs={12}>
                       {React.cloneElement(
