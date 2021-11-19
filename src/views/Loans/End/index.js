@@ -67,7 +67,6 @@ const End = ({ className, ...rest }) => {
 
   const onBlur = async ({ target }) => {
     if (target.value.trim() === "") return;
-    console.log("chegou aqui");
     await getLoanByCode({ variables: { code: target.value } });
   };
 

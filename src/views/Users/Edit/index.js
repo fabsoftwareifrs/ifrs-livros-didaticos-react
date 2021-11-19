@@ -34,7 +34,6 @@ const Edit = ({ className, ...rest }) => {
     variables: { id: +id },
     fetchPolicy: "cache-and-network",
     onCompleted: ({ user }) => {
-      console.log(user);
       setState(user);
       isLoading(false);
     },
