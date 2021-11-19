@@ -62,7 +62,6 @@ const Form = ({
   useEffect(() => {
     setValues(data);
   }, [data, setValues]);
-  console.log(input);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
