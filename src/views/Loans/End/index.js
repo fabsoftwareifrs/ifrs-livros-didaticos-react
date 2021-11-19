@@ -112,12 +112,24 @@ const End = ({ className, ...rest }) => {
       data={state}
       {...rest}
     >
-      <Field name="code" onBlur={onBlur} />
+      <Field id="1" name="code" onBlur={onBlur} />
 
-      <span style={{ display: isVisible ? "" : "none" }}>{state.book}</span>
-      <span style={{ display: isVisible ? "" : "none" }}>{state.student}</span>
-      <Status style={{ display: isVisible ? "" : "none" }} name="statusId" />
-      <Field style={{ display: isVisible ? "" : "none" }} name="observation" />
+      <span id="2" style={{ display: isVisible ? "" : "none" }}>
+        {state.book}
+      </span>
+      <span id="3" style={{ display: isVisible ? "" : "none" }}>
+        {state.student}
+      </span>
+      <Status
+        id="4"
+        style={{ display: isVisible ? "" : "none" }}
+        name="statusId"
+      />
+      <Field
+        id="5"
+        style={{ display: isVisible ? "" : "none" }}
+        name="observation"
+      />
     </Form>
   );
 };

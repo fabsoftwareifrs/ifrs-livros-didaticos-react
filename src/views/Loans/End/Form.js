@@ -76,21 +76,24 @@ const Form = ({
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                {React.Children.map(children, (child) => (
-                  <Grid item md={6} xs={12}>
-                    {React.cloneElement(
-                      child,
-                      ["Field", "Status"].includes(child.type.name) && {
-                        field: input[child.props.name],
-                        error: errors[child.props.name],
-                        onChange:
-                          child.type.name === "Field"
-                            ? ({ target }) => handleChange(target)
-                            : handleChange,
-                      }
-                    )}
-                  </Grid>
-                ))}
+                {children.map((child) => {
+                  //console.log(child);
+                  return (
+                    <Grid key={child.props.id} item md={6} xs={12}>
+                      {React.cloneElement(
+                        child,
+                        ["Field", "Status"].includes(child.type.name) && {
+                          field: input[child.props.name],
+                          error: errors[child.props.name],
+                          onChange:
+                            child.type.name === "Field"
+                              ? ({ target }) => handleChange(target)
+                              : handleChange,
+                        }
+                      )}
+                    </Grid>
+                  );
+                })}
               </Grid>
             </CardContent>
             <Divider />
