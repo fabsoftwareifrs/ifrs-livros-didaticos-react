@@ -76,17 +76,17 @@ const Form = ({
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                {children.map((child) => {
-                  //console.log(child);
+                {React.Children.map(children, (child) => {
+                  //console.log(child.type);
                   return (
-                    <Grid key={child.props.id} item md={6} xs={12}>
+                    <Grid item md={6} xs={12}>
                       {React.cloneElement(
                         child,
                         ["Field", "Status"].includes(child.type.name) && {
                           field: input[child.props.name],
                           error: errors[child.props.name],
                           onChange:
-                            child.type.name === "Field"
+                            child.type.name !== "span"
                               ? ({ target }) => handleChange(target)
                               : handleChange,
                         }
