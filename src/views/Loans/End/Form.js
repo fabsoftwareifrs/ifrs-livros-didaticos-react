@@ -62,7 +62,7 @@ const Form = ({
   useEffect(() => {
     setValues(data);
   }, [data, setValues]);
-
+  console.log(input);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -86,7 +86,7 @@ const Form = ({
                           field: input[child.props.name],
                           error: errors[child.props.name],
                           onChange:
-                            child.type.name !== "span"
+                            child.type.name === "Field"
                               ? ({ target }) => handleChange(target)
                               : handleChange,
                         }
