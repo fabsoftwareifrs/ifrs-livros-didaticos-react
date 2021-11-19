@@ -122,7 +122,7 @@ const LoanList = (props) => {
       dispatch(
         openMessageBox({
           type: "error",
-          message: "Erro ao enviar e-mail.",
+          message: err.message,
         })
       );
     },

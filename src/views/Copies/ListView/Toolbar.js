@@ -35,6 +35,7 @@ import {
 } from "@material-ui/core";
 import { Search as SearchIcon } from "react-feather";
 import { Link } from "react-router-dom";
+import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 const useStyles = makeStyles((theme) => ({
   root: {},
   importButton: {
@@ -48,7 +49,24 @@ const useStyles = makeStyles((theme) => ({
 const Toolbar = ({ className, id, search, componentRef, extra, ...rest }) => {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(0);
-  const [mutationCreate] = useMutation(ADD_COPY);
+  const { dispatch } = useMessageBox();
+  const [mutationCreate] = useMutation(ADD_COPY, {
+    onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Exemplares cadastrados com sucesso!",
+        })
+      );
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: err.message,
+        })
+      );
+    },
+  });
   const handlePress = (e) => {
     if (e.which === 13) {
       search(e.target.value);
