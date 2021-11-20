@@ -79,7 +79,7 @@ const items = [
   {
     href: "/app/classrooms",
     icon: SquareIcon,
-    title: "Turma",
+    title: "Turmas",
   },
   {
     href: "/app/students",
