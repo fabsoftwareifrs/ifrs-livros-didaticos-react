@@ -46,7 +46,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Toolbar = ({ className, id, search, componentRef, extra, ...rest }) => {
+const Toolbar = ({
+  className,
+  id,
+  search,
+  setSearch,
+  componentRef,
+  extra,
+  ...rest
+}) => {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(0);
   const { dispatch } = useMessageBox();
@@ -69,7 +77,7 @@ const Toolbar = ({ className, id, search, componentRef, extra, ...rest }) => {
   });
   const handlePress = (e) => {
     if (e.which === 13) {
-      search(e.target.value);
+      setSearch(e.target.value);
     }
   };
   const createCopy = async (e) => {
@@ -158,6 +166,7 @@ const Toolbar = ({ className, id, search, componentRef, extra, ...rest }) => {
                     </InputAdornment>
                   ),
                 }}
+                defaultValue={search}
                 placeholder="Buscar exemplares por código"
                 variant="outlined"
               />

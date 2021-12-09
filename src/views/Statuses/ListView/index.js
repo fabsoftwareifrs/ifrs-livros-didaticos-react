@@ -14,7 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { StatusesQuery } from "src/graphql/queries";
 import { REMOVE_STATUS } from "src/graphql/mutations";
@@ -94,6 +94,10 @@ const StatusList = (props) => {
     }
   );
 
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
   const { data, loading, refetch } = useQuery(StatusesQuery, {
     variables: { input: { page: page, paginate: limit, search } },
     notifyOnNetworkStatusChange: true,
@@ -102,6 +106,7 @@ const StatusList = (props) => {
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
+    setPage(1);
   };
 
   const handlePageChange = (event, newPage) => {
@@ -118,7 +123,7 @@ const StatusList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar search={setSearch} />
+            <Toolbar search={search} setSearch={setSearch} />
             <Box mt={3}>
               <Card>
                 {data.paginateStatuses.docs.length ? (

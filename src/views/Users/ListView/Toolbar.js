@@ -40,11 +40,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Toolbar = ({ className, search, ...rest }) => {
+const Toolbar = ({ className, search, setSearch, ...rest }) => {
   const classes = useStyles();
   const handlePress = (e) => {
     if (e.which === 13) {
-      search(e.target.value);
+      setSearch(e.target.value);
     }
   };
   return (
@@ -72,6 +72,7 @@ const Toolbar = ({ className, search, ...rest }) => {
                     </InputAdornment>
                   ),
                 }}
+                defaultValue={search}
                 placeholder="Buscar Usuários"
                 variant="outlined"
               />

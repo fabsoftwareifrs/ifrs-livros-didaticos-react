@@ -14,7 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { CategoriesQuery } from "src/graphql/queries";
 import { REMOVE_CATEGORY } from "src/graphql/mutations";
@@ -73,6 +73,10 @@ const CategoryList = (props) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
 
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
   const [removeCategory, { loading: loadingRemove }] = useMutation(
     REMOVE_CATEGORY,
     {
@@ -103,6 +107,7 @@ const CategoryList = (props) => {
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
+    setPage(1);
   };
 
   const handlePageChange = (event, newPage) => {
@@ -119,7 +124,7 @@ const CategoryList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar search={setSearch} />
+            <Toolbar search={search} setSearch={setSearch} />
             <Box mt={3}>
               <Card>
                 {data.paginateCategories.docs.length ? (

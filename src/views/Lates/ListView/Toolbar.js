@@ -32,7 +32,6 @@ import {
 import WarningIcon from "@material-ui/icons/Warning";
 import SendIcon from "@material-ui/icons/Send";
 import { Search as SearchIcon } from "react-feather";
-import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -56,11 +55,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Toolbar = ({ className, create, mail, search, selected, ...rest }) => {
+const Toolbar = ({
+  className,
+  create,
+  mail,
+  search,
+  setSearch,
+  selected,
+  ...rest
+}) => {
   const classes = useStyles();
   const handlePress = (e) => {
     if (e.which === 13) {
-      search(e.target.value);
+      setSearch(e.target.value);
     }
   };
   return (
@@ -82,6 +89,7 @@ const Toolbar = ({ className, create, mail, search, selected, ...rest }) => {
                       </InputAdornment>
                     ),
                   }}
+                  defaultValue={search}
                   placeholder="Buscar Empréstimos"
                   variant="outlined"
                 />

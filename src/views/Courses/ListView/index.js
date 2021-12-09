@@ -14,7 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
 import { CoursesQuery } from "src/graphql/queries";
@@ -93,10 +93,15 @@ const CourseList = (props) => {
     },
   });
 
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
   if (error) return <p>Error :(</p>;
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
+    setPage(1);
   };
 
   const handlePageChange = (event, newPage) => {
@@ -113,7 +118,7 @@ const CourseList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar search={setSearch} />
+            <Toolbar search={search} setSearch={setSearch} />
             <Box mt={3}>
               <Card>
                 {data.paginateCourses.docs.length ? (
@@ -155,7 +160,7 @@ const CourseList = (props) => {
                                           course.name +
                                           '" e suas turmas?'
                                         }
-                                        title="Deletar categoria"
+                                        title="Deletar curso"
                                       />
                                       <Button
                                         variant="contained"

@@ -14,13 +14,12 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
-import { GET_ALL_LOANS_BY_PERIOD_ID } from "src/graphql/queries/loans";
+import { PAGINATE_LOANS_QUERY } from "src/graphql/queries/loans";
 import { REMOVE_LOAN } from "src/graphql/mutations";
-
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ModalIcon from "src/components/ModalIcon";
 import { LateMail } from "src/graphql/mutations/mail";
@@ -81,18 +80,18 @@ const LoanList = (props) => {
 
   const [period] = usePeriod();
 
-  const { loading, error, data, refetch } = useQuery(
-    GET_ALL_LOANS_BY_PERIOD_ID,
-    {
-      variables: {
-        periodId: period.value,
-        pagination: { page: page, paginate: limit, search },
-        late: true,
-      },
-      fetchPolicy: "cache-and-network",
-    }
-  );
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
 
+  const { loading, error, data, refetch } = useQuery(PAGINATE_LOANS_QUERY, {
+    variables: {
+      periodId: period.value,
+      input: { page: page, paginate: limit, search },
+      late: true,
+    },
+    fetchPolicy: "cache-and-network",
+  });
   const { dispatch } = useMessageBox();
   const [mutationDelete] = useMutation(REMOVE_LOAN, {
     onCompleted: () => {
@@ -191,6 +190,7 @@ const LoanList = (props) => {
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
+    setPage(1);
   };
 
   const handlePageChange = (event, newPage) => {
@@ -205,13 +205,14 @@ const LoanList = (props) => {
         ) : (
           <>
             <Toolbar
-              search={setSearch}
+              search={search}
+              setSearch={setSearch}
               selected={selectedLoanIds.length > 0}
               mail={sendLateMail}
             />
             <Box mt={3}>
               <Card>
-                {data.getAllLoansByPeriodId.docs.length ? (
+                {data.paginateLoans.docs.length ? (
                   <>
                     <PerfectScrollbar>
                       <Box minWidth={300}>
@@ -222,27 +223,20 @@ const LoanList = (props) => {
                                 <Checkbox
                                   checked={
                                     selectedLoanIds.length ===
-                                    data.getAllLoansByPeriodId.docs.slice(
-                                      0,
-                                      limit
-                                    ).length
+                                    data.paginateLoans.docs.slice(0, limit)
+                                      .length
                                   }
                                   color="primary"
                                   indeterminate={
                                     selectedLoanIds.length > 0 &&
                                     selectedLoanIds.length <
-                                      data.getAllLoansByPeriodId.docs.slice(
-                                        0,
-                                        limit
-                                      ).length
+                                      data.paginateLoans.docs.slice(0, limit)
+                                        .length
                                   }
                                   onChange={(e) =>
                                     handleSelectAll(
                                       e,
-                                      data.getAllLoansByPeriodId.docs.slice(
-                                        0,
-                                        limit
-                                      )
+                                      data.paginateLoans.docs.slice(0, limit)
                                     )
                                   }
                                 />
@@ -255,7 +249,7 @@ const LoanList = (props) => {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {data.getAllLoansByPeriodId.docs
+                            {data.paginateLoans.docs
                               .slice(0, limit)
                               .map((loan) => (
                                 <TableRow hover key={loan.id}>
@@ -324,7 +318,7 @@ const LoanList = (props) => {
                     </PerfectScrollbar>
                     <TablePagination
                       component="div"
-                      count={data.getAllLoansByPeriodId.total}
+                      count={data.paginateLoans.total}
                       onPageChange={handlePageChange}
                       onRowsPerPageChange={handleLimitChange}
                       page={page - 1}

@@ -14,7 +14,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Page from "src/components/Page";
 import Toolbar from "./Toolbar";
 import { StudentsQuery } from "src/graphql/queries";
@@ -94,10 +94,15 @@ const StudentsList = (props) => {
     },
   });
 
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
   if (error) return <p>Error :(</p>;
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
+    setPage(1);
   };
 
   const handlePageChange = (event, newPage) => {
@@ -114,7 +119,7 @@ const StudentsList = (props) => {
           ""
         ) : (
           <>
-            <Toolbar search={setSearch} />
+            <Toolbar search={search} setSearch={setSearch} />
             <Box mt={3}>
               <Card>
                 {data.paginateStudents.docs.length ? (

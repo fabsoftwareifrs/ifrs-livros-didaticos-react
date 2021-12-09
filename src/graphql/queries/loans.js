@@ -84,9 +84,9 @@ export const GET_ALL_LOANS_BY_PERIOD_ID = gql`
   }
 `;
 
-export const LoansQuery = gql`
-  query LoansQuery($input: PaginateInput!, $late: Boolean!) {
-    paginateLoans(input: $input, late: $late) {
+export const PAGINATE_LOANS_QUERY = gql`
+  query LoansQuery($input: PaginateInput!, $late: Boolean!, $periodId: Int!) {
+    paginateLoans(input: $input, late: $late, periodId: $periodId) {
       docs {
         id
         late

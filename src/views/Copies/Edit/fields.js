@@ -16,7 +16,7 @@
 
 export const fields = {
   statusId: {
-    label: "Status",
+    label: "Estado",
     type: "number",
     value: "",
     placeholder: "Informe a situação do exemplar",

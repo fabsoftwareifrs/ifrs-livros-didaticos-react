@@ -56,11 +56,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Toolbar = ({ className, create, mail, search, selected, ...rest }) => {
+const Toolbar = ({
+  className,
+  create,
+  mail,
+  search,
+  setSearch,
+  selected,
+  ...rest
+}) => {
   const classes = useStyles();
   const handlePress = (e) => {
     if (e.which === 13) {
-      search(e.target.value);
+      setSearch(e.target.value);
     }
   };
   return (
@@ -98,6 +106,7 @@ const Toolbar = ({ className, create, mail, search, selected, ...rest }) => {
                       </InputAdornment>
                     ),
                   }}
+                  defaultValue={search}
                   placeholder="Buscar Empréstimos"
                   variant="outlined"
                 />

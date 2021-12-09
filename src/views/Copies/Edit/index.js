@@ -67,8 +67,8 @@ const Edit = ({ className, ...rest }) => {
   return (
     <Form
       header={{
-        subheader: "Você pode alterar as informações de categoria de livro.",
-        title: "Categoria de Livro",
+        subheader: "Você pode alterar as informações do exemplar do livro.",
+        title: "Exemplar",
       }}
       loading={loadingedit}
       onSubmit={onSubmit}

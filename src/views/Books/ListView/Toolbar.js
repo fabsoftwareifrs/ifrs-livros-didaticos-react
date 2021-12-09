@@ -40,11 +40,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Toolbar = ({ className, create, search, ...rest }) => {
+const Toolbar = ({ className, create, search, setSearch, ...rest }) => {
   const classes = useStyles();
   const handlePress = (e) => {
     if (e.which === 13) {
-      search(e.target.value);
+      setSearch(e.target.value);
     }
   };
   return (
@@ -82,6 +82,7 @@ const Toolbar = ({ className, create, search, ...rest }) => {
                 }}
                 placeholder="Buscar Livro"
                 variant="outlined"
+                defaultValue={search}
                 onKeyPress={handlePress}
               />
             </Box>

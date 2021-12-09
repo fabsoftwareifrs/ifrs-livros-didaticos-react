@@ -117,7 +117,8 @@ const CopyList = (props) => {
       <Container maxWidth={false}>
         <Toolbar
           componentRef={componentRef}
-          search={setSearch}
+          search={search}
+          setSearch={setSearch}
           id={id}
           extra={{ refetch }}
         />
