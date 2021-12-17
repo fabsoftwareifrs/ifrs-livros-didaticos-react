@@ -29,7 +29,7 @@ const fields = {
   },
   email: {
     label: "E-mail",
-    type: "text",
+    type: "email",
     value: "",
     rules: {
       required: "Este campo é obrigatório",
