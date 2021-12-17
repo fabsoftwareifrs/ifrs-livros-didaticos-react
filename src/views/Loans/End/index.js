@@ -56,7 +56,7 @@ const End = ({ className, ...rest }) => {
         dispatch(
           openMessageBox({
             type: "error",
-            message: err.message,
+            message: "Erro ao obter emprestimos",
           })
         );
         setIsVisible(false);
@@ -84,7 +84,7 @@ const End = ({ className, ...rest }) => {
       dispatch(
         openMessageBox({
           type: "error",
-          message: err.message,
+          message: "Erro ao devolver emprestimos",
         })
       );
       setIsVisible(false);

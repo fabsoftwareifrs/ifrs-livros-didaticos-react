@@ -41,7 +41,7 @@ const Add = ({ className, ...rest }) => {
       dispatch(
         openMessageBox({
           type: "error",
-          message: err.message,
+          message: "Erro ao cadastrar emprestimo",
         })
       );
     },

@@ -70,7 +70,7 @@ const Toolbar = ({
       dispatch(
         openMessageBox({
           type: "error",
-          message: err.message,
+          message: "Erro ao cadastrar exemplar",
         })
       );
     },

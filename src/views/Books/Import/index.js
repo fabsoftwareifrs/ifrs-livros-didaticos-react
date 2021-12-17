@@ -40,7 +40,7 @@ const Import = ({ className, ...rest }) => {
       dispatch(
         openMessageBox({
           type: "error",
-          message: err.message,
+          message: "Erro ao importar livros",
         })
       );
     },
