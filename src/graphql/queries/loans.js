@@ -92,6 +92,7 @@ export const PAGINATE_LOANS_QUERY = gql`
         late
         delivered
         end
+        observation
         student {
           id
           name

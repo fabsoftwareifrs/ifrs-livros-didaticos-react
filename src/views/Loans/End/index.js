@@ -21,6 +21,7 @@ import { TERMINATE_LOAN } from "src/graphql/mutations";
 import { GET_LOAN_BY_CODE } from "src/graphql/queries";
 import Form from "./Form";
 import { Field, Status } from "src/reusable";
+import { Typography } from "@material-ui/core";
 
 const initialState = {
   code: "",
@@ -104,19 +105,23 @@ const End = ({ className, ...rest }) => {
       loading={loading}
       onSubmit={onSubmit}
       header={{
-        subheader: "Você pode cadastrar as informações de um empréstimo.",
-        title: "Empréstimo",
+        subheader: "Você pode devolver um empréstimo.",
+        title: "Devolução de empréstimo",
       }}
       className={className}
       data={state}
       {...rest}
     >
       <Field name="code" onBlur={onBlur} />
-
-      <span style={{ display: isVisible ? "" : "none" }}>{state.book}</span>
-      <span style={{ display: isVisible ? "" : "none" }}>{state.student}</span>
       <Status style={{ display: isVisible ? "" : "none" }} name="statusId" />
       <Field style={{ display: isVisible ? "" : "none" }} name="observation" />
+      <Typography
+        style={{ display: isVisible ? "" : "none", padding: "0 13px" }}
+      >
+        Livro: {state.book}
+        <br />
+        Estudante: {state.student}
+      </Typography>
     </Form>
   );
 };

@@ -194,6 +194,7 @@ const LoanList = (props) => {
       await mutationWarnMail({ variables: { loans } });
     }
   };
+
   return (
     <Page className={classes.root} title="Empréstimos">
       <Container maxWidth={false}>
@@ -242,6 +243,7 @@ const LoanList = (props) => {
                               <TableCell>Livro</TableCell>
                               <TableCell>Exemplar</TableCell>
                               <TableCell>Entregue</TableCell>
+                              <TableCell>Observação</TableCell>
                               <TableCell></TableCell>
                             </TableRow>
                           </TableHead>
@@ -277,6 +279,9 @@ const LoanList = (props) => {
                                     ) : (
                                       <XIcon className={classes.icon} />
                                     )}
+                                  </TableCell>
+                                  <TableCell>
+                                    {loan.observation ? loan.observation : "-"}
                                   </TableCell>
                                   <TableCell className={classes.endCell}>
                                     <ModalIcon

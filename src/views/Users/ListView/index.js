@@ -136,7 +136,7 @@ const UsersList = (props) => {
                             </Box>
                           </TableCell>
                           <TableCell>{user.login}</TableCell>
-                          <TableCell>{user.accessLevel}</TableCell>
+                          <TableCell>Administrador</TableCell>
 
                           <TableCell className={classes.endCell}>
                             <Modal className={classes.icon} icon={TrashIcon}>
