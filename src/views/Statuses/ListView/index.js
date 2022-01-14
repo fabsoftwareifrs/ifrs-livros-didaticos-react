@@ -41,6 +41,7 @@ import {
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
 import { Link } from "react-router-dom";
 import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
+import { Backdrop, CircularProgress } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -72,7 +73,7 @@ const StatusList = (props) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
 
-  const [removeStatus, { loading: loadingRemove }] = useMutation(
+  const [removeStatus, { loading: loadingDelete }] = useMutation(
     REMOVE_STATUS,
     {
       onCompleted: () => {
@@ -118,6 +119,16 @@ const StatusList = (props) => {
 
   return (
     <Page className={classes.root} title="Estados dos exemplares">
+      <Backdrop
+        sx={{
+          color: "#17882c",
+          backgroundColor: "rgb(255 255 255 / 50%)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading || loadingDelete}
+      >
+        <CircularProgress disableShrink color="inherit" />
+      </Backdrop>
       <Container maxWidth={false}>
         {loading ? (
           ""
@@ -181,7 +192,6 @@ const StatusList = (props) => {
                                           color: "#fff",
                                         }}
                                         onClick={() => remove(status.id)}
-                                        disabled={loadingRemove}
                                       >
                                         Deletar
                                       </Button>

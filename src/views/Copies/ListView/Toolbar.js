@@ -36,6 +36,7 @@ import {
 import { Search as SearchIcon } from "react-feather";
 import { Link } from "react-router-dom";
 import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
+import { Backdrop, CircularProgress } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   root: {},
   importButton: {
@@ -57,6 +58,7 @@ const Toolbar = ({
 }) => {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(0);
+  const [loading, setLoading] = useState(false);
   const { dispatch } = useMessageBox();
   const [mutationCreate] = useMutation(ADD_COPY, {
     onCompleted: () => {
@@ -82,11 +84,13 @@ const Toolbar = ({
   };
   const createCopy = async (e) => {
     e.preventDefault();
+    setLoading(true);
     for (let i = 0; i < quantity; i++) {
       await mutationCreate({
         variables: { input: { bookId: id } },
       });
     }
+    setLoading(false);
     await extra.refetch();
   };
   const handleChange = (e) => {
@@ -100,6 +104,16 @@ const Toolbar = ({
 `;
   return (
     <div className={clsx(classes.root, className)} {...rest}>
+      <Backdrop
+        sx={{
+          color: "#17882c",
+          backgroundColor: "rgb(255 255 255 / 50%)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress disableShrink color="inherit" />
+      </Backdrop>
       <Box display="flex" justifyContent="space-between">
         <Link to="/app/books">
           <Button

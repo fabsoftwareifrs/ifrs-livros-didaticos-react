@@ -43,6 +43,7 @@ import {
 } from "@material-ui/core";
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
 import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,24 +89,27 @@ const CopyList = (props) => {
     variables: { bookId: id, search },
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_COPY, {
-    onCompleted: () => {
-      dispatch(
-        openMessageBox({
-          message: "Registro removido com sucesso.",
-        })
-      );
-      refetch();
-    },
-    onError: (err) => {
-      dispatch(
-        openMessageBox({
-          type: "error",
-          message: "Erro ao remover registro.",
-        })
-      );
-    },
-  });
+  const [mutationDelete, { loading: loadingDelete }] = useMutation(
+    REMOVE_COPY,
+    {
+      onCompleted: () => {
+        dispatch(
+          openMessageBox({
+            message: "Registro removido com sucesso.",
+          })
+        );
+        refetch();
+      },
+      onError: (err) => {
+        dispatch(
+          openMessageBox({
+            type: "error",
+            message: "Erro ao remover registro.",
+          })
+        );
+      },
+    }
+  );
 
   if (error) return <p>Error :(</p>;
 
@@ -114,6 +118,16 @@ const CopyList = (props) => {
   };
   return (
     <Page className={classes.root} title="Exemplares">
+      <Backdrop
+        sx={{
+          color: "#17882c",
+          backgroundColor: "rgb(255 255 255 / 50%)",
+          zIndex: (theme) => theme.zIndex.drawer + 1000,
+        }}
+        open={loading || loadingDelete}
+      >
+        <CircularProgress disableShrink color="inherit" />
+      </Backdrop>
       <Container maxWidth={false}>
         <Toolbar
           componentRef={componentRef}

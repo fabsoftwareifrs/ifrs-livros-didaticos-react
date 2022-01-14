@@ -27,27 +27,24 @@ const Import = ({ className, ...rest }) => {
   const { push } = useHistory();
   const { dispatch } = useMessageBox();
 
-  const [importStudents, { loading: loadingedit }] = useMutation(
-    IMPORT_STUDENTS,
-    {
-      onCompleted: () => {
-        dispatch(
-          openMessageBox({
-            message: "Estudantes importados com sucesso!",
-          })
-        );
-        push("/app/students");
-      },
-      onError: (err) => {
-        dispatch(
-          openMessageBox({
-            type: "error",
-            message: "Erro ao importar estudante",
-          })
-        );
-      },
-    }
-  );
+  const [importStudents, { loading }] = useMutation(IMPORT_STUDENTS, {
+    onCompleted: () => {
+      dispatch(
+        openMessageBox({
+          message: "Estudantes importados com sucesso!",
+        })
+      );
+      push("/app/students");
+    },
+    onError: (err) => {
+      dispatch(
+        openMessageBox({
+          type: "error",
+          message: "Erro ao importar estudante",
+        })
+      );
+    },
+  });
   const onSubmit = async (input) => {
     const { file } = input;
     await importStudents({ variables: { id: +id, input: { file: file[0] } } });
@@ -59,7 +56,7 @@ const Import = ({ className, ...rest }) => {
         subheader: "Você pode importar os estudantes.",
         title: "Estudante",
       }}
-      loading={loadingedit}
+      loading={loading}
       onSubmit={onSubmit}
       className={className}
       {...rest}

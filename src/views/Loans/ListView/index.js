@@ -47,6 +47,7 @@ import {
 import { Link } from "react-router-dom";
 import { usePeriod } from "src/providers/Period";
 import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -111,7 +112,7 @@ const LoanList = (props) => {
     },
   });
 
-  const [mutationWarnMail] = useMutation(WarnMail, {
+  const [mutationWarnMail, { loading: loadingDelete }] = useMutation(WarnMail, {
     onCompleted: () => {
       dispatch(
         openMessageBox({
@@ -197,6 +198,16 @@ const LoanList = (props) => {
 
   return (
     <Page className={classes.root} title="Empréstimos">
+      <Backdrop
+        sx={{
+          color: "#17882c",
+          backgroundColor: "rgb(255 255 255 / 50%)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading || loadingDelete}
+      >
+        <CircularProgress disableShrink color="inherit" />
+      </Backdrop>
       <Container maxWidth={false}>
         {loading ? (
           ""

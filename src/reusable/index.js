@@ -4,6 +4,7 @@ export * from "./Classes";
 export * from "./Copies";
 export * from "./Courses";
 export * from "./Field";
+export * from "./FieldEndCode";
 export * from "./Periods";
 export * from "./Replicator";
 export * from "./Status";

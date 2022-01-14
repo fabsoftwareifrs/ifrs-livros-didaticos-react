@@ -40,6 +40,7 @@ import {
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
 import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { Link } from "react-router-dom";
+import { Backdrop, CircularProgress } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -74,24 +75,27 @@ const CourseList = (props) => {
     fetchPolicy: "cache-and-network",
   });
   const { dispatch } = useMessageBox();
-  const [mutationDelete] = useMutation(REMOVE_COURSE, {
-    onCompleted: () => {
-      dispatch(
-        openMessageBox({
-          message: "Registro removido com sucesso.",
-        })
-      );
-      refetch();
-    },
-    onError: (err) => {
-      dispatch(
-        openMessageBox({
-          type: "error",
-          message: "Erro ao remover registro.",
-        })
-      );
-    },
-  });
+  const [mutationDelete, { loading: loadingDelete }] = useMutation(
+    REMOVE_COURSE,
+    {
+      onCompleted: () => {
+        dispatch(
+          openMessageBox({
+            message: "Registro removido com sucesso.",
+          })
+        );
+        refetch();
+      },
+      onError: (err) => {
+        dispatch(
+          openMessageBox({
+            type: "error",
+            message: "Erro ao remover registro.",
+          })
+        );
+      },
+    }
+  );
 
   useEffect(() => {
     setPage(1);
@@ -113,6 +117,16 @@ const CourseList = (props) => {
 
   return (
     <Page className={classes.root} title="Curso">
+      <Backdrop
+        sx={{
+          color: "#17882c",
+          backgroundColor: "rgb(255 255 255 / 50%)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading || loadingDelete}
+      >
+        <CircularProgress disableShrink color="inherit" />
+      </Backdrop>
       <Container maxWidth={false}>
         {loading ? (
           ""

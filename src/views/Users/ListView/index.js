@@ -40,6 +40,7 @@ import {
 import { Trash2 as TrashIcon, Edit as EditIcon } from "react-feather";
 import { Link } from "react-router-dom";
 import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
+import { Backdrop, CircularProgress } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -68,24 +69,27 @@ const UsersList = (props) => {
     variables: { input: { page: page, paginate: limit, search } },
     fetchPolicy: "cache-and-network",
   });
-  const [mutationDelete] = useMutation(REMOVE_USER, {
-    onCompleted: () => {
-      dispatch(
-        openMessageBox({
-          message: "Registro removido com sucesso.",
-        })
-      );
-      refetch();
-    },
-    onError: (err) => {
-      dispatch(
-        openMessageBox({
-          type: "error",
-          message: "Erro ao remover registro.",
-        })
-      );
-    },
-  });
+  const [mutationDelete, { loading: loadingDelete }] = useMutation(
+    REMOVE_USER,
+    {
+      onCompleted: () => {
+        dispatch(
+          openMessageBox({
+            message: "Registro removido com sucesso.",
+          })
+        );
+        refetch();
+      },
+      onError: (err) => {
+        dispatch(
+          openMessageBox({
+            type: "error",
+            message: "Erro ao remover registro.",
+          })
+        );
+      },
+    }
+  );
 
   useEffect(() => {
     setPage(1);
@@ -107,6 +111,16 @@ const UsersList = (props) => {
 
   return (
     <Page className={classes.root} title="Usuários">
+      <Backdrop
+        sx={{
+          color: "#17882c",
+          backgroundColor: "rgb(255 255 255 / 50%)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading || loadingDelete}
+      >
+        <CircularProgress disableShrink color="inherit" />
+      </Backdrop>
       <Container maxWidth={false}>
         <Toolbar search={search} setSearch={setSearch} />
         <Box mt={3}>

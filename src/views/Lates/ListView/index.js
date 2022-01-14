@@ -47,6 +47,7 @@ import {
 } from "react-feather";
 import { Link } from "react-router-dom";
 import { usePeriod } from "src/providers/Period";
+import { Backdrop, CircularProgress } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -112,7 +113,7 @@ const LoanList = (props) => {
     },
   });
 
-  const [mutationLateMail] = useMutation(LateMail, {
+  const [mutationLateMail, { loading: loadingDelete }] = useMutation(LateMail, {
     onCompleted: () => {
       dispatch(
         openMessageBox({
@@ -199,6 +200,16 @@ const LoanList = (props) => {
 
   return (
     <Page className={classes.root} title="Empréstimos">
+      <Backdrop
+        sx={{
+          color: "#17882c",
+          backgroundColor: "rgb(255 255 255 / 50%)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading || loadingDelete}
+      >
+        <CircularProgress disableShrink color="inherit" />
+      </Backdrop>
       <Container maxWidth={false}>
         {loading ? (
           ""

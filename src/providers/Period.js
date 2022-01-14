@@ -33,6 +33,7 @@ import Fade from "@material-ui/core/Fade";
 import { useAuth } from "./Auth";
 import { Button, CardHeader, TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
+import { CircularProgress, Backdrop as BackdropMUI } from "@mui/material";
 //import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -156,9 +157,16 @@ const Period = () => {
     const found = options.find(({ value }) => value === periodId);
     dispatch(setPeriod(found));
   };
-
-  if (loading) return <p>Aguarde...</p>;
-
+  <BackdropMUI
+    sx={{
+      color: "#17882c",
+      backgroundColor: "rgb(255 255 255 / 50%)",
+      zIndex: (theme) => theme.zIndex.drawer + 1,
+    }}
+    open={loading}
+  >
+    <CircularProgress disableShrink color="inherit" />
+  </BackdropMUI>;
   return (
     <>
       <CardHeader

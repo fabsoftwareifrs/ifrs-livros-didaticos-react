@@ -20,7 +20,7 @@ import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { TERMINATE_LOAN } from "src/graphql/mutations";
 import { GET_LOAN_BY_CODE } from "src/graphql/queries";
 import Form from "./Form";
-import { Field, Status } from "src/reusable";
+import { Field, Status, FieldEndCode } from "src/reusable";
 import { Typography } from "@material-ui/core";
 
 const initialState = {
@@ -66,9 +66,9 @@ const End = ({ className, ...rest }) => {
     }
   );
 
-  const onBlur = async ({ target }) => {
-    if (target.value.trim() === "") return;
-    await getLoanByCode({ variables: { code: target.value } });
+  const search = async (value) => {
+    if (value === "") return;
+    await getLoanByCode({ variables: { code: value } });
   };
 
   const [terminate, { loading }] = useMutation(TERMINATE_LOAN, {
@@ -98,11 +98,9 @@ const End = ({ className, ...rest }) => {
     await terminate({ variables: { id: state.id, input: { ...rest } } });
   };
 
-  if (loadingLoan) return <p>Loading ...</p>;
-
   return (
     <Form
-      loading={loading}
+      loading={loading || loadingLoan}
       onSubmit={onSubmit}
       header={{
         subheader: "Você pode devolver um empréstimo.",
@@ -112,7 +110,7 @@ const End = ({ className, ...rest }) => {
       data={state}
       {...rest}
     >
-      <Field name="code" onBlur={onBlur} />
+      <FieldEndCode name="code" search={search} />
       <Status style={{ display: isVisible ? "" : "none" }} name="statusId" />
       <Field style={{ display: isVisible ? "" : "none" }} name="observation" />
       <Typography

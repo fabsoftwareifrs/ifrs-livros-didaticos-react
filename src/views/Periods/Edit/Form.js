@@ -31,6 +31,7 @@ import {
   makeStyles,
   Container,
 } from "@material-ui/core";
+import { Backdrop, CircularProgress } from "@mui/material";
 import { Field } from "src/reusable";
 
 import fields from "./fields";
@@ -64,6 +65,16 @@ const Form = ({
       className={clsx(classes.root, className)}
       {...rest}
     >
+      <Backdrop
+        sx={{
+          color: "#17882c",
+          backgroundColor: "rgb(255 255 255 / 50%)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress disableShrink color="inherit" />
+      </Backdrop>
       <Container maxWidth={false}>
         <Box mt={3}>
           <Card>

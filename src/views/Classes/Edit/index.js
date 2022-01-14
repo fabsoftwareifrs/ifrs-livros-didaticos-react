@@ -21,6 +21,7 @@ import { EDIT_CLASSROOM } from "src/graphql/mutations";
 import { ClassQuery } from "src/graphql/queries";
 import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { useParams, useHistory } from "react-router-dom";
+import { Backdrop, CircularProgress } from "@mui/material";
 import Form from "./Form";
 
 const Edit = ({ className, ...rest }) => {
@@ -39,7 +40,7 @@ const Edit = ({ className, ...rest }) => {
     },
   });
 
-  const [edit, { loading: loadingedit }] = useMutation(EDIT_CLASSROOM, {
+  const [edit, { loading: loadingEdit }] = useMutation(EDIT_CLASSROOM, {
     onCompleted: () => {
       dispatch(
         openMessageBox({
@@ -61,15 +62,27 @@ const Edit = ({ className, ...rest }) => {
     await edit({ variables: { id: +id, input } });
   };
 
-  if (loading) return <p>Aguarde...</p>;
-
+  if (loading) {
+    return (
+      <Backdrop
+        sx={{
+          color: "#17882c",
+          backgroundColor: "rgb(255 255 255 / 50%)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress disableShrink color="inherit" />
+      </Backdrop>
+    );
+  }
   return (
     <Form
       header={{
         subheader: "Você pode alterar as informações de uma turma.",
         title: "Turma",
       }}
-      loading={loadingedit}
+      loading={loadingEdit || loading}
       onSubmit={onSubmit}
       data={state}
       className={className}

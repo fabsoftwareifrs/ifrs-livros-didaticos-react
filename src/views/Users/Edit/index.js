@@ -21,6 +21,7 @@ import { EDIT_USER } from "src/graphql/mutations";
 import { UserQuery } from "src/graphql/queries";
 import { openMessageBox, useMessageBox } from "src/providers/MessageBox";
 import { useParams, useHistory } from "react-router-dom";
+import { Backdrop, CircularProgress } from "@mui/material";
 import Form from "./Form";
 
 const Edit = ({ className, ...rest }) => {
@@ -39,7 +40,7 @@ const Edit = ({ className, ...rest }) => {
     },
   });
 
-  const [edit, { loading: loadingedit }] = useMutation(EDIT_USER, {
+  const [edit, { loading: loadingEdit }] = useMutation(EDIT_USER, {
     onCompleted: () => {
       dispatch(
         openMessageBox({
@@ -61,15 +62,27 @@ const Edit = ({ className, ...rest }) => {
     await edit({ variables: { id: +id, input } });
   };
 
-  if (loading) return <p>Aguarde...</p>;
-
+  if (loading) {
+    return (
+      <Backdrop
+        sx={{
+          color: "#17882c",
+          backgroundColor: "rgb(255 255 255 / 50%)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress disableShrink color="inherit" />
+      </Backdrop>
+    );
+  }
   return (
     <Form
       header={{
         subheader: "Você pode alterar as informações de categoria de livro.",
         title: "Categoria de Livro",
       }}
-      loading={loadingedit}
+      loading={loadingEdit || loading}
       onSubmit={onSubmit}
       data={state}
       className={className}

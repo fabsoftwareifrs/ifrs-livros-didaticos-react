@@ -27,7 +27,7 @@ const Import = ({ className, ...rest }) => {
   const { push } = useHistory();
   const { dispatch } = useMessageBox();
 
-  const [importBooks, { loading: loadingedit }] = useMutation(IMPORT_BOOKS, {
+  const [importBooks, { loading }] = useMutation(IMPORT_BOOKS, {
     onCompleted: () => {
       dispatch(
         openMessageBox({
@@ -56,7 +56,7 @@ const Import = ({ className, ...rest }) => {
         subheader: "Você pode importar os livros.",
         title: "Livro",
       }}
-      loading={loadingedit}
+      loading={loading}
       onSubmit={onSubmit}
       className={className}
       {...rest}
