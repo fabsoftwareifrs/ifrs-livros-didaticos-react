@@ -7,7 +7,8 @@ import { TextField } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
 // Esse componente renderiza apenas com cópias disponíveis
-export const Copies = ({ field, error, onChange, data, idCopyInclude }) => {
+export const Copies = ({ field, error, onChange, data }) => {
+  const [loading, setLoading] = useState(true);
   const [state, setState] = useState([]);
   const [search, setSearch] = useState("");
   const [selecteds, setSelecteds] = useState([]);
@@ -19,13 +20,12 @@ export const Copies = ({ field, error, onChange, data, idCopyInclude }) => {
         book,
       }));
       setState(options);
+      setLoading(false);
     },
     [setState]
   );
-
-  const { loading, refetch } = useQuery(AvailableCopiesQuery, {
+  const { refetch } = useQuery(AvailableCopiesQuery, {
     variables: {
-      idCopyInclude: +idCopyInclude,
       search: search,
       selecteds: selecteds,
     },
@@ -43,6 +43,7 @@ export const Copies = ({ field, error, onChange, data, idCopyInclude }) => {
     <Autocomplete
       name="copiesIds"
       multiple
+      filterOptions={(options, state) => options}
       options={state}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === "Tab") {

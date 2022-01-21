@@ -38,6 +38,25 @@ export const StudentsQuery = gql`
   }
 `;
 
+export const SearchStudentsQuery = gql`
+  query SearchStudentsQuery($search: String, $selected: String) {
+    searchStudents(search: $search, selected: $selected) {
+      id
+      name
+      email
+      matriculation
+      course {
+        id
+        name
+      }
+      classes {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const AllStudentsQuery = gql`
   query AllStudentsQuery {
     students {
